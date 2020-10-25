@@ -68,7 +68,7 @@ case "${CMD}" in
     git remote -v
 
     # Configure:
-    git config http.postBuffer 5242880000
+    git config http.postBuffer 2242880000
     git config user.name ${GITUSER}
     git config user.email ${GITUSER}@users.noreply.git.com
     git config --local -l
