@@ -22,13 +22,13 @@ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 ```
 
 ## Workflow
-* Create a <repo> under a fixed <owner> in GitHub and GitLab.
+* Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
 * Ensure SSH access exists to repo in GitHub and GitLab.
-* $ gec set owner <owner>  # just once for all future repos
-* $ gec clone <repo>
-* $ gec init.fs <repo>
-* $ gec mount <repo>  # use mount.ro for read-only mount
-* Work with files in $DECDIR
-* $ gec umount <repo>  # optional, except before git pull/merge/checkout
-* $ gec commit <repo> "<non-secret commit message>"
-* $ gec push <repo>
+* $ gec set owner `<owner>`  # just once for all future repos
+* $ gec clone `<repo>`
+* $ gec init.fs `<repo>`
+* $ gec mount `<repo>`  # use mount.ro instead for read-only mount
+* $ gec shell.dec `<repo>`
+* $ gec umount `<repo>`  # optional, except before git pull/merge/checkout
+* $ gec commit `<repo>` "<non-secret commit message>"
+* $ gec push `<repo>`
