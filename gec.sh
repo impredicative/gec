@@ -56,6 +56,7 @@ case "${CMD}" in
     set -x
     mkdir -p -v "${ENCDIR}"
     gocryptfs -init -nofail -sharedstorage "${ENCDIR}"
+    mkdir -p -v "${DECDIR}"
     ;;
   mount)
     set -x
