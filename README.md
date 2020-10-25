@@ -30,5 +30,7 @@ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 * $ gec mount `<repo>`  # use mount.ro instead for read-only mount
 * $ gec shell.dec `<repo>`
 * $ gec umount `<repo>`  # optional, except before git pull/merge/checkout
+* $ gec status `<repo>`  # optional
 * $ gec commit `<repo>` "non-secret commit message"
+* $ gec log `<repo>`  # optional
 * $ gec push `<repo>`
