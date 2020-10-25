@@ -2,7 +2,7 @@
 set -euxo pipefail
 
 # Installation (for user):
-# - Ensure gocryptfs and git are available.
+# - Ensure gocryptfs≥2.0-beta1 and git are available.
 # - $ wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh > ~/.local/bin/gec
 
 # Installation (for developer):
