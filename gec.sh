@@ -95,6 +95,12 @@ case "${CMD}" in
     USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
     $USER_SHELL
     ;;
+  status)
+    set -x
+    cd "${GITDIR}"
+    git status
+    mountpoint "${DECDIR}" || true
+    ;;
   rm)
     set -x
     rm -rf "${DECDIR}"
