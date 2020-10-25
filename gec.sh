@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euxo pipefail
+set -euo pipefail
 
 CMD="$1"
 REPO="$2"
@@ -8,7 +8,7 @@ _APPDIR="${HOME}/gocryptfs"
 GITDIR="${_APPDIR}/encrypted/${REPO}"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_APPDIR}/decrypted/${REPO}"
-set +x
+
 touch -a "${CONFIGFILE}"
 
 # Configuration helpers from https://unix.stackexchange.com/a/433816/
@@ -104,6 +104,21 @@ case "${CMD}" in
     set -x
     cd "${GITDIR}"
     git log
+    ;;
+  du.git)
+    set -x
+    cd "${GITDIR}"
+    du -h -c -d 1
+    ;;
+  du.enc)
+    set -x
+    cd "${ENCDIR}"
+    du -h -c -d 1
+    ;;
+  du.dec)
+    set -x
+    cd "${DECDIR}"
+    mountpoint "${DECDIR}" && du -h -c -d 1
     ;;
   rm)
     set -x
