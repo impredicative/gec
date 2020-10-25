@@ -1,28 +1,6 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-# Installation (for user):
-# - Ensure gocryptfs≥2.0-beta1 and git are available.
-# - $ wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh -O ~/.local/bin/gec
-# - $ chmod +x ~/.local/bin/gec
-
-# Installation (for developer):
-# - Ensure gocryptfs and git are available.
-# - $ git clone git@github.com:impredicative/gec.git
-# - $ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
-
-# Workflow:
-# - Create a <repo> under a fixed <owner> in GitHub and GitLab.
-# - Ensure SSH access exists to repo in GitHub and GitLab.
-# - $ gec set owner <owner>  # just once for all future repos
-# - $ gec clone <repo>
-# - $ gec init.fs <repo>
-# - $ gec mount <repo>  # use mount.ro for read-only mount
-# - Work with files in $DECDIR
-# - $ gec umount <repo>  # optional, except before git pull/merge/checkout
-# - $ gec commit <repo> "<non-secret commit message>"
-# - $ gec push <repo>
-
 CMD="$1"
 REPO="$2"
 CONFIGFILE="${HOME}/.gec"
@@ -89,7 +67,7 @@ case "${CMD}" in
     mkdir -p -v "${DECDIR}"
     gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
     ;;
-  umount|unmount|dismount)  # Remember to exit $DECDIR first.
+  umount|unmount|dismount)  # Remember to exit $DECDIR before using.
     set -x
     fusermount -u "${DECDIR}"
     ;;
@@ -105,7 +83,7 @@ case "${CMD}" in
     cd "${GITDIR}"
     git push
     ;;
-  shell.dec)  # Remember to exit, otherwise umount won't work.
+  shell.dec)  # Remember to exit after using, otherwise umount won't work.
     set -x
     cd "${DECDIR}"
     USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
