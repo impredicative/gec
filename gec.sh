@@ -8,7 +8,7 @@ set -euxo pipefail
 # Installation (for developer):
 # - Ensure gocryptfs and git are available.
 # - $ git clone git@github.com:impredicative/gec.git
-# - $ ln -s "${PWD}/gec/gec.sh" ~/.local/bin/gec
+# - $ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 
 # Workflow:
 # - Create a <repo> under a fixed <owner> in GitHub and GitLab.
