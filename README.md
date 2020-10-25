@@ -7,7 +7,7 @@ It is a stopgap until a more sophisticated and cross-platform utility is impleme
 1. gocryptfs ≥ 2.0-beta1
 1. git
 1. Linux (tested with Ubuntu)
-1. A dedicated GitHub and GitLab account with same username
+1. A dedicated GitHub and GitLab account with the same username!
 
 ## Installation
 ### For general use
