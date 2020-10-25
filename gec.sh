@@ -1,16 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CMD="$1"
-REPO="$2"
-CONFIGFILE="${HOME}/.gec"
-_APPDIR="${HOME}/gocryptfs"
-GITDIR="${_APPDIR}/encrypted/${REPO}"
-ENCDIR="${GITDIR}/fs"
-DECDIR="${_APPDIR}/decrypted/${REPO}"
-
-touch -a "${CONFIGFILE}"
-
 # Configuration helpers from https://unix.stackexchange.com/a/433816/
 sed_escape() {
   sed -e 's/[]\/$*.^[]/\\&/g'
@@ -29,13 +19,28 @@ cfg_haskey() { # path, key
   test -f "$1" && grep "^$(echo "$2" | sed_escape)=" "$1" > /dev/null
 }
 
-# Run command
+CMD="$1"
+CONFIGFILE="${HOME}/.gec"
+_APPDIR="${HOME}/gocryptfs"
+
+touch -a "${CONFIGFILE}"
+
 case "${CMD}" in
   set)
     cfg_write "${CONFIGFILE}" "$2" "$3"
     set -x
     cat "${CONFIGFILE}"
+    exit
     ;;
+esac
+
+REPO="$2"
+GITDIR="${_APPDIR}/encrypted/${REPO}"
+ENCDIR="${GITDIR}/fs"
+DECDIR="${_APPDIR}/decrypted/${REPO}"
+
+# Run command
+case "${CMD}" in
   clone)
     GITUSER=$(cfg_read "${CONFIGFILE}" owner)
     set -x
@@ -75,7 +80,7 @@ case "${CMD}" in
     cd "${GITDIR}"
     git add -A
     git commit -m "$3"
-    git show --name-status
+    git show
     ;;
   push)
     set -x
