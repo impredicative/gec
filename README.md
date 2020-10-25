@@ -15,7 +15,7 @@ It is a stopgap until a more sophisticated and cross-platform utility is impleme
 wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
 ```
-### For developer use
+### For development
 ```bash
 git clone git@github.com:impredicative/gec.git
 ln -s "${PWD}/gec.sh" ~/.local/bin/gec
