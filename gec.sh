@@ -5,6 +5,10 @@ set -euxo pipefail
 # - Ensure gocryptfs and git are available.
 # - $ wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh > ~/.local/bin/gec
 
+# Development:
+# - $ git clone git@github.com:impredicative/gec.git
+# - $ ln -s "${PWD}/gec/gec.sh" ~/.local/bin/gec
+
 # Workflow:
 # - Create a <repo> under a fixed <owner> in GitHub and GitLab.
 # - Ensure SSH access exists to repo in GitHub and GitLab.
