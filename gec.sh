@@ -99,7 +99,7 @@ case "${CMD}" in
     set -x
     cd "${GITDIR}"
     git status
-    mountpoint "${DECDIR}" || true
+    mountpoint "${DECDIR}" && findmnt -D --verbose "${DECDIR}" || :
     ;;
   log)
     set -x
