@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-# Installation:
+# Installation (for user):
 # - Ensure gocryptfs and git are available.
 # - $ wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh > ~/.local/bin/gec
 
-# Development:
+# Installation (for developer):
+# - Ensure gocryptfs and git are available.
 # - $ git clone git@github.com:impredicative/gec.git
 # - $ ln -s "${PWD}/gec/gec.sh" ~/.local/bin/gec
 
