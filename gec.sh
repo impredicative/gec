@@ -101,6 +101,11 @@ case "${CMD}" in
     git status
     mountpoint "${DECDIR}" || true
     ;;
+  log)
+    set -x
+    cd "${GITDIR}"
+    git log
+    ;;
   rm)
     set -x
     rm -rf "${DECDIR}"
