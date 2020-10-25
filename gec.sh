@@ -60,12 +60,10 @@ case "${CMD}" in
     ;;
   mount)
     set -x
-    mkdir -p -v "${DECDIR}"
     gocryptfs -nofail -sharedstorage "${ENCDIR}" "${DECDIR}"
     ;;
   mount.ro)
     set -x
-    mkdir -p -v "${DECDIR}"
     gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
     ;;
   umount|unmount|dismount)  # Remember to exit $DECDIR before using.
