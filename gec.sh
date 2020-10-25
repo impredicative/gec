@@ -3,7 +3,8 @@ set -euxo pipefail
 
 # Installation (for user):
 # - Ensure gocryptfs≥2.0-beta1 and git are available.
-# - $ wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh > ~/.local/bin/gec
+# - $ wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh -O ~/.local/bin/gec
+# - $ chmod +x ~/.local/bin/gec
 
 # Installation (for developer):
 # - Ensure gocryptfs and git are available.
@@ -25,10 +26,10 @@ set -euxo pipefail
 CMD="$1"
 REPO="$2"
 CONFIGFILE="${HOME}/.gec"
-APPDIR="${HOME}/gocryptfs"
-GITDIR="${APPDIR}/encrypted/${REPO}"
+_APPDIR="${HOME}/gocryptfs"
+GITDIR="${_APPDIR}/encrypted/${REPO}"
 ENCDIR="${GITDIR}/fs"
-DECDIR="${APPDIR}/decrypted/${REPO}"
+DECDIR="${_APPDIR}/decrypted/${REPO}"
 set +x
 touch -a "${CONFIGFILE}"
 
@@ -115,6 +116,11 @@ case "${CMD}" in
     cd "${GITDIR}"
     USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
     $USER_SHELL
+    ;;
+  rm)
+    set -x
+    rm -rf "${DECDIR}"
+    rm -rf "${GITDIR}"
     ;;
   *)
    echo "Invalid command"
