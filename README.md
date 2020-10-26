@@ -24,7 +24,9 @@ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 ```
 
 ## Workflow
-### On device 1
+In the workflows below, `<repo>` refers to just the name of a repository, e.g. "travel".
+
+### On first device
 * Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # just once for all future repos
@@ -35,7 +37,7 @@ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 * $ gec send `<repo>` "a non-secret commit message"  # = commit and push
 * $ gec umount `<repo>`  # optional, except before git pull/merge/checkout
 
-### On device 2
+### On subsequent devices
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # just once for all future repos
 * $ gec clone `<repo>`
