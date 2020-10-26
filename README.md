@@ -45,6 +45,6 @@ In the workflows below:
 ## Storage repo Usage
 * $ gec pull `<repo>`  # If changed on remote
 * $ gec use `<repo>`  # Mount and CD. Asks for password.
-* $ gec status `<repo>`  # optional
+* $ gec status `<repo>`  # Optional
 * $ gec send `<repo>` "a non-secret commit message"  # Commit and push
 * $ gec umount `<repo>`  # Optional, except before git pull/merge/checkout
