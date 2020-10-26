@@ -19,6 +19,7 @@ cfg_haskey() { # path, key
   test -f "$1" && grep "^$(echo "$2" | sed_escape)=" "$1" > /dev/null
 }
 
+TOOL="$(basename "$0")"
 CMD="$1"
 CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gocryptfs"
@@ -88,6 +89,7 @@ case "${CMD}" in
       cd "${GITDIR}"
       git pull
     else
+      echo "Failed: ${TOOL} $@" >&2
       exit 1
     fi
     ;;
@@ -98,8 +100,8 @@ case "${CMD}" in
     ;;
   send)
     set -x
-    gec commit ${REPO} "$3"
-    gec push ${REPO}
+    ${TOOL} commit ${REPO} "$3"
+    ${TOOL} push ${REPO}
     ;;
   shell.dec)  # Remember to exit after using, otherwise umount won't work.
     set -x
@@ -116,8 +118,8 @@ case "${CMD}" in
     ;;
   use)
     set -x
-    gec mount ${REPO}
-    gec shell.dec ${REPO}
+    ${TOOL} mount ${REPO}
+    ${TOOL} shell.dec ${REPO}
     ;;
   status)
     set -x
@@ -152,6 +154,7 @@ case "${CMD}" in
       rm -rfI "${DECDIR}"
       rm -rfI "${GITDIR}"
     else
+      echo "Failed: ${TOOL} $@" >&2
       exit 1
     fi
     ;;
