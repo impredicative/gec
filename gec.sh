@@ -128,10 +128,13 @@ case "${CMD}" in
     du -h -c -d 1
     ;;
   rm)
-    set -x
-    mountpoint "${DECDIR}" && false
-    rm -rfI "${DECDIR}"
-    rm -rfI "${GITDIR}"
+    if ! mountpoint "${DECDIR}"; then
+      set -x
+      rm -rfI "${DECDIR}"
+      rm -rfI "${GITDIR}"
+    else
+      exit 1
+    fi
     ;;
   *)
    echo "Invalid command"
