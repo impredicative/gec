@@ -1,7 +1,9 @@
 # gec
 
 **`gec`** is a simple and opinionated Bash utility with convenience commands for working with git with [gocryptfs](https://github.com/rfjakob/gocryptfs).
-It is a stopgap until a more sophisticated and cross-platform utility is implemented in Golang.
+
+It is in a very early stage of development and documentation.
+Even after this is remedied, it is still just a stopgap until a more sophisticated and cross-platform utility is implemented in Golang.
 
 ## Requirements
 1. gocryptfs ≥ 2.0-beta1
@@ -22,12 +24,22 @@ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 ```
 
 ## Workflow
+### On device 1
 * Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # just once for all future repos
 * $ gec clone `<repo>`
 * $ gec init.fs `<repo>`
-* $ gec use `<repo>`
+* $ gec use `<repo>`  # = mount and cd
 * $ gec status `<repo>`  # optional
-* $ gec send `<repo>` "non-secret commit message"
+* $ gec send `<repo>` "a non-secret commit message"  # = commit and push
+* $ gec umount `<repo>`  # optional, except before git pull/merge/checkout
+
+### On device 2
+* Ensure SSH access exists to repo in GitHub and GitLab.
+* $ gec set owner `<owner>`  # just once for all future repos
+* $ gec clone `<repo>`
+* $ gec use `<repo>`  # = mount and cd
+* $ gec status `<repo>`  # optional
+* $ gec send `<repo>` "a non-secret commit message"  # = commit and push
 * $ gec umount `<repo>`  # optional, except before git pull/merge/checkout
