@@ -127,8 +127,8 @@ case "${CMD}" in
     ;;
   rm)
     set -x
-    rm -rf "${DECDIR}"
-    rm -rf "${GITDIR}"
+    rm -rfI "${DECDIR}"
+    rm -rfI "${GITDIR}"
     ;;
   *)
    echo "Invalid command"
