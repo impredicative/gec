@@ -5,6 +5,8 @@
 It is in a very early stage of development and documentation.
 Even after this is remedied, it is still just a stopgap until a more sophisticated and cross-platform utility is implemented in Golang.
 
+Refer to [this post](https://stackoverflow.com/a/59479166/) for the applicable limits to avoid a failed `push`.
+
 ## Requirements
 1. gocryptfs ≥ 2.0-beta1
 1. git
