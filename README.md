@@ -1,6 +1,6 @@
 # gec
 
-**`gec`** is a simple and opinionated Bash utility with convenience commands for working with git with [gocryptfs](https://github.com/rfjakob/gocryptfs).
+**`gec`** is a simple and opinionated Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
 
 It is in a very early stage of development and documentation.
 Even after this is remedied, it is still just a stopgap until a more sophisticated and cross-platform utility is implemented in Golang.
