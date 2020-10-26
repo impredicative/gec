@@ -89,6 +89,7 @@ case "${CMD}" in
     ;;
   shell.dec)  # Remember to exit after using, otherwise umount won't work.
     set -x
+    mountpoint "${DECDIR}"
     cd "${DECDIR}"
     USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
     $USER_SHELL
@@ -122,11 +123,13 @@ case "${CMD}" in
     ;;
   du.dec)
     set -x
+    mountpoint "${DECDIR}"
     cd "${DECDIR}"
-    mountpoint "${DECDIR}" && du -h -c -d 1
+    du -h -c -d 1
     ;;
   rm)
     set -x
+    mountpoint "${DECDIR}" && false
     rm -rfI "${DECDIR}"
     rm -rfI "${GITDIR}"
     ;;
