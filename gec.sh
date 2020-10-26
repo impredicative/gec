@@ -82,6 +82,15 @@ case "${CMD}" in
     git commit -m "$3"
     git log --color=always --decorate -1 | grep -v '^Author: '
     ;;
+  pull)
+    if ! mountpoint "${DECDIR}"; then
+      set -x
+      cd "${GITDIR}"
+      git pull
+    else
+      exit 1
+    fi
+    ;;
   push)
     set -x
     cd "${GITDIR}"
