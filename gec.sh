@@ -100,6 +100,11 @@ case "${CMD}" in
     USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
     $USER_SHELL
     ;;
+  use)
+    set -x
+    gec mount ${REPO}
+    gec shell.dec ${REPO}
+    ;;
   status)
     set -x
     cd "${GITDIR}"
