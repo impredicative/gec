@@ -25,8 +25,8 @@ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 
 ## Storage repo Setup
 In the workflows below:
-* `<owner>` refers to the username in both GitHub and GitLab
-* `<repo>` refers to the name of a repository, e.g. "travel", in both GitHub and GitLab
+* `<owner>` refers to an identical username in both GitHub and GitLab
+* `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab
 
 ### On first device
 * Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
