@@ -9,7 +9,7 @@ Even after this is remedied, it is still just a stopgap until a more sophisticat
 1. gocryptfs ≥ 2.0-beta1
 1. git
 1. Linux (tested with Ubuntu)
-1. A dedicated GitHub and GitLab account with the same username!
+1. A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account with an identical username!
 
 ## Installation
 ### For general use
