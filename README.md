@@ -23,25 +23,24 @@ git clone git@github.com:impredicative/gec.git
 ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 ```
 
-## Workflow
+## Storage repo Setup
 In the workflows below:
 * `<owner>` refers to the username in both GitHub and GitLab
 * `<repo>` refers to the name of a repository, e.g. "travel", in both GitHub and GitLab
 
-### Setup
-#### On first device
+### On first device
 * Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # Just once for all future repos
 * $ gec clone `<repo>`
 * $ gec init.fs `<repo>`  # Asks for new password. Prints master key.
 
-#### On subsequent devices
+### On subsequent devices
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # Just once for all future repos
 * $ gec clone `<repo>`
 
-### Usage
+## Storage repo Usage
 * $ gec pull `<repo>`  # If changed on remote
 * $ gec use `<repo>`  # Mount and CD. Asks for password.
 * $ gec status `<repo>`  # optional
