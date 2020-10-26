@@ -31,18 +31,18 @@ In the workflows below:
 ### On first device
 * Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
 * Ensure SSH access exists to repo in GitHub and GitLab.
-* $ gec set owner `<owner>`  # just once for all future repos
+* $ gec set owner `<owner>`  # Just once for all future repos
 * $ gec clone `<repo>`
-* $ gec init.fs `<repo>`
+* $ gec init.fs `<repo>`  # Asks for new password. Prints master key.
 
 ### On subsequent devices
 * Ensure SSH access exists to repo in GitHub and GitLab.
-* $ gec set owner `<owner>`  # just once for all future repos
+* $ gec set owner `<owner>`  # Just once for all future repos
 * $ gec clone `<repo>`
 
 ### On all devices
-* $ gec pull `<repo>`  # if changed on remote
-* $ gec use `<repo>`  # = mount and cd
+* $ gec pull `<repo>`  # If changed on remote
+* $ gec use `<repo>`  # Mount and CD. Asks for password.
 * $ gec status `<repo>`  # optional
-* $ gec send `<repo>` "a non-secret commit message"  # = commit and push
-* $ gec umount `<repo>`  # optional, except before git pull/merge/checkout
+* $ gec send `<repo>` "a non-secret commit message"  # Commit and push
+* $ gec umount `<repo>`  # Optional, except before git pull/merge/checkout
