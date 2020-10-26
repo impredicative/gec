@@ -78,14 +78,19 @@ case "${CMD}" in
   commit)
     set -x
     cd "${GITDIR}"
-    git add -A
+    git add -A -v
     git commit -m "$3"
-    git show
+    git log --color=always --decorate -1 | grep -v '^Author: '
     ;;
   push)
     set -x
     cd "${GITDIR}"
     git push
+    ;;
+  send)
+    set -x
+    gec commit ${REPO} "$3"
+    gec push ${REPO}
     ;;
   shell.dec)  # Remember to exit after using, otherwise umount won't work.
     set -x
