@@ -24,7 +24,9 @@ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 ```
 
 ## Workflow
-In the workflows below, `<repo>` refers to just the name of a repository, e.g. "travel".
+In the workflows below:
+* `<owner>` refers to the username in both GitHub and GitLab
+* `<repo>` refers to the name of a repository, e.g. "travel", in both GitHub and GitLab
 
 ### On first device
 * Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
@@ -32,15 +34,14 @@ In the workflows below, `<repo>` refers to just the name of a repository, e.g. "
 * $ gec set owner `<owner>`  # just once for all future repos
 * $ gec clone `<repo>`
 * $ gec init.fs `<repo>`
-* $ gec use `<repo>`  # = mount and cd
-* $ gec status `<repo>`  # optional
-* $ gec send `<repo>` "a non-secret commit message"  # = commit and push
-* $ gec umount `<repo>`  # optional, except before git pull/merge/checkout
 
 ### On subsequent devices
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # just once for all future repos
 * $ gec clone `<repo>`
+
+### On all devices
+* $ gec pull `<repo>`  # if changed on remote
 * $ gec use `<repo>`  # = mount and cd
 * $ gec status `<repo>`  # optional
 * $ gec send `<repo>` "a non-secret commit message"  # = commit and push
