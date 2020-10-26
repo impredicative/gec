@@ -28,19 +28,20 @@ In the workflows below:
 * `<owner>` refers to the username in both GitHub and GitLab
 * `<repo>` refers to the name of a repository, e.g. "travel", in both GitHub and GitLab
 
-### On first device
+### Setup
+#### On first device
 * Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # Just once for all future repos
 * $ gec clone `<repo>`
 * $ gec init.fs `<repo>`  # Asks for new password. Prints master key.
 
-### On subsequent devices
+#### On subsequent devices
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # Just once for all future repos
 * $ gec clone `<repo>`
 
-### On all devices
+### Usage
 * $ gec pull `<repo>`  # If changed on remote
 * $ gec use `<repo>`  # Mount and CD. Asks for password.
 * $ gec status `<repo>`  # optional
