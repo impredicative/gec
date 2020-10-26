@@ -3,15 +3,15 @@
 **`gec`** is a simple and opinionated Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
 
 It is in a very early stage of development and documentation.
-Even after this is remedied, it is still just a stopgap until a more sophisticated and cross-platform utility is implemented in Golang.
-
-Refer to [this post](https://stackoverflow.com/a/59479166/) for the applicable limits to avoid a failed `push`.
+Even after this is remedied, it is still just a stopgap until a more sophisticated and cross-platform utility is developed in Golang.
 
 ## Requirements
 1. gocryptfs ≥ 2.0-beta1
 1. git
 1. Linux (tested with Ubuntu)
 1. A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account with an identical username!
+
+Refer to [this post](https://stackoverflow.com/a/59479166/) for the applicable limits to avoid a failed `push`.
 
 ## Installation
 ### For general use
