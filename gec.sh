@@ -108,7 +108,7 @@ case "${CMD}" in
   log)
     set -x
     cd "${GITDIR}"
-    git log
+    git log --color=always --decorate | grep -v '^Author: '
     ;;
   du.git)
     set -x
