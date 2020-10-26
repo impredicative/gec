@@ -35,7 +35,7 @@ In the workflows below:
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # Just once for all future repos
 * $ gec clone `<repo>`
-* $ gec init.fs `<repo>`  # Asks for new password. Prints master key.
+* $ gec init.fs `<repo>`  # Asks for new password. Save printed master key.
 
 ### On subsequent devices
 * Ensure SSH access exists to repo in GitHub and GitLab.
