@@ -13,6 +13,7 @@ Even after this is remedied, it is still just a stopgap until a more sophisticat
 1. Linux (tested with Ubuntu)
 1. A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account with an identical username!
 
+## Limitations
 The known applicable size [limits](https://stackoverflow.com/a/59479166/) are:
 
 | Subject | Value | Type | Enforcer |
@@ -21,6 +22,8 @@ The known applicable size [limits](https://stackoverflow.com/a/59479166/) are:
 | Push    | 2G    | Hard | GitHub   |
 | Repo    | 5G    | Soft | GitHub   |
 | Repo    | 10G   | Hard | GitLab   |
+
+Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in the decrypted repo itself.
 
 ## Installation
 ### For general use
@@ -35,6 +38,9 @@ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 ```
 
 ## Storage repo Setup
+Storage repos are created in `~/gocryptfs/`. Both encrypted and decrypted files are organized in this location.
+Although this location is not currently configurable, a softlink or hardlink can be used to redirect it elsewhere if needed.
+
 In the workflows below:
 * `<owner>` refers to an identical username in both GitHub and GitLab
 * `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab
@@ -44,7 +50,7 @@ In the workflows below:
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # Just once for all future repos
 * $ gec clone `<repo>`
-* $ gec init.fs `<repo>`  # Asks for new password. Save printed master key.
+* $ gec init.fs `<repo>`  # Asks for new password. Save the printed master key.
 
 ### On subsequent devices
 * Ensure SSH access exists to repo in GitHub and GitLab.
