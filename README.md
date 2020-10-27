@@ -68,5 +68,6 @@ In the workflows below:
 * Try clone,send,push,pull with password-protected SSH key.
 * Auto-detect and use current `<repo>` whenever possible.
 * Improve stdout messages.
+* Document all commands.
 * Try git LFS.
 * Try Microsoft Scalar instead of git.
