@@ -2,10 +2,7 @@
 
 **`gec`** is a simple and opinionated Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
 It refrains from doing anything clever, making it possible to fallback to the underlying gocryptfs or git commands.
-
 It allows data encryption, version control, and replication, while leveraging free storage.
-Refer to [this post](https://stackoverflow.com/a/59479166/) for the applicable limits.
-The known limits are 5G per repo (soft limit for GitHub), 10G per repo (hard limit for GitLab), 100M per file (hard limit for GitHub), and 2G per push (hard limit for GitHub).
 
 It is in a very early stage of development and documentation.
 Even after this is remedied, it is still just a stopgap until a more sophisticated and cross-platform utility is developed in Golang.
@@ -15,6 +12,15 @@ Even after this is remedied, it is still just a stopgap until a more sophisticat
 1. git
 1. Linux (tested with Ubuntu)
 1. A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account with an identical username!
+
+The known applicable size [limits](https://stackoverflow.com/a/59479166/) are:
+
+| Subject | Value | Type | Enforcer |
+|---------|-------|------|----------|
+| File    | 100M  | Hard | GitHub   |
+| Push    | 2G    | Hard | GitHub   |
+| Repo    | 5G    | Soft | GitHub   |
+| Repo    | 10G   | Hard | GitLab   |
 
 ## Installation
 ### For general use
