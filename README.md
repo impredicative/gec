@@ -2,7 +2,7 @@
 
 **`gec`** is a simple and opinionated Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
 It refrains from doing anything clever, making it possible to fallback to the underlying gocryptfs or git commands if a need should arise.
-It transparently uses data encryption, version control, while leveraging redundant free storage.
+It transparently uses data encryption, version control, while leveraging redundant remote storage.
 
 It is in a very early stage of development and documentation.
 Even after this is remedied, it is still just a stopgap until a more sophisticated and cross-platform utility is developed in Golang.
