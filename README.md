@@ -15,7 +15,9 @@ Even after this is remedied, it is still just a stopgap until a more sophisticat
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be useful.
 
 ## Limitations
-The known applicable size [limits](https://stackoverflow.com/a/59479166/) are:
+* The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
+These limits are not checked or enforced by this tool. If a hard limit is violated, a `push` or `send` will simply fail.
+Note that the size of an encrypted file can be just slightly larger than the size of its decrypted file.
 
 | Subject | Value | Type | Enforcer |
 |---------|-------|------|----------|
@@ -24,7 +26,7 @@ The known applicable size [limits](https://stackoverflow.com/a/59479166/) are:
 | Repo    | 5G    | Soft | GitHub   |
 | Repo    | 10G   | Hard | GitLab   |
 
-Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in the decrypted repo itself.
+* Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in the decrypted repo itself.
 
 ## Installation
 ### For general use
@@ -54,18 +56,16 @@ In the workflows below:
 * `<owner>` refers to the previously configured owner
 * `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab
 
-For each repo, for the first device:
-* Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
+For a new repo:
+* Create a `<repo>` under the `<owner>` in GitHub and GitLab.
 * $ gec clone `<repo>`
 * $ gec init.fs `<repo>`  # Asks for new password. Save the password and the printed master key.
-* $ gec send `<repo>` "Initialize new repo"  # Commit and push
+* $ gec send `<repo>` "Initialize"  # Commit and push
 
-For each repo, for subsequent devices:
-* Ensure SSH access exists to repo in GitHub and GitLab.
-* $ gec set owner `<owner>`  # Just once for all future repos
+For an existing repo with a previously initialized filesystem:
 * $ gec clone `<repo>`
 
-For all devices, to use a repo:
+To use a repo:
 * $ gec pull `<repo>`  # If and when changed on remote
 * $ gec use `<repo>`  # Mount and CD. Asks for password.
 * $ gec status `<repo>`  # Optional
