@@ -10,8 +10,9 @@ Even after this is remedied, it is still just a stopgap until a more sophisticat
 ## Requirements
 1. gocryptfs ≥ 2.0-beta1
 1. git
-1. Linux (tested with Ubuntu)
+1. Linux
 1. A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account with an identical username!
+If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be useful.
 
 ## Limitations
 The known applicable size [limits](https://stackoverflow.com/a/59479166/) are:
@@ -37,34 +38,41 @@ git clone git@github.com:impredicative/gec.git
 ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 ```
 
-## Storage repo Setup
-Storage repos are created in `~/gocryptfs/`. Both encrypted and decrypted files are organized in this location.
+## Setup
+Storage repos are created in `~/gocryptfs/`. This location is created automatically. Both encrypted and decrypted files are organized in this location.
 Although this location is not currently configurable, a softlink or hardlink can be used to redirect it elsewhere if needed.
 
-In the workflows below:
+In the steps below:
 * `<owner>` refers to an identical username in both GitHub and GitLab
+
+On each device:
+* $ gec set owner `<owner>`  # Just once for all future repos
+* Ensure SSH access exists to repo in GitHub and GitLab.
+
+## Usage
+In the workflows below:
+* `<owner>` refers to the previously configured owner
 * `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab
 
-### On first device
+For each repo, for the first device:
 * Create a `<repo>` under a fixed `<owner>` in GitHub and GitLab.
+* $ gec clone `<repo>`
+* $ gec init.fs `<repo>`  # Asks for new password. Save the password and the printed master key.
+* $ gec send `<repo>` "Initialize new repo"  # Commit and push
+
+For each repo, for subsequent devices:
 * Ensure SSH access exists to repo in GitHub and GitLab.
 * $ gec set owner `<owner>`  # Just once for all future repos
 * $ gec clone `<repo>`
-* $ gec init.fs `<repo>`  # Asks for new password. Save the printed master key.
 
-### On subsequent devices
-* Ensure SSH access exists to repo in GitHub and GitLab.
-* $ gec set owner `<owner>`  # Just once for all future repos
-* $ gec clone `<repo>`
-
-## Storage repo Usage
-* $ gec pull `<repo>`  # If changed on remote
+For all devices, to use a repo:
+* $ gec pull `<repo>`  # If and when changed on remote
 * $ gec use `<repo>`  # Mount and CD. Asks for password.
 * $ gec status `<repo>`  # Optional
 * $ gec send `<repo>` "a non-secret commit message"  # Commit and push
 * $ gec umount `<repo>`  # Optional, except before git pull/merge/checkout
 
-## High-level Roadmap
+## Roadmap
 * Try clone,send,push,pull with password-protected SSH key.
 * Auto-detect and use current `<repo>` whenever possible.
 * Improve stdout messages.
