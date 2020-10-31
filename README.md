@@ -49,15 +49,14 @@ In the steps below:
 
 On each device:
 * $ gec set owner `<owner>`  # Just once for all future repos
-* Setup SSH:
-  * $ ssh-keygen -f ~/.ssh/id_gec  # Use and save a passphrase to prevent any unauthorized push
-  * Add `~/.ssh/id_gec.pub` key in GitHub and GitLab.
-  * Create or prepend to `~/.ssh/config` the contents:
-    ```shell script
-    Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
-        IdentityFile ~/.ssh/id_gec
-    ```
-  * $ chmod go-rw ~/.ssh/config
+* $ ssh-keygen -f ~/.ssh/id_gec  # Use and save a passphrase to prevent any unauthorized push
+* Add `~/.ssh/id_gec.pub` key in GitHub and GitLab.
+* Create or prepend to `~/.ssh/config` the contents:
+```shell script
+Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
+    IdentityFile ~/.ssh/id_gec
+```
+* $ chmod go-rw ~/.ssh/config
 
 ## Usage
 In the workflows below:
