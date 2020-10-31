@@ -164,7 +164,7 @@ case "${CMD}" in
     ${TOOL} state "${REPO}" && echo
     cd "${GITDIR}"
     git status
-    mountpoint -q "${DECDIR}" && echo && findmnt "${DECDIR}" || :
+    mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
     ;;
   log)
     ${TOOL} state "${REPO}" && echo
