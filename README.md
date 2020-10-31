@@ -7,6 +7,15 @@ It transparently uses data encryption, version control, while leveraging redunda
 It is in a very early stage of development and documentation.
 Even after this is remedied, it is still just a stopgap until a more sophisticated and cross-platform utility is developed in Golang.
 
+## Contents
+* [Requirements](#requirements)
+* [Limitations](#limitations)
+* [Installation](#installation)
+* [Development](#development)
+* [Setup](#setup)
+* [Workflow](#workflow)
+* [Roadmap](#roadmap)
+
 ## Requirements
 1. gocryptfs ≥ 2.0-beta1
 1. git
@@ -29,12 +38,12 @@ Note that the size of an encrypted file can be just slightly larger than the siz
 * Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in the decrypted repo itself.
 
 ## Installation
-### For general use
 ```shell script
 wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
 ```
-### For development
+
+## Development
 ```shell script
 git clone git@github.com:impredicative/gec.git
 ln -s "${PWD}/gec.sh" ~/.local/bin/gec
