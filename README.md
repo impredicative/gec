@@ -58,7 +58,7 @@ On each device:
     ```
 1. $ chmod go-rw ~/.ssh/config
 
-## Usage
+## Workflow
 In the workflows below:
 * `<owner>` refers to the previously configured owner
 * `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab
@@ -80,7 +80,6 @@ To use a repo:
 * $ gec umount `<repo>`  # Optional, except before git pull/merge/checkout
 
 ## Roadmap
-* Try clone,send,push,pull with password-protected SSH key.
 * Auto-detect and use current `<repo>` whenever possible.
 * Improve stdout messages.
 * Document all commands.
