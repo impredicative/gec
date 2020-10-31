@@ -22,7 +22,7 @@ cfg_haskey() { # path, key
 TOOL="$(basename "$0")"
 CMD="$1"
 CONFIGFILE="${HOME}/.gec"
-_APPDIR="${HOME}/gocryptfs"
+_APPDIR="${HOME}/gec"
 
 touch -a "${CONFIGFILE}"
 
