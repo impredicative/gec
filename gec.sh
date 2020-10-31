@@ -46,7 +46,7 @@ case "${CMD}" in
     cat "${CONFIGFILE}"
     exit
     ;;
-  ls)
+  ls|list)
     ls -1 "${_GITDIR}" 2>&- || :
     exit
     ;;
