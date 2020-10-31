@@ -52,7 +52,19 @@ case "${CMD}" in
     ;;
 esac
 
-REPO="$2"
+# Define repo vars
+if [ "$#" -ge 2 ] && [ "$2" != '.' ]; then
+  REPO="$2"
+else
+  case "${PWD}"/ in
+    ${_GITDIR}/*/*) REPO=$(realpath --relative-to="${_GITDIR}" "${PWD}" | cut -d/ -f1);;
+    ${_DECDIR}/*/*) REPO=$(realpath --relative-to="${_DECDIR}" "${PWD}" | cut -d/ -f1);;
+    *)
+     echo "${TOOL}: Failed to identify repo. Provide it as a positional argument or change to its directory." >&2
+     exit 1
+     ;;
+  esac
+fi
 GITDIR="${_GITDIR}/${REPO}"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
