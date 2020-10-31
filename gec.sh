@@ -21,7 +21,12 @@ cfg_haskey() { # path, key
 
 # Define non-repo vars
 TOOL="$(basename "$0")"
-CMD="$1"
+if [ "$#" -ge 1 ]; then
+  CMD="$1"
+else
+   echo "${TOOL}: Provide a command as a positional argument." >&2
+   exit 1
+fi
 CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gec"
 _GITDIR="${_APPDIR}/encrypted"
