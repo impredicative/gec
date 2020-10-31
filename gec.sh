@@ -157,8 +157,8 @@ case "${CMD}" in
     ${TOOL} shell.dec ${REPO}
     ;;
   state)
-    MOUNT_STATUS=$(mountpoint -q "${DECDIR}" && echo "mounted" || echo "unmounted")
-    echo "${REPO} is ${MOUNT_STATUS}."
+    MOUNT_STATE=$(mountpoint -q "${DECDIR}" && echo "mounted" || echo "unmounted")
+    echo "${REPO} (${MOUNT_STATE})"
     ;;
   status|info)
     ${TOOL} state "${REPO}" && echo
