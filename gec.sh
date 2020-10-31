@@ -23,6 +23,7 @@ TOOL="$(basename "$0")"
 CMD="$1"
 CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gec"
+_GITDIR="${_APPDIR}/encrypted"
 
 touch -a "${CONFIGFILE}"
 
@@ -37,10 +38,14 @@ case "${CMD}" in
     cat "${CONFIGFILE}"
     exit
     ;;
+  ls)
+    ls -1 "${_GITDIR}" 2>&- || :
+    exit
+    ;;
 esac
 
 REPO="$2"
-GITDIR="${_APPDIR}/encrypted/${REPO}"
+GITDIR="${_GITDIR}/${REPO}"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_APPDIR}/decrypted/${REPO}"
 
