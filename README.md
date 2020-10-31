@@ -52,11 +52,11 @@ On each device:
 * Setup SSH:
   * $ ssh-keygen  # Save SSH key having a passphrase to `/home/<user>/.ssh/id_gec`. Save the passphrase. Passphrase prevents ransomware from force pushing.
   * Add `~/.ssh/id_gec.pub` key in GitHub and GitLab.
-  * Create or add to `~/.ssh/config` the contents:
-```shell script
-Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
-    IdentityFile ~/.ssh/id_gec
-```
+  * Create or prepend to `~/.ssh/config` the contents:
+    ```shell script
+    Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
+        IdentityFile ~/.ssh/id_gec
+    ```
   * $ chmod go-rw ~/.ssh/config
 
 ## Usage
