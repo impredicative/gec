@@ -30,18 +30,18 @@ Note that the size of an encrypted file can be just slightly larger than the siz
 
 ## Installation
 ### For general use
-```bash
+```shell script
 wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
 ```
 ### For development
-```bash
+```shell script
 git clone git@github.com:impredicative/gec.git
 ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 ```
 
 ## Setup
-Storage repos are created in `~/gocryptfs/`. This location is created automatically. Both encrypted and decrypted files are organized in this location.
+Storage repos are created in `~/gec/`. This location is created automatically. Both encrypted and decrypted files are organized in this location.
 Although this location is not currently configurable, a softlink or hardlink can be used to redirect it elsewhere if needed.
 
 In the steps below:
@@ -49,7 +49,15 @@ In the steps below:
 
 On each device:
 * $ gec set owner `<owner>`  # Just once for all future repos
-* Ensure SSH access exists to repo in GitHub and GitLab.
+* Setup SSH:
+  * $ ssh-keygen  # Save SSH key having a passphrase to `/home/<user>/.ssh/id_gec`. Save the passphrase. Passphrase prevents ransomware from force pushing.
+  * Add `~/.ssh/id_gec.pub` key in GitHub and GitLab.
+  * Create or add to `~/.ssh/config` the contents:
+```shell script
+Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
+    IdentityFile ~/.ssh/id_gec
+```
+  * $ chmod go-rw ~/.ssh/config
 
 ## Usage
 In the workflows below:
