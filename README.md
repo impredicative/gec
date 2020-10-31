@@ -50,7 +50,7 @@ In the steps below:
 On each device:
 * $ gec set owner `<owner>`  # Just once for all future repos
 * Setup SSH:
-  * $ ssh-keygen  # Save SSH key having a passphrase to `/home/<user>/.ssh/id_gec`. Save the passphrase. Passphrase prevents ransomware from force pushing.
+  * $ ssh-keygen -f ~/.ssh/id_gec  # Use and save a passphrase to prevent any unauthorized push
   * Add `~/.ssh/id_gec.pub` key in GitHub and GitLab.
   * Create or prepend to `~/.ssh/config` the contents:
     ```shell script
@@ -67,7 +67,7 @@ In the workflows below:
 For a new repo:
 * Create a `<repo>` under the `<owner>` in GitHub and GitLab.
 * $ gec clone `<repo>`
-* $ gec init.fs `<repo>`  # Asks for new password. Save the password and the printed master key.
+* $ gec init.fs `<repo>`  # Set and save the new password and the printed master key
 * $ gec send `<repo>` "Initialize"  # Commit and push
 
 For an existing repo with a previously initialized filesystem:
