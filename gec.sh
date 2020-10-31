@@ -155,7 +155,7 @@ case "${CMD}" in
     MOUNT_STATUS=$(mountpoint -q "${DECDIR}" && echo "mounted" || echo "unmounted")
     echo "${REPO} is ${MOUNT_STATUS}."
     ;;
-  status)
+  status|info)
     ${TOOL} state "${REPO}" && echo
     cd "${GITDIR}"
     git status
