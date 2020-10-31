@@ -156,7 +156,7 @@ case "${CMD}" in
     ${TOOL} mount.ro ${REPO}
     ${TOOL} shell.dec ${REPO}
     ;;
-  state)
+  state|'?')
     MOUNT_STATE=$(mountpoint -q "${DECDIR}" && echo "mounted" || echo "unmounted")
     echo "${REPO} (${MOUNT_STATE})"
     ;;
