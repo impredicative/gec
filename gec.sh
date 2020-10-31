@@ -24,6 +24,7 @@ CMD="$1"
 CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gec"
 _GITDIR="${_APPDIR}/encrypted"
+_DECDIR="${_APPDIR}/decrypted"
 
 touch -a "${CONFIGFILE}"
 
@@ -47,7 +48,7 @@ esac
 REPO="$2"
 GITDIR="${_GITDIR}/${REPO}"
 ENCDIR="${GITDIR}/fs"
-DECDIR="${_APPDIR}/decrypted/${REPO}"
+DECDIR="${_DECDIR}/${REPO}"
 
 # Run command
 case "${CMD}" in
