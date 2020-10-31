@@ -168,7 +168,7 @@ case "${CMD}" in
     fi
     ;;
   *)
-   echo "Invalid command"
+   echo "Failed: ${TOOL} $@" >&2
    exit 1
    ;;
 esac
