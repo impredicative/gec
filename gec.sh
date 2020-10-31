@@ -94,6 +94,7 @@ case "${CMD}" in
     fusermount -u "${DECDIR}"
     ;;
   commit)
+    ${TOOL} state "${REPO}" && echo
     set -x
     cd "${GITDIR}"
     git add -A -v
@@ -138,32 +139,43 @@ case "${CMD}" in
     ${TOOL} mount ${REPO}
     ${TOOL} shell.dec ${REPO}
     ;;
+  state)
+    MOUNT_STATUS=$(mountpoint -q "${DECDIR}" && echo "mounted" || echo "unmounted")
+    echo "${REPO} is ${MOUNT_STATUS}."
+    ;;
   status)
-    set -x
+    ${TOOL} state "${REPO}" && echo
     cd "${GITDIR}"
     git status
-    mountpoint "${DECDIR}" && findmnt "${DECDIR}" || :
+    mountpoint -q "${DECDIR}" && echo && findmnt "${DECDIR}" || :
     ;;
   log)
-    set -x
+    ${TOOL} state "${REPO}" && echo
     cd "${GITDIR}"
     git log --color=always --decorate -10 | grep -v '^Author: '
     ;;
   du.git)
+    ${TOOL} state "${REPO}" && echo
     set -x
     cd "${GITDIR}"
     du -h -c -d 1
     ;;
   du.enc)
+    ${TOOL} state "${REPO}" && echo
     set -x
     cd "${ENCDIR}"
     du -h -c -d 1
     ;;
   du.dec)
-    set -x
-    mountpoint "${DECDIR}"
-    cd "${DECDIR}"
-    du -h -c -d 1
+    ${TOOL} state "${REPO}" && echo
+    if mountpoint -q "${DECDIR}"; then
+      set -x
+      cd "${DECDIR}"
+      du -h -c -d 1
+    else
+      echo "${TOOL}: Failed: $@" >&2
+      exit 3
+    fi
     ;;
   rm)
     if ! mountpoint "${DECDIR}"; then
