@@ -27,6 +27,10 @@ _APPDIR="${HOME}/gec"
 touch -a "${CONFIGFILE}"
 
 case "${CMD}" in
+  get)
+    cfg_read "${CONFIGFILE}" "$2"
+    exit
+    ;;
   set)
     cfg_write "${CONFIGFILE}" "$2" "$3"
     set -x
