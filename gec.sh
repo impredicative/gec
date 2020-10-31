@@ -101,7 +101,7 @@ case "${CMD}" in
       cd "${GITDIR}"
       git pull
     else
-      echo "Failed: ${TOOL} $@" >&2
+      echo "${TOOL}: Failed: $@" >&2
       exit 2
     fi
     ;;
@@ -166,12 +166,12 @@ case "${CMD}" in
       rm -rfI "${DECDIR}"
       rm -rfI "${GITDIR}"
     else
-      echo "Failed: ${TOOL} $@" >&2
+      echo "${TOOL}: Failed: $@" >&2
       exit 3
     fi
     ;;
   *)
-   echo "Failed: ${TOOL} $@" >&2
+   echo "${TOOL}: Unknown command: $@" >&2
    exit 1
    ;;
 esac
