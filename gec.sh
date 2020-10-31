@@ -102,7 +102,7 @@ case "${CMD}" in
       git pull
     else
       echo "Failed: ${TOOL} $@" >&2
-      exit 1
+      exit 2
     fi
     ;;
   push)
@@ -167,7 +167,7 @@ case "${CMD}" in
       rm -rfI "${GITDIR}"
     else
       echo "Failed: ${TOOL} $@" >&2
-      exit 1
+      exit 3
     fi
     ;;
   *)
