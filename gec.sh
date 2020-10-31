@@ -19,6 +19,7 @@ cfg_haskey() { # path, key
   test -f "$1" && grep "^$(echo "$2" | sed_escape)=" "$1" > /dev/null
 }
 
+# Define non-repo vars
 TOOL="$(basename "$0")"
 CMD="$1"
 CONFIGFILE="${HOME}/.gec"
@@ -28,6 +29,7 @@ _DECDIR="${_APPDIR}/decrypted"
 
 touch -a "${CONFIGFILE}"
 
+# Run non-repo command
 case "${CMD}" in
   get)
     cfg_read "${CONFIGFILE}" "$2"
@@ -50,7 +52,7 @@ GITDIR="${_GITDIR}/${REPO}"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
 
-# Run command
+# Run repo command
 case "${CMD}" in
   clone)
     GITUSER=$(cfg_read "${CONFIGFILE}" owner)
