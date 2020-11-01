@@ -76,19 +76,19 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 
 For a new repo:
 * Create a `<repo>` under the `<owner>` in GitHub and GitLab.
-* $ gec clone `<repo>`
-* $ gec init.fs [`<repo>`]  # Set and save the new password and the printed master key
-* $ gec send `<repo>` "Initialize"  # Commit and push. Can specify current repo as a single period.
+* $ `gec clone <repo>`
+* $ `gec init.fs [<repo>]`  # Set and save the new password and the printed master key
+* $ `gec send <repo> "Initialize"`  # Commit and push. Can specify current repo as a single period.
 
 For an existing repo with a previously initialized filesystem:
-* $ gec clone `<repo>`
+* $ `gec clone <repo>`
 
 To use a repo:
-* $ gec pull [`<repo>`]  # If and when changed on remote
-* $ gec use [`<repo>`]  # Mount and CD. Asks for password.
-* $ gec status [`<repo>`]
-* $ gec send `<repo>` "a non-secret commit message"  # Commit and push. Can specify current repo as a single period.
-* $ gec umount [`<repo>`]  # Optional, except before git pull/merge/checkout
+* $ `gec pull [<repo>]`  # If and when changed on remote
+* $ `gec use [<repo>]`  # Mount and CD. Asks for password.
+* $ `gec status [<repo>]`
+* $ `gec send <repo> "a non-secret commit message"`  # Commit and push. Can specify current repo as a single period.
+* $ `gec umount [<repo>]`  # Optional, except before git pull/merge/checkout
 
 ## Roadmap
 * Improve stdout messages.
