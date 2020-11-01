@@ -77,7 +77,7 @@ On each device:
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
 It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
-When it can be auto-determined, to disambiguate a command's arguments that follow, it can be specified as a single period.
+When it can be auto-determined, to disambiguate a command's arguments that follow, it can be specified as a period.
 
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
@@ -98,13 +98,13 @@ In the workflows below:
 * `<owner>` refers to the previously configured owner
 * `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
 It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
-When it can be auto-determined, to disambiguate a command's arguments that follow, it can be specified as a single period.
+When it can be auto-determined, to disambiguate a command's arguments that follow, it can be specified as a period.
 
 For a new repo:
 * Create a `<repo>` under the `<owner>` in GitHub and GitLab.
 * `gec clone <repo>`
 * `gec init.fs [<repo>]`
-* `gec send <repo> "Initialize"`  # Commit and push. Can specify current repo as a single period.
+* `gec send <repo> "Initialize"`  # Commit and push. Can specify current repo as a period.
 
 For an existing repo with a previously initialized filesystem:
 * `gec clone <repo>`
