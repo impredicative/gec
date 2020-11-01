@@ -14,6 +14,7 @@ Even after this is remedied, it is still just a stopgap until a more sophisticat
 * [Development](#development)
 * [Setup](#setup)
 * [Workflow](#workflow)
+* [Commands](#commands)
 * [Roadmap](#roadmap)
 
 ## Requirements
@@ -90,8 +91,21 @@ To use a repo:
 * $ `gec send <repo> "a non-secret commit message"`  # Commit and push. Can specify current repo as a single period.
 * $ `gec umount [<repo>]`  # Optional, except before `gec pull` or `git checkout`, etc.
 
+## Commands
+### Repo-agnostic
+* **`get <key>`**: Get value of key from configuration file. The configuration file is `~/.gec`.
+* **`ls`**: List the name and mount status of all repos.
+* **`set <key> <val>`**: Set key to value in configuration file. The configuration file is `~/.gec`.
+
+### Repo-specific
+* **`clone <repo>`**: Clone and configure a preexisting repo from GitHub, and add its GitLab URL.
+* **`init.fs <repo>`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made.
+A new password is requested. The password and a printed master key must be saved.
+* **`mount <repo>`**: Mount a repo having a previously initialized encrypted filesystem.
+
+(incomplete list)
+
 ## Roadmap
 * Improve stdout messages.
-* Document all commands.
 * Try git LFS.
 * Try Microsoft Scalar instead of git.
