@@ -75,16 +75,9 @@ case "${CMD}" in
     GITUSER=$(cfg_read "${CONFIGFILE}" owner)
     set -x
     mkdir -p -v "${GITDIR}" && cd "$_"
-
-    # Clone:
-    git clone git@github.com:${GITUSER}/${REPO}.git .
+    git clone -c http.postBuffer=2000000000 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
     git remote set-url --add origin git@gitlab.com:${GITUSER}/${REPO}.git
     git remote -v
-
-    # Configure:
-    git config http.postBuffer 2000000000
-    git config user.name gec
-    git config user.email gec@users.noreply.git.com
     git config --local -l
     ;;
   init.fs)
