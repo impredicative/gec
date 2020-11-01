@@ -94,6 +94,8 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 
 (incomplete list)
 
+For any other action, use the respective git or OS command.
+
 ## Workflow
 In the workflows below:
 * `<owner>` refers to the previously configured owner
