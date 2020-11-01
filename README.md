@@ -77,7 +77,7 @@ On each device:
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
 It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
-When it can be auto-determined, to disambiguate a command's arguments that follow, it can be specified as a period.
+When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into `~/gec/encrypted/<repo>`, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes that exist in `~/gec/encrypted/<repo>`. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
@@ -101,10 +101,10 @@ In the workflows below:
 * `<owner>` refers to the previously configured owner
 * `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
 It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
-When it can be auto-determined, to disambiguate a command's arguments that follow, it can be specified as a period.
+When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
 For a new repo:
-* Create a `<repo>` under the `<owner>` in GitHub and GitLab.
+* Create a `<repo>` under the `<owner>` in GitHub and GitLab. This step is currently not automated.
 * `gec clone <repo>`
 * `gec init.fs [<repo>]`
 * `gec send <repo> "Initialize"`  # Commit and push. Can specify current repo as a period.
@@ -123,3 +123,4 @@ To use a repo:
 * Document all commands.
 * Mirror to https://gitee.com/
 * Review and improve stdout messages of each command.
+* Automate creation of repo in GitHub and GitLab.
