@@ -89,10 +89,12 @@ In the commands below, `<repo>` refers to an identical repository name, e.g. "tr
 It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
+* **`? [<repo>]`**: Alias of `status`.
 * **`clone <repo>`**: Clone and configure a preexisting encrypted repo from GitHub into its git repo directory, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`dismount`**: Alias of `umount`.
 * **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be securely saved.
+* **`info [<repo>]`**: Alias of `status`.
 * **`mount [<repo>]`**: Mount a repo into its decrypted mountpoint. The repo must be in a dismounted state.
 * **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
 * **`pull [<repo>]`**: Pull commits from remote. For safety, a prerequisite is that the repo must be in a dismounted state.
@@ -100,8 +102,12 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`send <repo> "<commit_msg>"`**: Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
 * **`shell.git [<repo>]`**: Provide a shell into the git repo directory.
+* **`state [<repo>]`**: Display the repo name and mount state.
+* **`status  [<repo>]`**: Display the repo name, mount state, short git status, and mount information if mounted.
 * **`umount [<repo>]`**: Unmount a previously mounted repo.
 * **`unmount`**: Alias of `umount`.
+* **`use [<repo>]`**: Mount and provide a shell into the decrypted mountpoint. The repo must be in a dismounted state.
+* **`use.ro [<repo>]`**: Mount read-only and provide a shell into the decrypted mountpoint. The repo must be in a dismounted state.
 
 (incomplete list)
 
@@ -118,20 +124,21 @@ For a new repo:
 * Create a `<repo>` under the `<owner>` in GitHub and GitLab. This step is currently not automated.
 * `gec clone <repo>`
 * `gec init.fs [<repo>]`
-* `gec send <repo> "Initialize"`  # Commit and push. Can specify current repo as a period.
+* `gec send <repo> "Initialize"`
 
 For an existing repo with a previously initialized filesystem:
 * `gec clone <repo>`
 
 To use a repo:
 * `gec pull [<repo>]`  # If and when changed on remote
-* `gec use [<repo>]`  # Mount and CD. Asks for password.
+* `gec use [<repo>]`
 * `gec status [<repo>]`
 * `gec send <repo> "a non-secret commit message"`
-* `gec umount [<repo>]`  # Optional, except before `gec pull` or `git checkout`, etc.
+* `gec umount [<repo>]`
 
 ## Roadmap
 * Document all commands.
+* Try moving config to git config file.
 * Mirror to https://gitee.com/
 * Review and improve stdout messages of each command.
 * Automate creation of repo in GitHub and GitLab.
