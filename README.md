@@ -13,6 +13,7 @@ Even after this is remedied, it is still just a stopgap until a more sophisticat
 * [Installation](#installation)
 * [Development](#development)
 * [Setup](#setup)
+* [Directories](#directories)
 * [Commands](#commands)
 * [Workflow](#workflow)
 * [Roadmap](#roadmap)
@@ -51,9 +52,6 @@ ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 ```
 
 ## Setup
-Storage repos are created in `~/gec/`. This location is created automatically. Both encrypted and decrypted files are organized in this location.
-Although this location is not currently configurable, a softlink or hardlink can be used to redirect it elsewhere if needed.
-
 In the steps below:
 * `<owner>` refers to an identical username in both GitHub and GitLab
 
@@ -67,6 +65,18 @@ On each device:
         IdentityFile ~/.ssh/id_gec
     ```
 1. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as is advised in `man ssh_config`.
+
+## Directories
+Storage repos are created in `~/gec/`. This location is created automatically. Both encrypted and decrypted files are organized in this location.
+Although this location is not currently configurable, a softlink or hardlink can be used to redirect it elsewhere if needed.
+
+For each repo, these directories are created and used:
+
+| Location                    | Description                    |
+|-----------------------------|--------------------------------|
+| `~/gec/encrypted/<repo>`    | git repo contents              |
+| `~/gec/encrypted/<repo>/fs` | encrypted contents in git repo |
+| `~/gec/decrypted/<repo>`    | decrypted mountpoint           |
 
 ## Commands
 ### Repo-agnostic
