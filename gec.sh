@@ -157,7 +157,12 @@ case "${CMD}" in
     ${TOOL} shell.dec ${REPO}
     ;;
   state|'?')
-    MOUNT_STATE=$(mountpoint -q "${DECDIR}" && echo "mounted" || echo "unmounted")
+    if mountpoint -q "${DECDIR}"; then
+      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
+      MOUNT_STATE="mounted ${MOUNT_OPTION}"
+    else
+      MOUNT_STATE="unmounted"
+    fi
     echo "${REPO} (${MOUNT_STATE})"
     ;;
   status|info|'??')
