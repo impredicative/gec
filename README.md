@@ -56,7 +56,7 @@ In the steps below:
 * `<owner>` refers to an identical username in both GitHub and GitLab
 
 On each device:
-1. Run `gec set owner <owner>` once for all future repos.
+1. Run `gec config core.owner <owner>` once for all future repos.
 1. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Use and securely save a passphrase for this key to minimize the risk of any unauthorized push.
 1. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in both GitHub and GitLab.
 1. Create or prepend to `~/.ssh/config` the contents:
@@ -80,9 +80,8 @@ For each repo, these directories are created and used:
 
 ## Commands
 ### Repo-agnostic
-* **`get <key>`**: Get value of key from configuration file `~/.gec`.
+* **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
 * **`ls`**: List the name and mount state of all repos in `~/gec/encrypted`.
-* **`set <key> <val>`**: Set key to value in configuration file `~/.gec`.
 
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
