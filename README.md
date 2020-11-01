@@ -25,18 +25,18 @@ Even after this is remedied, it is still just a stopgap until a more sophisticat
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be useful.
 
 ## Limitations
-* The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
+1. The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
 These limits are not checked or enforced by this tool. If a hard limit is violated, a `push` or `send` will simply fail.
 Note that the size of an encrypted file can be just slightly larger than the size of its decrypted file.
 
-| Subject | Value | Type | Enforcer |
-|---------|-------|------|----------|
-| File    | 100M  | Hard | GitHub   |
-| Push    | 2G    | Hard | GitHub   |
-| Repo    | 5G    | Soft | GitHub   |
-| Repo    | 10G   | Hard | GitLab   |
+    | Subject | Value | Type | Enforcer |
+    |---------|-------|------|----------|
+    | File    | 100M  | Hard | GitHub   |
+    | Push    | 2G    | Hard | GitHub   |
+    | Repo    | 5G    | Soft | GitHub   |
+    | Repo    | 10G   | Hard | GitLab   |
 
-* Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in the decrypted repo itself.
+1. Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in the decrypted repo itself.
 
 ## Installation
 ```shell script
@@ -116,4 +116,5 @@ To use a repo:
 
 ## Roadmap
 * Document all commands.
+* Mirror to https://gitee.com/
 * Review and improve stdout messages of each command.
