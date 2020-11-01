@@ -141,7 +141,6 @@ To use a repo:
 * `gec umount [<repo>]`
 
 ## Roadmap
-* Try moving config to git config file.
 * Mirror to https://gitee.com/
 * Review and improve stdout messages of each command.
 * Automate creation of repo in GitHub and GitLab.
