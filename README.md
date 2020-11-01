@@ -82,10 +82,12 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`dismount`**: Alias of `umount`.
-* **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made.
-A new password is requested. The password and a printed master key must be saved.
+* **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be saved.
 * **`mount [<repo>]`**: Mount a repo having a previously initialized encrypted filesystem.
 * **`mount.ro [<repo>]`**: Mount in read-only mode a repo having a previously initialized encrypted filesystem.
+* **`pull [<repo>]`**: Pull commits from remote. For safety, a prerequisite is that the repo must be in a dismounted state.
+* **`push [<repo>]`**: Push commits to remote.
+* **`send <repo> "<commit_msg>"`**: Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`umount [<repo>]`**: Unmount a previously mounted repo.
 * **`unmount`**: Alias of `umount`.
 
