@@ -58,15 +58,15 @@ In the steps below:
 * `<owner>` refers to an identical username in both GitHub and GitLab
 
 On each device:
-1. $ `gec set owner <owner>`  # Just once for all future repos
-1. $ `ssh-keygen -f ~/.ssh/id_gec`  # Use and save a passphrase to prevent any unauthorized push
-1. Add `~/.ssh/id_gec.pub` key in GitHub and GitLab.
+1. Run `gec set owner <owner>` once for all future repos.
+1. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Use and save a passphrase for this key to minimize the risk of any unauthorized push.
+1. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in both GitHub and GitLab.
 1. Create or prepend to `~/.ssh/config` the contents:
     ```shell script
     Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
         IdentityFile ~/.ssh/id_gec
     ```
-1. $ `chmod go-rw ~/.ssh/config`
+1. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as advised in `man ssh_config`.
 
 ## Workflow
 In the workflows below:
