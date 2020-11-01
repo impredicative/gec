@@ -88,7 +88,7 @@ To use a repo:
 * $ `gec use [<repo>]`  # Mount and CD. Asks for password.
 * $ `gec status [<repo>]`
 * $ `gec send <repo> "a non-secret commit message"`  # Commit and push. Can specify current repo as a single period.
-* $ `gec umount [<repo>]`  # Optional, except before git pull/merge/checkout
+* $ `gec umount [<repo>]`  # Optional, except before `gec pull` or `git checkout`, etc.
 
 ## Roadmap
 * Improve stdout messages.
