@@ -156,7 +156,7 @@ case "${CMD}" in
     ${TOOL} mount.ro ${REPO}
     ${TOOL} shell.dec ${REPO}
     ;;
-  state|'?')
+  state)
     if mountpoint -q "${DECDIR}"; then
       MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
       MOUNT_STATE="mounted ${MOUNT_OPTION}"
@@ -165,10 +165,10 @@ case "${CMD}" in
     fi
     echo "${REPO} (${MOUNT_STATE})"
     ;;
-  status|info|'??')
+  status|info|?)
     ${TOOL} state "${REPO}" && echo
     cd "${GITDIR}"
-    git status
+    git status -bs
     mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
     ;;
   log)
