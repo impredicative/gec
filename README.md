@@ -111,5 +111,3 @@ A new password is requested. The password and a printed master key must be saved
 
 ## Roadmap
 * Improve stdout messages.
-* Try git LFS.
-* Try Microsoft Scalar instead of git.
