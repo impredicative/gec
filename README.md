@@ -13,8 +13,8 @@ Even after this is remedied, it is still just a stopgap until a more sophisticat
 * [Installation](#installation)
 * [Development](#development)
 * [Setup](#setup)
-* [Workflow](#workflow)
 * [Commands](#commands)
+* [Workflow](#workflow)
 * [Roadmap](#roadmap)
 
 ## Requirements
@@ -66,30 +66,7 @@ On each device:
     Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
         IdentityFile ~/.ssh/id_gec
     ```
-1. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as advised in `man ssh_config`.
-
-## Workflow
-In the workflows below:
-* `<owner>` refers to the previously configured owner
-* `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
-It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
-When it can be auto-determined, to disambiguate a command's arguments that follow, it can be specified as a single period.
-
-For a new repo:
-* Create a `<repo>` under the `<owner>` in GitHub and GitLab.
-* $ `gec clone <repo>`
-* $ `gec init.fs [<repo>]`  # Set and save the new password and the printed master key
-* $ `gec send <repo> "Initialize"`  # Commit and push. Can specify current repo as a single period.
-
-For an existing repo with a previously initialized filesystem:
-* $ `gec clone <repo>`
-
-To use a repo:
-* $ `gec pull [<repo>]`  # If and when changed on remote
-* $ `gec use [<repo>]`  # Mount and CD. Asks for password.
-* $ `gec status [<repo>]`
-* $ `gec send <repo> "a non-secret commit message"`  # Commit and push. Can specify current repo as a single period.
-* $ `gec umount [<repo>]`  # Optional, except before `gec pull` or `git checkout`, etc.
+1. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as is advised in `man ssh_config`.
 
 ## Commands
 ### Repo-agnostic
@@ -103,11 +80,40 @@ It can be auto-determined if a command is run from its encrypted or decrypted di
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can be specified as a single period.
 
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub, and add its GitLab URL.
+* **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`dismount`**: Alias of `umount`.
 * **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made.
 A new password is requested. The password and a printed master key must be saved.
 * **`mount [<repo>]`**: Mount a repo having a previously initialized encrypted filesystem.
+* **`mount.ro [<repo>]`**: Mount in read-only mode a repo having a previously initialized encrypted filesystem.
+* **`umount [<repo>]`**: Unmount a previously mounted repo.
+* **`unmount`**: Alias of `umount`.
 
 (incomplete list)
 
+## Workflow
+In the workflows below:
+* `<owner>` refers to the previously configured owner
+* `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
+It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
+When it can be auto-determined, to disambiguate a command's arguments that follow, it can be specified as a single period.
+
+For a new repo:
+* Create a `<repo>` under the `<owner>` in GitHub and GitLab.
+* $ `gec clone <repo>`
+* $ `gec init.fs [<repo>]`
+* $ `gec send <repo> "Initialize"`  # Commit and push. Can specify current repo as a single period.
+
+For an existing repo with a previously initialized filesystem:
+* $ `gec clone <repo>`
+
+To use a repo:
+* $ `gec pull [<repo>]`  # If and when changed on remote
+* $ `gec use [<repo>]`  # Mount and CD. Asks for password.
+* $ `gec status [<repo>]`
+* $ `gec send <repo> "a non-secret commit message"`
+* $ `gec umount [<repo>]`  # Optional, except before `gec pull` or `git checkout`, etc.
+
 ## Roadmap
-* Improve stdout messages.
+* Document all commands.
+* Review and improve stdout messages of each command.
