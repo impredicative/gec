@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Configuration helpers from https://unix.stackexchange.com/a/433816/
+# Define configuration helper functions from https://unix.stackexchange.com/a/433816/
 sed_escape() {
   sed -e 's/[]\/$*.^[]/\\&/g'
 }
@@ -19,7 +19,7 @@ cfg_haskey() { # path, key
   test -f "$1" && grep "^$(echo "$2" | sed_escape)=" "$1" > /dev/null
 }
 
-# Define non-repo vars
+# Define repo-agnostic vars
 TOOL="$(basename "$0")"
 if [ "$#" -ge 1 ]; then
   CMD="$1"
@@ -34,7 +34,7 @@ _DECDIR="${_APPDIR}/decrypted"
 
 touch -a "${CONFIGFILE}"
 
-# Run non-repo command
+# Run repo-agnostic command
 case "${CMD}" in
   get)
     cfg_read "${CONFIGFILE}" "$2"
@@ -52,7 +52,7 @@ case "${CMD}" in
     ;;
 esac
 
-# Define repo vars
+# Define repo-specific vars
 if [ "$#" -ge 2 ] && [ "$2" != '.' ]; then
   REPO="$2"
 else
@@ -69,7 +69,7 @@ GITDIR="${_GITDIR}/${REPO}"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
 
-# Run repo command
+# Run repo-specific command
 case "${CMD}" in
   clone)
     GITUSER=$(cfg_read "${CONFIGFILE}" owner)
