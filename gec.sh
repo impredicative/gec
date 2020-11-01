@@ -47,7 +47,7 @@ case "${CMD}" in
     exit
     ;;
   ls|list)
-    ls -1 "${_GITDIR}" 2>&- || :
+    ls -1 "${_GITDIR}" 2>&- | xargs -i ${TOOL} state {} || :
     exit
     ;;
 esac
