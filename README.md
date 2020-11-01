@@ -59,7 +59,7 @@ In the steps below:
 
 On each device:
 1. Run `gec set owner <owner>` once for all future repos.
-1. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Use and save a passphrase for this key to minimize the risk of any unauthorized push.
+1. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Use and securely save a passphrase for this key to minimize the risk of any unauthorized push.
 1. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in both GitHub and GitLab.
 1. Create or prepend to `~/.ssh/config` the contents:
     ```shell script
@@ -82,7 +82,7 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into `~/gec/encrypted/<repo>`, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes that exist in `~/gec/encrypted/<repo>`. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`dismount`**: Alias of `umount`.
-* **`init.fs [<repo>]`**: Initialize the encrypted filesystem in `~/gec/encrypted/<repo>/fs` for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be saved.
+* **`init.fs [<repo>]`**: Initialize the encrypted filesystem in `~/gec/encrypted/<repo>/fs` for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be securely saved.
 * **`mount [<repo>]`**: Mount a repo into `~/gec/decrypted/<repo>`. It must be in a dismounted state.
 * **`mount.ro [<repo>]`**: Mount in read-only mode a repo into `~/gec/decrypted/<repo>`. It must be in a dismounted state.
 * **`pull [<repo>]`**: Pull commits from remote into `~/gec/encrypted/<repo>`. For safety, a prerequisite is that the repo must be in a dismounted state.
