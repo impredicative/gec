@@ -81,7 +81,7 @@ For each repo, these directories are created and used:
 ## Commands
 ### Repo-agnostic
 * **`get <key>`**: Get value of key from configuration file `~/.gec`.
-* **`ls`**: List the name and mount status of all repos in `~/gec/encrypted`.
+* **`ls`**: List the name and mount state of all repos in `~/gec/encrypted`.
 * **`set <key> <val>`**: Set key to value in configuration file `~/.gec`.
 
 ### Repo-specific
@@ -93,17 +93,22 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`clone <repo>`**: Clone and configure a preexisting encrypted repo from GitHub into its git repo directory, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`dismount`**: Alias of `umount`.
+* **`du.dec [<repo>]`**:  Print the human-friendly disk usage of the decrypted directory for a depth of one.
+* **`du.enc [<repo>]`**:  Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
+* **`du.git [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
 * **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be securely saved.
 * **`info [<repo>]`**: Alias of `status`.
+* **`log [<repo>]`**: Print the git log for the last ten commits.
 * **`mount [<repo>]`**: Mount a repo into its decrypted mountpoint. The repo must be in a dismounted state.
 * **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
 * **`pull [<repo>]`**: Pull commits from remote. For safety, a prerequisite is that the repo must be in a dismounted state.
 * **`push [<repo>]`**: Push commits to remote.
+* **`rm [<repo>]`**: Interactively remove all directories of the repo. The repo must be in a dismounted state.
 * **`send <repo> "<commit_msg>"`**: Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
 * **`shell.git [<repo>]`**: Provide a shell into the git repo directory.
-* **`state [<repo>]`**: Display the repo name and mount state.
-* **`status  [<repo>]`**: Display the repo name, mount state, short git status, and mount information if mounted.
+* **`state [<repo>]`**: Print the repo name and mount state.
+* **`status  [<repo>]`**: Print the repo name, mount state, short git status, and mount information if mounted.
 * **`umount [<repo>]`**: Unmount a previously mounted repo.
 * **`unmount`**: Alias of `umount`.
 * **`use [<repo>]`**: Mount and provide a shell into the decrypted mountpoint. The repo must be in a dismounted state.
@@ -137,7 +142,6 @@ To use a repo:
 * `gec umount [<repo>]`
 
 ## Roadmap
-* Document all commands.
 * Try moving config to git config file.
 * Mirror to https://gitee.com/
 * Review and improve stdout messages of each command.
