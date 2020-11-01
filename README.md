@@ -70,26 +70,27 @@ On each device:
 
 ## Commands
 ### Repo-agnostic
-* **`get <key>`**: Get value of key from configuration file. The configuration file is `~/.gec`.
-* **`ls`**: List the name and mount status of all repos.
-* **`set <key> <val>`**: Set key to value in configuration file. The configuration file is `~/.gec`.
+* **`get <key>`**: Get value of key from configuration file `~/.gec`.
+* **`ls`**: List the name and mount status of all repos in `~/gec/encrypted`.
+* **`set <key> <val>`**: Set key to value in configuration file `~/.gec`.
 
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
 It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
-* **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into `~/gec/encrypted/<repo>`, and add its GitLab URL.
-* **`commit <repo> "<commit_msg>"`**: Add and commit all changes that exist in `~/gec/encrypted/<repo>`. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`clone <repo>`**: Clone and configure a preexisting encrypted repo from GitHub into `~/gec/encrypted/<repo>`, and add its GitLab URL.
+* **`commit <repo> "<commit_msg>"`**: Add and commit all changes that exist in the encrypted directory `~/gec/encrypted/<repo>`. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`dismount`**: Alias of `umount`.
 * **`init.fs [<repo>]`**: Initialize the encrypted filesystem in `~/gec/encrypted/<repo>/fs` for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be securely saved.
-* **`mount [<repo>]`**: Mount a repo into `~/gec/decrypted/<repo>`. It must be in a dismounted state.
-* **`mount.ro [<repo>]`**: Mount in read-only mode a repo into `~/gec/decrypted/<repo>`. It must be in a dismounted state.
-* **`pull [<repo>]`**: Pull commits from remote into `~/gec/encrypted/<repo>`. For safety, a prerequisite is that the repo must be in a dismounted state.
-* **`push [<repo>]`**: Push commits in `~/gec/encrypted/<repo>` to remote.
-* **`send <repo> "<commit_msg>"`**: Add, commit, and push all changes in `~/gec/encrypted/<repo>`. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`mount [<repo>]`**: Mount a repo into the decrypted directory `~/gec/decrypted/<repo>`. The repo must be in a dismounted state.
+* **`mount.ro [<repo>]`**: Mount in read-only mode a repo into the decrypted directory `~/gec/decrypted/<repo>`. The repo must be in a dismounted state.
+* **`pull [<repo>]`**: Pull commits from remote into the encrypted directory `~/gec/encrypted/<repo>`. For safety, a prerequisite is that the repo must be in a dismounted state.
+* **`push [<repo>]`**: Push commits in the encrypted directory `~/gec/encrypted/<repo>` to remote.
+* **`send <repo> "<commit_msg>"`**: Add, commit, and push all changes from the encrypted directory `~/gec/encrypted/<repo>`. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted directory `~/gec/decrypted/<repo>` of a mounted repo.
-* **`umount [<repo>]`**: Unmount a previously mounted repo from `~/gec/decrypted/<repo>`.
+* **`shell.git [<repo>]`**: Provide a shell into the git repo directory `~/gec/encrypted/<repo>`.
+* **`umount [<repo>]`**: Unmount a previously mounted repo from its decrypted directory `~/gec/decrypted/<repo>`.
 * **`unmount`**: Alias of `umount`.
 
 (incomplete list)
