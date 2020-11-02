@@ -145,6 +145,7 @@ To use a repo:
 * `gec umount [<repo>]`
 
 ## Roadmap
+* Automate creation of repo in GitHub and GitLab.
+* Release.
 * Mirror to https://gitee.com/
 * Review and improve stdout messages of each command.
-* Automate creation of repo in GitHub and GitLab.
