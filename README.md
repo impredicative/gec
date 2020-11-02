@@ -83,7 +83,7 @@ For each repo, these directories are created and used:
 * **`ls`**: List the name and mount state of all repos in `~/gec/encrypted`.
 
 ### Repo-specific
-In the commands below, `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
+In the commands below, `<repo>` refers to an identical repository name, e.g. "travel-us", in both GitHub and GitLab.
 It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
@@ -119,7 +119,7 @@ For any other action, use the respective git or OS command.
 ## Workflow
 In the workflows below:
 * `<owner>` refers to the previously configured owner
-* `<repo>` refers to an identical repository name, e.g. "travel", in both GitHub and GitLab.
+* `<repo>` refers to an identical repository name, e.g. "travel-eu", in both GitHub and GitLab.
 It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
