@@ -87,34 +87,39 @@ In the commands below, `<repo>` refers to an identical repository name, e.g. "tr
 It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
+#### Informational
 * **`? [<repo>]`**: Alias of `status`.
-* **`clone <repo>`**: Clone and configure a preexisting encrypted repo from GitHub into its git repo directory, and add its GitLab URL.
-* **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
-* **`dismount`**: Alias of `umount`.
 * **`du.dec [<repo>]`**:  Print the human-friendly disk usage of the decrypted directory for a depth of one.
 * **`du.enc [<repo>]`**:  Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
 * **`du.git [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
-* **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be securely saved.
 * **`info [<repo>]`**: Alias of `status`.
 * **`log [<repo>]`**: Print the git log for the last ten commits.
-* **`mount [<repo>]`**: Mount a repo into its decrypted mountpoint. The repo must be in a dismounted state.
-* **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
-* **`pull [<repo>]`**: Pull commits from remote. For safety, a prerequisite is that the repo must be in a dismounted state.
-* **`push [<repo>]`**: Push commits to remote.
-* **`rm [<repo>]`**: Interactively remove all directories of the repo. The repo must be in a dismounted state.
-* **`send <repo> "<commit_msg>"`**: Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
-* **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
-* **`shell.git [<repo>]`**: Provide a shell into the git repo directory.
 * **`state [<repo>]`**: Print the repo name and mount state.
 * **`status  [<repo>]`**: Print the repo name, mount state, short git status, and mount information if mounted.
+
+#### git oriented
+* **`clone <repo>`**: Clone and configure a preexisting encrypted repo from GitHub into its git repo directory, and add its GitLab URL.
+* **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`pull [<repo>]`**: Pull commits from remote. For safety, a prerequisite is that the repo must be in a dismounted state.
+* **`push [<repo>]`**: Push commits to remote.
+* **`send <repo> "<commit_msg>"`**: Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+
+#### gocryptfs oriented
+* **`dismount`**: Alias of `umount`.
+* **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be securely saved.
+* **`mount [<repo>]`**: Mount a repo into its decrypted mountpoint. The repo must be in a dismounted state.
+* **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
 * **`umount [<repo>]`**: Unmount a previously mounted repo.
 * **`unmount`**: Alias of `umount`.
+
+#### System
+* **`rm [<repo>]`**: Interactively remove all directories of the repo. The repo must be in a dismounted state.
+* **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
+* **`shell.git [<repo>]`**: Provide a shell into the git repo directory.
+
+#### Compound
 * **`use [<repo>]`**: Mount and provide a shell into the decrypted mountpoint. The repo must be in a dismounted state.
 * **`use.ro [<repo>]`**: Mount read-only and provide a shell into the decrypted mountpoint. The repo must be in a dismounted state.
-
-(incomplete list)
-
-For any other action, use the respective git or OS command.
 
 ## Workflow
 In the workflows below:
