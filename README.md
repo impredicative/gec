@@ -149,3 +149,5 @@ To use a repo:
 * Release.
 * Mirror to https://gitee.com/
 * Review and improve stdout messages of each command.
+* Rewrite using Golang.
+* Add an optional UI.
