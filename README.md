@@ -84,7 +84,7 @@ For each repo, these directories are created and used:
 
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel-us", in both GitHub and GitLab.
-It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
+It can be auto-determined if a command is run from its encrypted or decrypted directory.
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
 #### Informational
@@ -96,6 +96,11 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`log [<repo>]`**: Print the git log for the last ten commits.
 * **`state [<repo>]`**: Print the repo name and mount state.
 * **`status  [<repo>]`**: Print the repo name, mount state, short git status, and mount information if mounted.
+
+#### Remote oriented
+* **`create <repo>`**: Create the repo in GitHub and GitLab. It must not already exist.
+A [GitHub token](https://github.com/settings/tokens/new) and a [GitLab token](https://gitlab.com/-/profile/personal_access_tokens) are required.
+For your security, these tokens are not saved by `gec`.
 
 #### git oriented
 * **`clone <repo>`**: Clone and configure a preexisting encrypted repo from GitHub into its git repo directory, and add its GitLab URL.
@@ -122,14 +127,10 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`use.ro [<repo>]`**: Mount read-only and provide a shell into the decrypted mountpoint. The repo must be in a dismounted state.
 
 ## Workflow
-In the workflows below:
-* `<owner>` refers to the previously configured owner
-* `<repo>` refers to an identical repository name, e.g. "travel-eu", in both GitHub and GitLab.
-It can be auto-determined if a command is run from its encrypted or decrypted directory, although this is not expected for the `clone` command.
-When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
+Refer to the [repo-specific commands](#repo-specific) section for details on using the commands in the workflows below.
 
 For a new repo:
-* Create a `<repo>` under the `<owner>` in GitHub and GitLab. This step is currently not automated.
+* `gec create <repo>`
 * `gec clone <repo>`
 * `gec init.fs [<repo>]`
 * `gec send <repo> "Initialize"`
