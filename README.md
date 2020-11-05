@@ -36,7 +36,7 @@ Note that the size of an encrypted file can be just slightly larger than the siz
     | Repo    | 5G    | Soft | GitHub   |
     | Repo    | 10G   | Hard | GitLab   |
 
-1. Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in the decrypted repo itself.
+1. Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in a decrypted repo.
 
 ## Installation
 ```shell script
