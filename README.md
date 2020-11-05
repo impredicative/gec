@@ -149,10 +149,8 @@ To use a repo:
 * `gec umount [<repo>]`
 
 ## Roadmap
-* Automate creation of repo in GitHub and GitLab.
 * Consider adding `init.git` command.
-* Release.
 * Mirror to https://gitee.com/
 * Review and improve stdout messages of each command.
+* Release.
 * Rewrite using Golang.
-* Add an optional UI.
