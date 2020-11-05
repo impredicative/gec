@@ -50,7 +50,7 @@ DECDIR="${_DECDIR}/${REPO}"
 case "${CMD}" in
   create)
     GITUSER=$(${TOOL} config core.owner)
-    echo "Creating repo ${REPO} in GitHub and GitLab under user ${GITUSER}."
+    echo "Creating repo ${REPO} in GitHub and GitLab."
 
     # Create GitHub repo
     # Ref: https://stackoverflow.com/a/64636218/
@@ -73,16 +73,20 @@ case "${CMD}" in
       "https://gitlab.com/api/v4/projects" -d "{\"path\": \"${REPO}\", \"visibility\": \"private\"}"
     echo "Created repo ${REPO} in GitLab."
 
-    echo -e "\nCreated repo ${REPO} in GitHub and GitLab under user ${GITUSER}."
+    echo -e "\nCreated repo ${REPO} in GitHub and GitLab."
       ;;
   clone)
-    set -x
+    echo "Cloning and configuring repo ${REPO}."
+
     GITUSER=$(${TOOL} config core.owner)
-    mkdir -p -v "${GITDIR}" && cd "$_"
+    mkdir -p "${GITDIR}" && cd "$_"
+    echo -e "\nCloning repo ${REPO} from GitHub."
     git clone -c http.postBuffer=2000000000 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
+    echo "Cloned repo ${REPO} from GitHub."
     git remote set-url --add origin git@gitlab.com:${GITUSER}/${REPO}.git
-    git remote -v
-    git config --local -l
+    echo -e "\nAdded GitLab URL for repo ${REPO}."
+
+    echo -e "\nCloned and configured repo ${REPO}."
     ;;
   init.fs)
     set -x
