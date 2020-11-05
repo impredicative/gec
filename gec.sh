@@ -206,6 +206,32 @@ case "${CMD}" in
       exit 3
     fi
     ;;
+  del)
+    GITUSER=$(${TOOL} config core.owner)
+    echo "Deleting repo ${REPO} in GitHub and GitLab under user ${GITUSER}."
+
+    # Delete GitHub repo
+    # Ref: https://stackoverflow.com/a/30644156/
+    echo
+    read -s -p "GitHub token with access to 'delete_repo' scope: " GITHUB_TOKEN
+    echo -e "\nDeleting repo ${REPO} in GitHub."
+    curl -sS -f -X DELETE -o /dev/null \
+      -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
+      https://api.github.com/repos/${GITUSER}/${REPO}
+    echo "Deleted repo ${REPO} in GitHub."
+
+#    # Delete GitLab repo
+    # Ref: https://stackoverflow.com/a/52132529/
+    echo
+    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
+    echo -e "\nDeleting repo ${REPO} in GitLab."
+    curl -sS -f -X DELETE -o /dev/null \
+      -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
+      "https://gitlab.com/api/v4/projects/${GITUSER}%2F${REPO}"
+    echo "Deleted repo ${REPO} in GitLab."
+
+    echo -e "\nDeleted repo ${REPO} in GitHub and GitLab under user ${GITUSER}."
+      ;;
   *)
    echo "${TOOL}: Unknown command: $@" >&2
    exit 1

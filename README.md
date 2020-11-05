@@ -98,9 +98,12 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`status  [<repo>]`**: Print the repo name, mount state, short git status, and mount information if mounted.
 
 #### Remote oriented
-* **`create <repo>`**: Create the repo in GitHub and GitLab. It must not already exist.
 A [GitHub token](https://github.com/settings/tokens/new) and a [GitLab token](https://gitlab.com/-/profile/personal_access_tokens) are required.
 For your security, these tokens are not saved by `gec`.
+* **`create <repo>`**: Create the repo in GitHub and GitLab. It must not already exist.
+The GitHub and GitLab tokens must have access to their `repo` and `api` scopes respectively.
+* **`del [<repo>]`**: Delete an existing repo in GitHub and GitLab.
+The GitHub and GitLab tokens must have access to their `delete_repo` and `api` scopes respectively.
 
 #### git oriented
 * **`clone <repo>`**: Clone and configure a preexisting encrypted repo from GitHub into its git repo directory, and add its GitLab URL.
