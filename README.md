@@ -149,6 +149,7 @@ To use a repo:
 * `gec umount [<repo>]`
 
 ## Roadmap
+* Make `use.*` commands work independent of mount state.
 * Consider adding `init.git` command.
 * Mirror to https://gitee.com/
 * Release.
