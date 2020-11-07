@@ -140,13 +140,14 @@ case "${CMD}" in
     fi
     ;;
   push)
-    set -x
     cd "${GITDIR}"
+    log "Pushing commits"
     git push
+    log "Pushed commits"
     ;;
   send)
-    set -x
-    ${TOOL} commit ${REPO} "$3"
+    COMMIT_MESSAGE="$3"
+    ${TOOL} commit ${REPO} "${COMMIT_MESSAGE}"
     ${TOOL} push ${REPO}
     ;;
   shell.dec)  # Remember to exit after using, otherwise umount won't work.
