@@ -115,8 +115,9 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 #### gocryptfs oriented
 * **`dismount`**: Alias of `umount`.
 * **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be securely saved.
-* **`mount [<repo>]`**: Mount a repo into its decrypted mountpoint. The repo must be in a dismounted state.
+* **`mount [<repo>]`**: Mount in read-write mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
 * **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
+* **`mount.rw`**: Alias of `mount`.
 * **`umount [<repo>]`**: Unmount a previously mounted repo.
 * **`unmount`**: Alias of `umount`.
 
@@ -127,8 +128,9 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 * **`shell.git [<repo>]`**: Provide a shell into the git repo directory.
 
 #### Compound
-* **`use [<repo>]`**: Mount and provide a shell into the decrypted mountpoint. The repo must be in a dismounted state.
-* **`use.ro [<repo>]`**: Mount read-only and provide a shell into the decrypted mountpoint. The repo must be in a dismounted state.
+* **`use [<repo>]`**: Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
+* **`use.ro [<repo>]`**: Mount read-only if not already mounted as such, and provide a shell into the decrypted mountpoint.
+* **`use.rw`**: Alias of `use`.
 
 ## Workflow
 Refer to the [repo-specific commands](#repo-specific) section for details on using the commands in the workflows below.
@@ -150,7 +152,6 @@ To use a repo:
 * `gec umount [<repo>]`
 
 ## Roadmap
-* Make `use.*` commands work independent of mount state.
 * Consider adding `init.git` command.
 * Mirror to https://gitee.com/
 * Release.

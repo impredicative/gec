@@ -112,10 +112,10 @@ case "${CMD}" in
     mkdir -p "${DECDIR}"
     logn "Initialized encrypted filesystem"
     ;;
-  mount)
-    log "Mounting repo"
-    gocryptfs -nofail -sharedstorage "${ENCDIR}" "${DECDIR}"
-    log "Mounted repo"
+  mount|mount.rw)
+    log "Mounting repo read-write"
+    gocryptfs -nofail -sharedstorage -rw "${ENCDIR}" "${DECDIR}"
+    log "Mounted repo read-write"
     ;;
   mount.ro)
     log "Mounting repo read-only"
@@ -175,14 +175,28 @@ case "${CMD}" in
   shell.git)
     _shell "${GITDIR}"
     ;;
-  use)
-    set -x
-    ${TOOL} mount ${REPO}
+  use|use.rw)
+    if mountpoint -q "${DECDIR}"; then
+      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
+      if [ "${MOUNT_OPTION}" != "rw" ]; then
+        ${TOOL} umount ${REPO}
+        ${TOOL} mount ${REPO}
+      fi
+    else
+      ${TOOL} mount ${REPO}
+    fi
     ${TOOL} shell.dec ${REPO}
     ;;
   use.ro)
-    set -x
-    ${TOOL} mount.ro ${REPO}
+    if mountpoint -q "${DECDIR}"; then
+      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
+      if [ "${MOUNT_OPTION}" != "ro" ]; then
+        ${TOOL} umount ${REPO}
+        ${TOOL} mount ${REPO}
+      fi
+    else
+      ${TOOL} mount ${REPO}
+    fi
     ${TOOL} shell.dec ${REPO}
     ;;
   state)
