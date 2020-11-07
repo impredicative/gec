@@ -130,14 +130,21 @@ case "${CMD}" in
   commit)
     COMMIT_MESSAGE="$3"
     cd "${GITDIR}"
+
     log "Adding changes"
     git add -A -v
     log "Added changes"
-    logr "Committing: ${COMMIT_MESSAGE}"
-    git commit -m "${COMMIT_MESSAGE}"
-    logr "Committed: ${COMMIT_MESSAGE}"
-    echo
-    git log --color=always --decorate -1 | grep -v '^Author: '
+
+    if ! git diff-index --quiet @; then
+      # Ref: https://stackoverflow.com/a/34093391/
+      logr "Committing: ${COMMIT_MESSAGE}"
+      git commit -m "${COMMIT_MESSAGE}"
+      logr "Committed: ${COMMIT_MESSAGE}"
+      echo
+      git log --color=always --decorate -1 | grep -v '^Author: '
+    else
+      log "No changes to commit"
+    fi
     ;;
   pull)
     if ! mountpoint -q "${DECDIR}"; then
@@ -160,6 +167,15 @@ case "${CMD}" in
     COMMIT_MESSAGE="$3"
     ${TOOL} commit ${REPO} "${COMMIT_MESSAGE}"
     ${TOOL} push ${REPO}
+    ;;
+  done)
+    COMMIT_MESSAGE="$3"
+    if mountpoint -q "${DECDIR}"; then
+      ${TOOL} umount ${REPO}
+    else
+      log "Repo is unmounted"
+    fi
+    ${TOOL} send ${REPO} "${COMMIT_MESSAGE}"
     ;;
   shell.dec)  # Remember to exit the shell after using, otherwise umount won't work.
     if mountpoint -q "${DECDIR}"; then

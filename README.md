@@ -128,6 +128,7 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 * **`shell.git [<repo>]`**: Provide a shell into the git repo directory.
 
 #### Compound
+* **`done [<repo>] "<commit_msg>"`**: Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`use [<repo>]`**: Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.ro [<repo>]`**: Mount read-only if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.rw`**: Alias of `use`.
@@ -146,10 +147,9 @@ For an existing repo with a previously initialized filesystem:
 
 To use a repo:
 * `gec pull [<repo>]`  # If and when changed on remote
-* `gec use [<repo>]`
+* `gec use [<repo>]`  # "exit" shell after using
 * `gec status [<repo>]`
-* `gec send <repo> "a non-secret commit message"`
-* `gec umount [<repo>]`
+* `gec done <repo> "a non-secret commit message"`
 
 ## Roadmap
 * Consider adding `init.git` command.
