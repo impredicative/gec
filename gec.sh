@@ -58,30 +58,30 @@ logn () {
 case "${CMD}" in
   create)
     GITUSER=$(${TOOL} config core.owner)
-    echo "Creating repo ${REPO} in GitHub and GitLab."
+    log "Creating repo in GitHub and GitLab"
 
     # Create GitHub repo
     # Ref: https://stackoverflow.com/a/64636218/
     echo
     read -s -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
-    echo -e "\nCreating repo ${REPO} in GitHub."
+    logn "Creating repo in GitHub"
     curl -sS -f -X POST -o /dev/null \
       -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
       https://api.github.com/user/repos -d "{\"name\": \"${REPO}\", \"private\": true}"
-    echo "Created repo ${REPO} in GitHub."
+    log "Created repo in GitHub"
 
     # Create GitLab repo
     # Ref: https://stackoverflow.com/a/64656788/
     # This is optional as the repo is automatically created upon first push.
     echo
     read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
-    echo -e "\nCreating repo ${REPO} in GitLab."
+    logn "Creating repo in GitLab"
     curl -sS -f -X POST -o /dev/null \
       -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
       "https://gitlab.com/api/v4/projects" -d "{\"path\": \"${REPO}\", \"visibility\": \"private\"}"
-    echo "Created repo ${REPO} in GitLab."
+    echo "Created repo in GitLab"
 
-    echo -e "\nCreated repo ${REPO} in GitHub and GitLab."
+    logn "Created repo ${REPO} in GitHub and GitLab"
       ;;
   clone)
     log "Cloning and configuring repo"
