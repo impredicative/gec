@@ -261,7 +261,7 @@ case "${CMD}" in
     logn "Deleted repo in GitHub and GitLab"
     ;;
   *)
-   echo "${TOOL}: Unknown command: $@" >&2
+   loge "Unknown command"
    exit 1
    ;;
 esac
