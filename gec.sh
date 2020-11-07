@@ -85,7 +85,7 @@ case "${CMD}" in
       "https://gitlab.com/api/v4/projects" -d "{\"path\": \"${REPO}\", \"visibility\": \"private\"}"
     log "Created repo in GitLab"
 
-    logn "Created repo ${REPO} in GitHub and GitLab"
+    logn "Created repo in GitHub and GitLab"
       ;;
   clone)
     log "Cloning and configuring repo"
@@ -96,16 +96,16 @@ case "${CMD}" in
     git clone -c http.postBuffer=2000000000 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
     log "Cloned repo from GitHub"
     git remote set-url --add origin git@gitlab.com:${GITUSER}/${REPO}.git
-    logn "Added GitLab URL for repo"
+    logn "Added GitLab URL"
 
     logn "Cloned and configured repo"
     ;;
   init.fs)
-    log "Initializing encrypted filesystem for repo"
+    log "Initializing encrypted filesystem"
     mkdir -p "${ENCDIR}"
     gocryptfs -init -nofail -sharedstorage "${ENCDIR}"
     mkdir -p "${DECDIR}"
-    logn "Initialized encrypted filesystem for repo"
+    logn "Initialized encrypted filesystem"
     ;;
   mount)
     log "Mounting repo"
@@ -215,12 +215,22 @@ case "${CMD}" in
     fi
     ;;
   rm)
-    if ! mountpoint "${DECDIR}"; then
-      set -x
-      [ -d "${DECDIR}" ] && rm -rfI "${DECDIR}"
+    if ! mountpoint -q "${DECDIR}"; then
+      log "Removing directories"
+
+      if [ -d "${DECDIR}" ]; then
+        logn "Removing decryption directory"
+        rm -rfI "${DECDIR}"
+        log "Removed decryption directory"
+      fi
+
+      logn "Removing git directory"
       rm -rfI "${GITDIR}"
+      log "Removed git directory"
+
+      logn "Removed directories"
     else
-      echo "${TOOL}: Failed: $@" >&2
+      loge "Unmount first"
       exit 3
     fi
     ;;
