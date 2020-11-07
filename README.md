@@ -149,7 +149,6 @@ To use a repo:
 * `gec umount [<repo>]`
 
 ## Roadmap
-* Review and improve stdout messages of each command.
 * Consider adding `init.git` command.
 * Mirror to https://gitee.com/
 * Release.
