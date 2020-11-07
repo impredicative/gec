@@ -203,7 +203,7 @@ case "${CMD}" in
   rm)
     if ! mountpoint "${DECDIR}"; then
       set -x
-      rm -rfI "${DECDIR}"
+      [ -d "${DECDIR}" ] && rm -rfI "${DECDIR}"
       rm -rfI "${GITDIR}"
     else
       echo "${TOOL}: Failed: $@" >&2
