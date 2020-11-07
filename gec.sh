@@ -66,9 +66,9 @@ case "${CMD}" in
 
     # Create GitHub repo
     # Ref: https://stackoverflow.com/a/64636218/
-    echo
-    read -s -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
     logn "Creating repo in GitHub"
+    read -s -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
+    echo
     curl -sS -f -X POST -o /dev/null \
       -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
       https://api.github.com/user/repos -d "{\"name\": \"${REPO}\", \"private\": true}"
@@ -77,9 +77,9 @@ case "${CMD}" in
     # Create GitLab repo
     # Ref: https://stackoverflow.com/a/64656788/
     # This is optional as the repo is automatically created upon first push.
-    echo
-    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
     logn "Creating repo in GitLab"
+    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
+    echo
     curl -sS -f -X POST -o /dev/null \
       -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
       "https://gitlab.com/api/v4/projects" -d "{\"path\": \"${REPO}\", \"visibility\": \"private\"}"
