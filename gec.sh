@@ -107,9 +107,9 @@ case "${CMD}" in
     log "Mounted repo"
     ;;
   mount.ro)
-    log "Mounting repo (read-only)"
+    log "Mounting repo read-only"
     gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
-    log "Mounted repo (read-only)"
+    log "Mounted repo read-only"
     ;;
   umount|unmount|dismount)  # Remember to exit $DECDIR before using.
     log "Unmounting repo"
@@ -195,25 +195,19 @@ case "${CMD}" in
     git log --color=always --decorate -10 | grep -v '^Author: '
     ;;
   du.git)
-    ${TOOL} state "${REPO}" && echo
-    set -x
     cd "${GITDIR}"
     du -h -c -d 1
     ;;
   du.enc)
-    ${TOOL} state "${REPO}" && echo
-    set -x
     cd "${ENCDIR}"
     du -h -c -d 1
     ;;
   du.dec)
-    ${TOOL} state "${REPO}" && echo
     if mountpoint -q "${DECDIR}"; then
-      set -x
       cd "${DECDIR}"
       du -h -c -d 1
     else
-      echo "${TOOL}: Failed: $@" >&2
+      loge "Mount first"
       exit 3
     fi
     ;;
