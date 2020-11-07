@@ -52,6 +52,12 @@ log () { logr "${1}." ; }  # Log
 logn () { echo; log "$1" ; }  # Log after newline
 loge () { log "Failed ${CMD}. $1" >&2 ; }  # Log error
 
+# Define utility functions
+_du () {  # Disk usage
+  cd "$1"
+  du -h -c -d 1
+}
+
 # Run repo-specific command
 case "${CMD}" in
   create)
@@ -195,17 +201,14 @@ case "${CMD}" in
     git log --color=always --decorate -10 | grep -v '^Author: '
     ;;
   du.git)
-    cd "${GITDIR}"
-    du -h -c -d 1
+    _du "${GITDIR}"
     ;;
   du.enc)
-    cd "${ENCDIR}"
-    du -h -c -d 1
+    _du "${ENCDIR}"
     ;;
   du.dec)
     if mountpoint -q "${DECDIR}"; then
-      cd "${DECDIR}"
-      du -h -c -d 1
+      _du "${DECDIR}"
     else
       loge "Mount first"
       exit 3
