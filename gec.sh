@@ -46,10 +46,13 @@ GITDIR="${_GITDIR}/${REPO}"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
 
-log () {
-  echo "[${TOOL}:${REPO}] ${1}."
+logr () {  # Log raw
+  echo "[${TOOL}:${REPO}] ${1}"
 }
-logn () {
+log () {
+  logr "${1}."
+}
+logn () {  # Log after newline
   echo
   log "$1"
 }
@@ -79,7 +82,7 @@ case "${CMD}" in
     curl -sS -f -X POST -o /dev/null \
       -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
       "https://gitlab.com/api/v4/projects" -d "{\"path\": \"${REPO}\", \"visibility\": \"private\"}"
-    echo "Created repo in GitLab"
+    log "Created repo in GitLab"
 
     logn "Created repo ${REPO} in GitHub and GitLab"
       ;;
@@ -109,19 +112,25 @@ case "${CMD}" in
     log "Mounted repo"
     ;;
   mount.ro)
-    set -x
+    log "Mounting repo (read-only)"
     gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
+    log "Mounted repo (read-only)"
     ;;
   umount|unmount|dismount)  # Remember to exit $DECDIR before using.
-    set -x
+    log "Unmounting repo"
     fusermount -u "${DECDIR}"
+    log "Unmounted repo"
     ;;
   commit)
-    ${TOOL} state "${REPO}" && echo
-    set -x
+    COMMIT_MESSAGE="$3"
     cd "${GITDIR}"
+    log "Adding changes"
     git add -A -v
-    git commit -m "$3"
+    log "Added changes"
+    logr "Committing: ${COMMIT_MESSAGE}"
+#    git commit -m "${COMMIT_MESSAGE}"
+    logr "Committed: ${COMMIT_MESSAGE}"
+    echo
     git log --color=always --decorate -1 | grep -v '^Author: '
     ;;
   pull)
