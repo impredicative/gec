@@ -47,10 +47,10 @@ ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
 
 # Define logging functions
-logr () { echo "[${TOOL}:${REPO}] ${1}"; }  # Log raw
-log () { logr "${1}."; }  # Log
-logn () { echo; log "$1"; }  # Log after newline
-loge () { log "Failed ${CMD}. $1" >&2; }  # Log error
+logr () { echo "[${TOOL}:${REPO}] ${1}" ; }  # Log raw
+log () { logr "${1}." ; }  # Log
+logn () { echo; log "$1" ; }  # Log after newline
+loge () { log "Failed ${CMD}. $1" >&2 ; }  # Log error
 
 # Run repo-specific command
 case "${CMD}" in
@@ -150,15 +150,17 @@ case "${CMD}" in
     ${TOOL} commit ${REPO} "${COMMIT_MESSAGE}"
     ${TOOL} push ${REPO}
     ;;
-  shell.dec)  # Remember to exit after using, otherwise umount won't work.
-    set -x
-    mountpoint "${DECDIR}"
-    cd "${DECDIR}"
-    USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
-    $USER_SHELL
+  shell.dec)  # Remember to exit the shell after using, otherwise umount won't work.
+    if mountpoint -q "${DECDIR}"; then
+      cd "${DECDIR}"
+      USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
+      $USER_SHELL
+    else
+      loge "Mount first"
+      exit 2
+    fi
     ;;
   shell.git)
-    set -x
     cd "${GITDIR}"
     USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
     $USER_SHELL
