@@ -123,6 +123,7 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 #### System
 * **`rm [<repo>]`**: Interactively remove all directories of the repo. The repo must be in a dismounted state.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
+* **`shell.enc [<repo>]`**: Provide a shell into the encrypted filesystem directory.
 * **`shell.git [<repo>]`**: Provide a shell into the git repo directory.
 
 #### Compound

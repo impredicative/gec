@@ -57,6 +57,11 @@ _du () {  # Disk usage
   cd "$1"
   du -h -c -d 1
 }
+_shell () {  # Shell into dir
+  cd "$1"
+  USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
+  $USER_SHELL
+}
 
 # Run repo-specific command
 case "${CMD}" in
@@ -158,18 +163,17 @@ case "${CMD}" in
     ;;
   shell.dec)  # Remember to exit the shell after using, otherwise umount won't work.
     if mountpoint -q "${DECDIR}"; then
-      cd "${DECDIR}"
-      USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
-      $USER_SHELL
+      _shell "${DECDIR}"
     else
       loge "Mount first"
       exit 2
     fi
     ;;
+  shell.enc)
+    _shell "${ENCDIR}"
+    ;;
   shell.git)
-    cd "${GITDIR}"
-    USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
-    $USER_SHELL
+    _shell "${GITDIR}"
     ;;
   use)
     set -x
