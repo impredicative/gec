@@ -46,16 +46,11 @@ GITDIR="${_GITDIR}/${REPO}"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
 
-logr () {  # Log raw
-  echo "[${TOOL}:${REPO}] ${1}"
-}
-log () {
-  logr "${1}."
-}
-logn () {  # Log after newline
-  echo
-  log "$1"
-}
+# Define logging functions
+logr () { echo "[${TOOL}:${REPO}] ${1}"; }  # Log raw
+log () { logr "${1}."; }  # Log
+logn () { echo; log "$1"; }  # Log after newline
+loge () { log "Failed ${CMD}. $1" >&2; }  # Log error
 
 # Run repo-specific command
 case "${CMD}" in
@@ -134,12 +129,13 @@ case "${CMD}" in
     git log --color=always --decorate -1 | grep -v '^Author: '
     ;;
   pull)
-    if ! mountpoint "${DECDIR}"; then
-      set -x
+    if ! mountpoint -q "${DECDIR}"; then
       cd "${GITDIR}"
+      log "Pulling commits"
       git pull
+      log "Pulled commits"
     else
-      echo "${TOOL}: Failed: $@" >&2
+      loge "Unmount first"
       exit 2
     fi
     ;;
