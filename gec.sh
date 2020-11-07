@@ -128,7 +128,7 @@ case "${CMD}" in
     git add -A -v
     log "Added changes"
     logr "Committing: ${COMMIT_MESSAGE}"
-#    git commit -m "${COMMIT_MESSAGE}"
+    git commit -m "${COMMIT_MESSAGE}"
     logr "Committed: ${COMMIT_MESSAGE}"
     echo
     git log --color=always --decorate -1 | grep -v '^Author: '
