@@ -86,7 +86,7 @@ case "${CMD}" in
     log "Created repo in GitLab"
 
     logn "Created repo in GitHub and GitLab"
-      ;;
+    ;;
   clone)
     log "Cloning and configuring repo"
 
@@ -236,30 +236,30 @@ case "${CMD}" in
     ;;
   del)
     GITUSER=$(${TOOL} config core.owner)
-    echo "Deleting repo ${REPO} in GitHub and GitLab under user ${GITUSER}."
+    log "Deleting repo in GitHub and GitLab"
 
     # Delete GitHub repo
     # Ref: https://stackoverflow.com/a/30644156/
-    echo
+    logn "Deleting repo in GitHub"
     read -s -p "GitHub token with access to 'delete_repo' scope: " GITHUB_TOKEN
-    echo -e "\nDeleting repo ${REPO} in GitHub."
+    echo
     curl -sS -f -X DELETE -o /dev/null \
       -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
       https://api.github.com/repos/${GITUSER}/${REPO}
-    echo "Deleted repo ${REPO} in GitHub."
+    log "Deleted repo in GitHub"
 
 #    # Delete GitLab repo
     # Ref: https://stackoverflow.com/a/52132529/
-    echo
+    logn "Deleting repo in GitLab"
     read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
-    echo -e "\nDeleting repo ${REPO} in GitLab."
+    echo
     curl -sS -f -X DELETE -o /dev/null \
       -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
       "https://gitlab.com/api/v4/projects/${GITUSER}%2F${REPO}"
-    echo "Deleted repo ${REPO} in GitLab."
+    log "Deleted repo in GitLab"
 
-    echo -e "\nDeleted repo ${REPO} in GitHub and GitLab under user ${GITUSER}."
-      ;;
+    logn "Deleted repo in GitHub and GitLab"
+    ;;
   *)
    echo "${TOOL}: Unknown command: $@" >&2
    exit 1
