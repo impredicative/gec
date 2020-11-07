@@ -47,11 +47,11 @@ ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
 
 log () {
-  echo "[${TOOL}:${REPO}] $1"
+  echo "[${TOOL}:${REPO}] ${1}."
 }
 logn () {
   echo
-  echo "[${TOOL}:${REPO}] $1"
+  log "$1"
 }
 
 # Run repo-specific command
@@ -84,28 +84,29 @@ case "${CMD}" in
     echo -e "\nCreated repo ${REPO} in GitHub and GitLab."
       ;;
   clone)
-    log "Cloning and configuring repo."
+    log "Cloning and configuring repo"
 
     GITUSER=$(${TOOL} config core.owner)
     mkdir -p "${GITDIR}" && cd "$_"
-    logn "Cloning repo from GitHub."
+    logn "Cloning repo from GitHub"
     git clone -c http.postBuffer=2000000000 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
-    log "Cloned repo from GitHub."
+    log "Cloned repo from GitHub"
     git remote set-url --add origin git@gitlab.com:${GITUSER}/${REPO}.git
-    logn "Added GitLab URL for repo."
+    logn "Added GitLab URL for repo"
 
-    logn "Cloned and configured repo."
+    logn "Cloned and configured repo"
     ;;
   init.fs)
-    log "Initializing encrypted filesystem."
+    log "Initializing encrypted filesystem for repo"
     mkdir -p "${ENCDIR}"
     gocryptfs -init -nofail -sharedstorage "${ENCDIR}"
     mkdir -p "${DECDIR}"
-    logn "Initialized encrypted filesystem."
+    logn "Initialized encrypted filesystem for repo"
     ;;
   mount)
-    set -x
+    log "Mounting repo"
     gocryptfs -nofail -sharedstorage "${ENCDIR}" "${DECDIR}"
+    log "Mounted repo"
     ;;
   mount.ro)
     set -x
