@@ -182,7 +182,7 @@ case "${CMD}" in
     else
       MOUNT_STATE="unmounted"
     fi
-    echo "${REPO} (${MOUNT_STATE})"
+    echo "${REPO} (${MOUNT_STATE})"  # Output is used by ls command.
     ;;
   status|info|?)
     ${TOOL} state "${REPO}" && echo
@@ -191,7 +191,6 @@ case "${CMD}" in
     mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
     ;;
   log)
-    ${TOOL} state "${REPO}" && echo
     cd "${GITDIR}"
     git log --color=always --decorate -10 | grep -v '^Author: '
     ;;
