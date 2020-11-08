@@ -21,6 +21,7 @@ It is in an early stage of development. Breaking changes are possible.
 
 ## Links
 * Source: https://github.com/impredicative/gec
+* Changelog: https://github.com/impredicative/gec/releases
 * Mirror: https://gitee.com/impredicative/gec
 
 ## Requirements
@@ -46,7 +47,7 @@ Note that the size of an encrypted file can be just slightly larger than the siz
 
 ## Installation
 ```shell script
-RELEASE=v0.1  # Use latest release.
+RELEASE=v0.1.1  # Use latest release.
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
 ```
