@@ -80,6 +80,7 @@ For each repo, these directories are created and used:
 ## Commands
 ### Repo-agnostic
 * **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
+* **`list`**: Alias of `ls`.
 * **`ls`**: List the name and mount state of all repos in `~/gec/encrypted`.
 
 ### Repo-specific
@@ -94,7 +95,7 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`du.git [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
 * **`info [<repo>]`**: Alias of `status`.
 * **`log [<repo>]`**: Print the git log for the last ten commits.
-* **`state [<repo>]`**: Print the repo name and mount state.
+* **`state [<repo>]`**: Print the repo name, encrypted filesystem directory disk usage, git directory disk usage, and repo mount state.
 * **`status  [<repo>]`**: Print the repo name, mount state, short git status, and mount information if mounted.
 
 #### Remote oriented

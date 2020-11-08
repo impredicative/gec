@@ -250,13 +250,20 @@ case "${CMD}" in
     ${TOOL} shell.dec ${REPO}
     ;;
   state)
+    # Get mount state
     if mountpoint -q "${DECDIR}"; then
       MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
       MOUNT_STATE="mounted ${MOUNT_OPTION}"
     else
       MOUNT_STATE="unmounted"
     fi
-    echo "${REPO} (${MOUNT_STATE})"  # Output is used by ls command.
+
+    # Measure disk usage
+    mkdir -p "${ENCDIR}"
+    ENCDIR_SIZE=$(du -h -s ${ENCDIR} | cut -f1)
+    GITDIR_SIZE=$(du -h -s ${GITDIR} | cut -f1)
+
+    echo "${REPO} (${ENCDIR_SIZE}/${GITDIR_SIZE}) (${MOUNT_STATE})"  # Output is used by ls command.
     ;;
   status|info|?)
     ${TOOL} state ${REPO}
