@@ -141,10 +141,10 @@ Refer to the [repo-specific commands](#repo-specific) section for details on usi
 To create and setup a new repo:
 * `gec init <repo>`
 
-For an existing repo with a previously initialized filesystem:
+To provision an existing repo with a previously initialized filesystem:
 * `gec clone <repo>`
 
-To use a repo:
+To use a provisioned repo:
 * `gec pull [<repo>]`  # If and when changed on remote
 * `gec use [<repo>]`  # "exit" shell after using
 * `gec status [<repo>]`
