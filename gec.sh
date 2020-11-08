@@ -133,6 +133,15 @@ case "${CMD}" in
     fusermount -u "${DECDIR}"
     log "Unmounted repo"
     ;;
+  clean)
+    if mountpoint -q "${DECDIR}"; then
+      cd "${DECDIR}"
+      rm -rfv ./.Trash*
+    else
+      loge "Mount first"
+      exit 2
+    fi
+    ;;
   commit)
     COMMIT_MESSAGE="$3"
     cd "${GITDIR}"
