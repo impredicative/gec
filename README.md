@@ -166,4 +166,5 @@ To use a provisioned repo:
 * `gec done <repo> "a non-secret commit message"`
 
 ## Roadmap
+* Add commands: `check.dec`, `check.enc`, `check`.
 * Consider rewriting using Golang.
