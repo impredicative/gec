@@ -263,7 +263,7 @@ case "${CMD}" in
     ENCDIR_SIZE=$(du -h -s ${ENCDIR} | cut -f1)
     GITDIR_SIZE=$(du -h -s ${GITDIR} | cut -f1)
 
-    echo "${REPO} (${ENCDIR_SIZE}/${GITDIR_SIZE}) (${MOUNT_STATE})"  # Output is used by ls command.
+    printf "%10s (%4s/%4s) %s\n" ${MOUNT_STATE} ${ENCDIR_SIZE} ${GITDIR_SIZE} ${REPO}
     ;;
   status|info|?)
     ${TOOL} state ${REPO}

@@ -81,7 +81,7 @@ For each repo, these directories are created and used:
 ### Repo-agnostic
 * **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
 * **`list`**: Alias of `ls`.
-* **`ls`**: List the name and mount state of all repos in `~/gec/encrypted`.
+* **`ls`**: List the name, encrypted filesystem directory disk usage, git directory disk usage, and mount state of all repos in `~/gec/encrypted`.
 
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel-us", in both GitHub and GitLab.
