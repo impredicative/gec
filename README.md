@@ -48,7 +48,7 @@ Note that the size of an encrypted file can be just slightly larger than the siz
 
 ## Installation
 ```shell script
-RELEASE=v0.1.2  # Use latest release.
+RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
 ```
