@@ -122,7 +122,7 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 * **`unmount`**: Alias of `umount`.
 
 #### System
-* **`clean [<repo>]`**: Remove paths matching `.Trash*` from the decrypted mountpoint of a mounted repo.
+* **`empty [<repo>]`**: Empty the trash by removing paths matching `.Trash*` from the decrypted mountpoint of a mounted repo.
 * **`rm [<repo>]`**: Interactively remove all directories of the repo.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
 * **`shell.enc [<repo>]`**: Provide a shell into the encrypted filesystem directory.

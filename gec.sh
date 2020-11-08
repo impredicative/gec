@@ -133,7 +133,7 @@ case "${CMD}" in
     fusermount -u "${DECDIR}"
     log "Unmounted repo"
     ;;
-  clean)
+  empty)
     if mountpoint -q "${DECDIR}"; then
       cd "${DECDIR}"
       rm -rfv ./.Trash*
