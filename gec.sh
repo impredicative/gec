@@ -105,6 +105,12 @@ case "${CMD}" in
 
     logn "Cloned and configured repo"
     ;;
+  init)
+    ${TOOL} create ${REPO}
+    ${TOOL} clone ${REPO}
+    ${TOOL} init.fs ${REPO}
+    ${TOOL} send ${REPO} "Initialized"
+    ;;
   init.fs)
     log "Initializing encrypted filesystem"
     mkdir -p "${ENCDIR}"
@@ -225,8 +231,9 @@ case "${CMD}" in
     echo "${REPO} (${MOUNT_STATE})"  # Output is used by ls command.
     ;;
   status|info|?)
-    ${TOOL} state "${REPO}" && echo
+    ${TOOL} state ${REPO}
     cd "${GITDIR}"
+    echo
     git status -bs
     mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
     ;;
@@ -249,24 +256,24 @@ case "${CMD}" in
     fi
     ;;
   rm)
-    if ! mountpoint -q "${DECDIR}"; then
-      log "Removing directories"
-
-      if [ -d "${DECDIR}" ]; then
-        logn "Removing decryption directory"
-        rm -rfI "${DECDIR}"
-        log "Removed decryption directory"
-      fi
-
-      logn "Removing git directory"
-      rm -rfI "${GITDIR}"
-      log "Removed git directory"
-
-      logn "Removed directories"
-    else
-      loge "Unmount first"
-      exit 3
+    if mountpoint -q "${DECDIR}"; then
+      ${TOOL} umount ${REPO}
+      echo
     fi
+
+    log "Removing directories"
+
+    if [ -d "${DECDIR}" ]; then
+      logn "Removing decryption directory"
+      rm -rfI "${DECDIR}"
+      log "Removed decryption directory"
+    fi
+
+    logn "Removing git directory"
+    rm -rfI "${GITDIR}"
+    log "Removed git directory"
+
+    logn "Removed directories"
     ;;
   del)
     GITUSER=$(${TOOL} config core.owner)
@@ -293,6 +300,10 @@ case "${CMD}" in
     log "Deleted repo in GitLab"
 
     logn "Deleted repo in GitHub and GitLab"
+    ;;
+  destroy)
+    ${TOOL} rm ${REPO}
+    ${TOOL} del ${REPO}
     ;;
   *)
    loge "Unknown command"

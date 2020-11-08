@@ -110,7 +110,7 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`pull [<repo>]`**: Pull commits from remote. For safety, a prerequisite is that the repo must be in a dismounted state.
 * **`push [<repo>]`**: Push commits to remote.
-* **`send <repo> "<commit_msg>"`**: Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`send <repo> "<commit_msg>"`**: (`commit`+`push`) Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 
 #### gocryptfs oriented
 * **`dismount`**: Alias of `umount`.
@@ -122,25 +122,24 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 * **`unmount`**: Alias of `umount`.
 
 #### System
-* **`rm [<repo>]`**: Interactively remove all directories of the repo. The repo must be in a dismounted state.
+* **`rm [<repo>]`**: Interactively remove all directories of the repo.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
 * **`shell.enc [<repo>]`**: Provide a shell into the encrypted filesystem directory.
 * **`shell.git [<repo>]`**: Provide a shell into the git repo directory.
 
 #### Compound
-* **`done [<repo>] "<commit_msg>"`**: Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
-* **`use [<repo>]`**: Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
-* **`use.ro [<repo>]`**: Mount read-only if not already mounted as such, and provide a shell into the decrypted mountpoint.
+* **`init <repo>`**: (`create`+`clone`+`init.fs`+`send`) Create new repo using access tokens, clone it locally, initialize encrypted filesystem, commit, and push.
+* **`destroy <repo>`**: (`rm`+`del`) Interactively remove all repo directories, and delete repo from GitHub and GitLab.
+* **`done [<repo>] "<commit_msg>"`**: (`unmount`+`send`) Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`use [<repo>]`**: (`mount`+`shell.dec`) Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
+* **`use.ro [<repo>]`**: (`mount.ro`+`shell.dec`) Mount read-only if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.rw`**: Alias of `use`.
 
 ## Workflow
 Refer to the [repo-specific commands](#repo-specific) section for details on using the commands in the workflows below.
 
-For a new repo:
-* `gec create <repo>`
-* `gec clone <repo>`
-* `gec init.fs [<repo>]`
-* `gec send <repo> "Initialize"`
+To create and setup a new repo:
+* `gec init <repo>`
 
 For an existing repo with a previously initialized filesystem:
 * `gec clone <repo>`
