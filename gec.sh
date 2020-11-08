@@ -201,6 +201,7 @@ case "${CMD}" in
   send)
     COMMIT_MESSAGE="$3"
     ${TOOL} commit ${REPO} "${COMMIT_MESSAGE}"
+    echo
     ${TOOL} push ${REPO}
     ;;
   done)
