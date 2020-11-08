@@ -106,6 +106,7 @@ The GitHub and GitLab tokens must have access to their `repo` and `api` scopes r
 The GitHub and GitLab tokens must have access to their `delete_repo` and `api` scopes respectively.
 
 #### git oriented
+* **`amend <repo> "<commit_msg>"`**: Add and amend all changes to most recent commit. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into its git repo directory, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`pull [<repo>]`**: Pull commits from remote. For safety, a prerequisite is that the repo must be in a dismounted state.

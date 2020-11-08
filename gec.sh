@@ -161,6 +161,25 @@ case "${CMD}" in
       log "No changes to commit"
     fi
     ;;
+  amend)
+    COMMIT_MESSAGE="$3"
+    cd "${GITDIR}"
+
+    log "Adding changes"
+    git add -A -v
+    log "Added changes"
+
+    if ! git diff-index --quiet @; then
+      # Ref: https://stackoverflow.com/a/34093391/
+      logr "Amending commit: ${COMMIT_MESSAGE}"
+      git commit --amend -m "${COMMIT_MESSAGE}"
+      logr "Amended commit: ${COMMIT_MESSAGE}"
+      echo
+      git log --color=always --decorate -1 | grep -v '^Author: '
+    else
+      log "No changes to amend"
+    fi
+    ;;
   pull)
     if ! mountpoint -q "${DECDIR}"; then
       cd "${GITDIR}"
