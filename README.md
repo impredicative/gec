@@ -151,7 +151,6 @@ To use a repo:
 * `gec done <repo> "a non-secret commit message"`
 
 ## Roadmap
-* Consider adding `init.git` command.
 * Mirror to https://gitee.com/
 * Release.
 * Rewrite using Golang.
