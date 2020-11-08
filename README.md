@@ -99,7 +99,7 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 
 #### Informational
 * **`? [<repo>]`**: Alias of `status`.
-* **`check.git [<repo>]`**: Use `git-sizer` to check various sizes of the git repo to determine if a hard limit is exceeded. It is run automatically by `commit`.
+* **`check.git [<repo>]`**: Use `git-sizer` to check various sizes of the git repo to determine if a hard limit is exceeded. It is run automatically by `commit` when needed.
 * **`du.dec [<repo>]`**:  Print the human-friendly disk usage of the decrypted directory for a depth of one.
 * **`du.enc [<repo>]`**:  Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
 * **`du.git [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.

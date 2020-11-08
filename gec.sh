@@ -152,7 +152,7 @@ case "${CMD}" in
       git log --color=always --decorate -1 | grep -v '^Author: '
 
       echo
-      if which git-sizer &>- ; then
+      if which git-sizer >/dev/null ; then
         ${TOOL} check.git ${REPO}
       else
         log "Skipped checking sizes of git repo since git-sizer is unavailable"
