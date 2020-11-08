@@ -46,7 +46,8 @@ Note that the size of an encrypted file can be just slightly larger than the siz
 
 ## Installation
 ```shell script
-wget https://raw.githubusercontent.com/impredicative/gec/master/gec.sh -O ~/.local/bin/gec
+RELEASE=v0.1  # Use latest release.
+wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
 ```
 
@@ -161,4 +162,4 @@ To use a provisioned repo:
 * `gec done <repo> "a non-secret commit message"`
 
 ## Roadmap
-* Rewrite using Golang.
+* Consider rewriting using Golang.
