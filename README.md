@@ -3,10 +3,12 @@
 **`gec`** is a simple and opinionated Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
 It refrains from doing anything clever, making it possible to fallback to the underlying gocryptfs or git commands if a need should arise.
 It transparently uses data encryption and version control while leveraging redundant remote storage.
+Many of the implemented commands use GitHub and GitLab.
 
 It is in an early stage of development. Breaking changes are possible.
 
 ## Contents
+* [Links](#links)
 * [Requirements](#requirements)
 * [Limitations](#limitations)
 * [Installation](#installation)
@@ -16,6 +18,10 @@ It is in an early stage of development. Breaking changes are possible.
 * [Commands](#commands)
 * [Workflow](#workflow)
 * [Roadmap](#roadmap)
+
+## Links
+* Source: https://github.com/impredicative/gec
+* Mirror: https://gitee.com/impredicative/gec
 
 ## Requirements
 1. gocryptfs ≥ 2.0-beta1
@@ -155,6 +161,4 @@ To use a provisioned repo:
 * `gec done <repo> "a non-secret commit message"`
 
 ## Roadmap
-* Mirror to https://gitee.com/
-* Release.
 * Rewrite using Golang.
