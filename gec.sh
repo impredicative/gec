@@ -194,7 +194,7 @@ case "${CMD}" in
   push)
     cd "${GITDIR}"
     log "Pushing commits"
-    git push
+    git push -v
     log "Pushed commits"
     ;;
   send)
