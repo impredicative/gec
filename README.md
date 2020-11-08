@@ -25,9 +25,10 @@ It is in an early stage of development. Breaking changes are possible.
 * Mirror: https://gitee.com/impredicative/gec
 
 ## Requirements
-1. gocryptfs ≥ 2.0-beta1
+1. [gocryptfs](https://github.com/rfjakob/gocryptfs/releases) ≥2.0-beta1
 1. git
-1. Linux
+1. [git-sizer](https://github.com/github/git-sizer/releases) ≥1.3.0 (optional but strongly recommended)
+1. Linux (developed under Ubuntu)
 1. A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account with an identical username!
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be useful.
 
@@ -98,6 +99,7 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 
 #### Informational
 * **`? [<repo>]`**: Alias of `status`.
+* **`check.git [<repo>]`**: Use `git-sizer` to check various sizes of the git repo to determine if a hard limit is exceeded. It is run automatically by `commit`.
 * **`du.dec [<repo>]`**:  Print the human-friendly disk usage of the decrypted directory for a depth of one.
 * **`du.enc [<repo>]`**:  Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
 * **`du.git [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.

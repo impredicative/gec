@@ -143,11 +143,21 @@ case "${CMD}" in
 
     if ! git diff-index --quiet @; then
       # Ref: https://stackoverflow.com/a/34093391/
+
       logr "Committing: ${COMMIT_MESSAGE}"
       git commit -m "${COMMIT_MESSAGE}"
       logr "Committed: ${COMMIT_MESSAGE}"
+
       echo
       git log --color=always --decorate -1 | grep -v '^Author: '
+
+      echo
+      if which git-sizer &>- ; then
+        ${TOOL} check.git ${REPO}
+      else
+        log "Skipped checking sizes of git repo since git-sizer is unavailable"
+      fi
+
     else
       log "No changes to commit"
     fi
@@ -330,6 +340,31 @@ case "${CMD}" in
   destroy)
     ${TOOL} rm ${REPO}
     ${TOOL} del ${REPO}
+    ;;
+  check.git)
+    cd ${GITDIR}
+    log "Checking sizes of git repo"
+    size_json=$(git-sizer -j --json-version 2)
+
+    max_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["maxBlobSize"]["value"]')
+    max_blob_size_mb=$(echo "$max_blob_size / 1000000" | bc -l | xargs -i printf "%'.1f MB" {})
+    if (( $max_blob_size > 100000000 ));then
+      loge "Max blob size of ${max_blob_size_mb} is over the hard limit of 100 MB"
+      exit 4
+    else
+      log "Max blob size of ${max_blob_size_mb} is under the hard limit of 100 MB"
+    fi
+
+    max_checkout_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["maxCheckoutBlobSize"]["value"]')
+    max_checkout_blob_size_gb=$(echo "$max_checkout_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
+    if (( $max_checkout_blob_size > 10000000000 )); then
+      loge "Max checkout blob size of ${max_checkout_blob_size_gb} is over the hard limit of 10 GB"
+      exit 4
+    else
+      log "Max checkout blob size of ${max_checkout_blob_size_gb} is under the hard limit of 10 GB"
+    fi
+
+    log "Checked sizes of git repo"
     ;;
   *)
    loge "Unknown command"
