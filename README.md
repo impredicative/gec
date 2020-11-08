@@ -47,7 +47,7 @@ Note that the size of an encrypted file can be just slightly larger than the siz
 
 ## Installation
 ```shell script
-RELEASE=v0.1.1  # Use latest release.
+RELEASE=v0.1.2  # Use latest release.
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
 ```
@@ -132,7 +132,6 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 * **`unmount`**: Alias of `umount`.
 
 #### System
-* **`empty [<repo>]`**: Empty the trash by removing paths matching `.Trash*` from the decrypted mountpoint of a mounted repo.
 * **`rm [<repo>]`**: Interactively remove all directories of the repo.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
 * **`shell.enc [<repo>]`**: Provide a shell into the encrypted filesystem directory.
@@ -149,8 +148,10 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 ## Workflow
 Refer to the [repo-specific commands](#repo-specific) section for details on using the commands in the workflows below.
 
-To create and setup a new repo:
+To create and provision a new repo:
 * `gec init <repo>`
+* `gec use <repo>`
+* `touch .Trash-1001`  # Avoids deleting files to Trash on Ubuntu
 
 To provision an existing repo with a previously initialized filesystem:
 * `gec clone <repo>`
