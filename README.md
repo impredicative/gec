@@ -109,8 +109,8 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`status  [<repo>]`**: Print the repo name, mount state, short git status, and mount information if mounted.
 
 #### Remote oriented
-A [GitHub token](https://github.com/settings/tokens/new) and a [GitLab token](https://gitlab.com/-/profile/personal_access_tokens) are required.
-For your security, these tokens are not saved by `gec`.
+A [GitHub token](https://github.com/settings/tokens/new) and a [GitLab token](https://gitlab.com/-/profile/personal_access_tokens) are required for these commands.
+For your security, the tokens are not saved by `gec`.
 * **`create <repo>`**: Create the repo in GitHub and GitLab. It must not already exist.
 The GitHub and GitLab tokens must have access to their `repo` and `api` scopes respectively.
 * **`del [<repo>]`**: Delete an existing repo in GitHub and GitLab.
@@ -142,7 +142,7 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 #### Compound
 * **`init <repo>`**: (`create`+`clone`+`init.fs`+`send`) Create new repo using access tokens, clone it locally, initialize encrypted filesystem, commit, and push.
 * **`destroy <repo>`**: (`rm`+`del`) Interactively remove all repo directories, and delete repo from GitHub and GitLab.
-* **`done [<repo>] "<commit_msg>"`**: (`unmount`+`send`) Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`done <repo> "<commit_msg>"`**: (`unmount`+`send`) Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`use [<repo>]`**: (`mount`+`shell.dec`) Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.ro [<repo>]`**: (`mount.ro`+`shell.dec`) Mount read-only if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.rw`**: Alias of `use`.
@@ -168,4 +168,5 @@ To use a provisioned repo:
 ## Roadmap
 * Add command `lock` to unmount all mounted repos.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
+* Consider adding `install` command to install latest release of gec.
 * Consider rewriting using Golang.
