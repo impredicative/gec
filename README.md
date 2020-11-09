@@ -166,5 +166,6 @@ To use a provisioned repo:
 * `gec done <repo> "a non-secret commit message"`
 
 ## Roadmap
-* Add commands: `check.dec`, `check.enc`, `check`.
+* Add command `lock` to unmount all mounted repos.
+* Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
 * Consider rewriting using Golang.
