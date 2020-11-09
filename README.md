@@ -27,7 +27,7 @@ It is in an early stage of development. Breaking changes are possible.
 ## Requirements
 1. [gocryptfs](https://github.com/rfjakob/gocryptfs/releases) ≥2.0-beta1
 1. git ≥2.25.1
-1. [git-sizer](https://github.com/github/git-sizer/releases) ≥1.3.0 (optional but strongly recommended)
+1. [git-sizer](https://github.com/github/git-sizer/releases) ≥1.3.0 (optional but advisable)
 1. Linux (developed under Ubuntu)
 1. A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account with an identical username!
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be useful.
