@@ -13,6 +13,7 @@ CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gec"
 _GITDIR="${_APPDIR}/encrypted"
 _DECDIR="${_APPDIR}/decrypted"
+LS_FORMAT="%11s (%4s/%4s) %s\n"
 
 touch -a "${CONFIGFILE}"
 
@@ -24,7 +25,17 @@ case "${CMD}" in
     exit
     ;;
   ls|list)
-    ls -1 "${_GITDIR}" 2>&- | xargs -i ${TOOL} state {} || :
+    mkdir -p "${_GITDIR}"
+    cd "${_GITDIR}"
+
+    # Print individual state
+    ls -1 | xargs -i ${TOOL} state {}
+#    ls -1 2>&- | xargs -i ${TOOL} state {} || :
+
+    # Print cumulative disk usage
+    encdirs_size=$(du -h -s -c ./*/fs | tail -1 | cut -f1)
+    gitdirs_size=$(du -h -s | cut -f1)
+    printf "${LS_FORMAT}" "" ${encdirs_size} ${gitdirs_size} "(total)"
     exit
     ;;
 esac
@@ -262,10 +273,11 @@ case "${CMD}" in
 
     # Measure disk usage
     mkdir -p "${ENCDIR}"
-    ENCDIR_SIZE=$(du -h -s ${ENCDIR} | cut -f1)
-    GITDIR_SIZE=$(du -h -s ${GITDIR} | cut -f1)
+    ENCDIR_SIZE=$(du -h -s "${ENCDIR}" | cut -f1)
+    GITDIR_SIZE=$(du -h -s "${GITDIR}" | cut -f1)
 
-    printf "%11s (%4s/%4s) %s\n" "${MOUNT_STATE}" ${ENCDIR_SIZE} ${GITDIR_SIZE} ${REPO}
+    # Print state
+    printf "${LS_FORMAT}" "${MOUNT_STATE}" ${ENCDIR_SIZE} ${GITDIR_SIZE} ${REPO}
     ;;
   status|info|?)
     ${TOOL} state ${REPO}
