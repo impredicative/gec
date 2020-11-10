@@ -1,6 +1,6 @@
 # gec
 
-**`gec`** is a simple and opinionated Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
+**`gec`** is a Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
 It refrains from doing anything clever, making it possible to fallback to the underlying gocryptfs or git commands if a need should arise.
 It transparently uses data encryption and version control while leveraging redundant remote storage.
 Many of the implemented commands use GitHub and GitLab.
@@ -166,6 +166,8 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
+* Improve output of `status` and `ls` to show these three sizes: git, enc, all
+* Add convenience commands `tar` and `untar` to split and merge files and folders into 45 MB parts.
 * Add command `lock` to unmount all mounted repos.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
 * Consider adding `install` command to install latest release of gec.
