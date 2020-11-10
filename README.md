@@ -162,7 +162,8 @@ To use a provisioned repo:
 * `gec pull [<repo>]`  # If and when changed on remote
 * `gec use [<repo>]`  # Do "exit" the shell after using
 * `gec status [<repo>]`
-* `gec done <repo> "a non-secret commit message"`
+* `gec done <repo> "a non-secret commit message"` # If files changed
+* `gec umount <repo>`  # If files not changed
 
 ## Roadmap
 * Add command `lock` to unmount all mounted repos.
