@@ -161,7 +161,6 @@ To provision an existing repo with a previously initialized filesystem:
 To use a provisioned repo:
 * `gec pull [<repo>]`  # If and when changed on remote
 * `gec use [<repo>]`  # "exit" shell after using
-* `gec clean [<repo>]`
 * `gec status [<repo>]`
 * `gec done <repo> "a non-secret commit message"`
 
