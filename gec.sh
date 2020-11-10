@@ -371,20 +371,21 @@ case "${CMD}" in
     max_checkout_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["maxCheckoutBlobSize"]["value"]')
     max_checkout_blob_size_gb=$(echo "$max_checkout_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
     if (( $max_checkout_blob_size > 10000000000 )); then
-      loge "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitHub's hard limit of 10 GB"
+      loge "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitLab's repo size hard limit of 10 GB"
       exit 4
     else
-      log "Max checkout blob size of ${max_checkout_blob_size_gb} is under GitHub's hard limit of 10 GB"
+      log "Max checkout blob size of ${max_checkout_blob_size_gb} is under GitLab's repo size hard limit of 10 GB"
     fi
 
-    unique_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["uniqueBlobSize"]["value"]')
-    unique_blob_size_gb=$(echo "$unique_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
-    if (( $max_checkout_blob_size > 10000000000 )); then
-      loge "Unique blob size of ${unique_blob_size_gb} is over GitHub's hard limit of 10 GB"
-      exit 4
-#    else  # Always found to be same as max_checkout_blob_size_gb.
-#      log "Unique blob size of ${unique_blob_size_gb} is under GitHub's hard limit of 10 GB"
-    fi
+#    This section is disabled because the relevance of the value is unclear.
+#    unique_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["uniqueBlobSize"]["value"]')
+#    unique_blob_size_gb=$(echo "$unique_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
+#    if (( $max_checkout_blob_size > 10000000000 )); then
+#      loge "Unique blob size of ${unique_blob_size_gb} is over GitLab's repo size hard limit of 10 GB"
+#      exit 4
+#    else
+#      log "Unique blob size of ${unique_blob_size_gb} is under GitLab's repo size hard limit of 10 GB"
+#    fi
 
     log "Checked sizes of git repo"
     ;;
