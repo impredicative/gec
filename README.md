@@ -90,7 +90,7 @@ For each repo, these directories are created and used:
 ### Repo-agnostic
 * **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
 * **`list`**: Alias of `ls`.
-* **`ls`**: List the name, encrypted filesystem directory disk usage, git directory disk usage, and mount state of all repos in `~/gec/encrypted`.
+* **`ls`**: List the output of the `state` command for all repos in `~/gec/encrypted`.
 
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel-us", in both GitHub and GitLab.
@@ -105,7 +105,7 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 * **`du.git [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
 * **`info [<repo>]`**: Alias of `status`.
 * **`log [<repo>]`**: Print the git log for the last ten commits.
-* **`state [<repo>]`**: Print the repo name, encrypted filesystem directory disk usage, git directory disk usage, and repo mount state.
+* **`state [<repo>]`**: Print the repo mount state, .git directory disk usage, encrypted filesystem directory disk usage, total disk usage, and repo name.
 * **`status  [<repo>]`**: Print the repo name, mount state, short git status, and mount information if mounted.
 
 #### Remote oriented
@@ -166,8 +166,7 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
-* Improve output of `status` and `ls` to show these three sizes: git, enc, all
-* Add convenience commands `tar` and `untar` to split and merge files and folders into 45 MB parts.
+* Colorize various outputs.
 * Add command `lock` to unmount all mounted repos.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
 * Consider adding `install` command to install latest release of gec.
