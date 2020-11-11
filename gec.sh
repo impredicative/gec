@@ -25,11 +25,12 @@ _du_hsc () {  # Disk usage
 # Run repo-agnostic command
 case "${CMD}" in
   install)
-    RELEASE=$(curl -sS -f https://api.github.com/repos/impredicative/gec/releases | python -c 'import json,sys; print(json.load(sys.stdin)[0]["tag_name"])')
+    releases=$(curl -sS -f -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/impredicative/gec/releases)
+    release=$(echo "${releases}" | python -c 'import json,sys; print(json.load(sys.stdin)[0]["tag_name"])')
     FILE="$0"
-    wget -q https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O "${FILE}"
+    wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh -O "${FILE}"
     chmod +x "${FILE}"
-    echo "[gec] Installed ${RELEASE} to ${FILE}"
+    echo "[gec] Installed ${release} to ${FILE}"
     exit
     ;;
   config)
