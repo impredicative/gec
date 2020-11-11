@@ -24,6 +24,14 @@ _du_hsc () {  # Disk usage
 
 # Run repo-agnostic command
 case "${CMD}" in
+  install)
+    RELEASE=$(curl -sS -f https://api.github.com/repos/impredicative/gec/releases | python -c 'import json,sys; print(json.load(sys.stdin)[0]["tag_name"])')
+    FILE="$0"
+    wget -q https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O "${FILE}"
+    chmod +x "${FILE}"
+    echo "[gec] Installed ${RELEASE} to ${FILE}"
+    exit
+    ;;
   config)
     shift
     git config -f "${CONFIGFILE}" "$@"

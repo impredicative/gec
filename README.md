@@ -53,6 +53,7 @@ RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
 ```
+Running `gec install` will update to the latest release.
 
 ## Development
 ```shell script
@@ -91,6 +92,7 @@ For each repo, these directories are created and used:
 ## Commands
 ### Repo-agnostic
 * **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
+* **`install`**: Update to the latest release of `gec`.
 * **`list`**: Alias of `ls`.
 * **`ls [pattern]...`**: List the output of the `state` command for matching repos in `~/gec/encrypted`.
 * **`lock`**: Unmount all mounted repos.
@@ -171,5 +173,4 @@ To use a provisioned repo:
 ## Roadmap
 * Colorize various outputs.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
-* Consider adding `install` command to install latest release of gec.
 * Consider rewriting using Golang.
