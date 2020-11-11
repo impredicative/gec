@@ -225,6 +225,9 @@ case "${CMD}" in
     fi
     ${TOOL} send ${REPO} "${COMMIT_MESSAGE}"
     ;;
+  shell)
+    _shell "${GITDIR}"
+    ;;
   shell.dec)  # Remember to exit the shell after using, otherwise umount won't work.
     if mountpoint -q "${DECDIR}"; then
       _shell "${DECDIR}"
@@ -235,9 +238,6 @@ case "${CMD}" in
     ;;
   shell.enc)
     _shell "${ENCDIR}"
-    ;;
-  shell.git)
-    _shell "${GITDIR}"
     ;;
   use|use.rw)
     if mountpoint -q "${DECDIR}"; then
@@ -292,7 +292,7 @@ case "${CMD}" in
     cd "${GITDIR}"
     git log --color=always --decorate -10 | grep -v '^Author: '
     ;;
-  du.git)
+  du)
     _du "${GITDIR}"
     ;;
   du.enc)

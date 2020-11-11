@@ -80,11 +80,12 @@ Although this location is not currently configurable, a softlink or hardlink can
 
 For each repo, these directories are created and used:
 
-| Location                    | Description                                   |
-|-----------------------------|-----------------------------------------------|
-| `~/gec/encrypted/<repo>`    | git repo contents                             |
-| `~/gec/encrypted/<repo>/fs` | encrypted filesystem contents within git repo |
-| `~/gec/decrypted/<repo>`    | decrypted filesystem mountpoint               |
+| Location                      | Description                                   |
+|-------------------------------|-----------------------------------------------|
+| `~/gec/encrypted/<repo>`      | git repo contents                             |
+| `~/gec/encrypted/<repo>/.git` | .git directory of git repo                    |
+| `~/gec/encrypted/<repo>/fs`   | encrypted filesystem contents within git repo |
+| `~/gec/decrypted/<repo>`      | decrypted filesystem mountpoint               |
 
 ## Commands
 ### Repo-agnostic
@@ -100,9 +101,9 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 #### Informational
 * **`? [<repo>]`**: Alias of `status`.
 * **`check.git [<repo>]`**: Use `git-sizer` to check various sizes of the git repo to determine if a hard limit is exceeded. It is run automatically by `commit` when needed.
+* **`du [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
 * **`du.dec [<repo>]`**:  Print the human-friendly disk usage of the decrypted directory for a depth of one.
 * **`du.enc [<repo>]`**:  Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
-* **`du.git [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
 * **`info [<repo>]`**: Alias of `status`.
 * **`log [<repo>]`**: Print the git log for the last ten commits.
 * **`state [<repo>]`**: Print the repo mount state, .git directory disk usage, encrypted filesystem directory disk usage, total disk usage, and repo name.
@@ -135,9 +136,9 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 
 #### System
 * **`rm [<repo>]`**: Interactively remove all directories of the repo.
+* **`shell [<repo>]`**: Provide a shell into the git repo directory.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
 * **`shell.enc [<repo>]`**: Provide a shell into the encrypted filesystem directory.
-* **`shell.git [<repo>]`**: Provide a shell into the git repo directory.
 
 #### Compound
 * **`init <repo>`**: (`create`+`clone`+`init.fs`+`send`) Create new repo using access tokens, clone it locally, initialize encrypted filesystem, commit, and push.
