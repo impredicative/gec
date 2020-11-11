@@ -17,6 +17,11 @@ LS_FORMAT="%11s .git=%4s enc=%4s all=%4s %s\n"
 
 touch -a "${CONFIGFILE}"
 
+# Define utility functions
+_du_hsc () {  # Disk usage
+  du -h -s -c "$@" | tail -1 | cut -f1
+}
+
 # Run repo-agnostic command
 case "${CMD}" in
   config)
@@ -27,14 +32,16 @@ case "${CMD}" in
   ls|list)
     mkdir -p "${_GITDIR}"
     cd "${_GITDIR}"
+    shift
+    PATTERN=${@:-*}
 
     # Print individual state
-    ls -1 | xargs -i ${TOOL} state {}
+    ls -1d ${PATTERN} | uniq | xargs -i ${TOOL} state {}
 
-    # Print cumulative disk usage
-    gitdirs_size=$(du -h -s -c ./*/.git | tail -1 | cut -f1)
-    encdirs_size=$(du -h -s -c ./*/fs | tail -1 | cut -f1)
-    alldirs_size=$(du -h -s | cut -f1)
+    # Print cumulative disk usage1)
+    gitdirs_size=$(_du_hsc ./${PATTERN}/.git)
+    encdirs_size=$(_du_hsc ./${PATTERN}/fs)
+    alldirs_size=$(_du_hsc ./${PATTERN})
     printf "${LS_FORMAT}" "" ${gitdirs_size} ${encdirs_size} ${alldirs_size} "(total)"
     exit
     ;;
@@ -70,7 +77,7 @@ logn () { echo; log "$1" ; }  # Log after newline
 loge () { log "Failed ${CMD}. $1" >&2 ; }  # Log error
 
 # Define utility functions
-_du () {  # Disk usage
+_du_hcd () {  # Disk usage
   cd "$1"
   du -h -c -d 1
 }
@@ -302,14 +309,14 @@ case "${CMD}" in
     git log --color=always --decorate -10 | grep -v '^Author: '
     ;;
   du)
-    _du "${GITDIR}"
+    _du_hcd "${GITDIR}"
     ;;
   du.enc)
-    _du "${ENCDIR}"
+    _du_hcd "${ENCDIR}"
     ;;
   du.dec)
     if mountpoint -q "${DECDIR}"; then
-      _du "${DECDIR}"
+      _du_hcd "${DECDIR}"
     else
       loge "Mount first"
       exit 3

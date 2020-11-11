@@ -91,7 +91,7 @@ For each repo, these directories are created and used:
 ### Repo-agnostic
 * **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
 * **`list`**: Alias of `ls`.
-* **`ls`**: List the output of the `state` command for all repos in `~/gec/encrypted`.
+* **`ls [pattern]...`**: List the output of the `state` command for matching repos in `~/gec/encrypted`.
 * **`lock`**: Unmount all mounted repos.
 
 ### Repo-specific
