@@ -162,7 +162,7 @@ case "${CMD}" in
     fi
     ;;
   commit)
-    COMMIT_MESSAGE="$3"
+    COMMIT_MESSAGE="${3:?'Provide a commit message as a positional argument.'}"
     cd "${GITDIR}"
 
     log "Adding changes"
@@ -191,7 +191,7 @@ case "${CMD}" in
     fi
     ;;
   amend)
-    COMMIT_MESSAGE="$3"
+    COMMIT_MESSAGE="${3:?'Provide a commit message as a positional argument.'}"
     cd "${GITDIR}"
 
     log "Adding changes"
@@ -227,19 +227,17 @@ case "${CMD}" in
     log "Pushed commits"
     ;;
   send)
-    COMMIT_MESSAGE="$3"
-    ${TOOL} commit ${REPO} "${COMMIT_MESSAGE}"
+    ${TOOL} commit ${REPO} "${@:3}"
     echo
     ${TOOL} push ${REPO}
     ;;
   done)
-    COMMIT_MESSAGE="$3"
     if mountpoint -q "${DECDIR}"; then
       ${TOOL} umount ${REPO}
     else
       log "Repo is unmounted"
     fi
-    ${TOOL} send ${REPO} "${COMMIT_MESSAGE}"
+    ${TOOL} send ${REPO} "${@:3}"
     ;;
   shell)
     _shell "${GITDIR}"
