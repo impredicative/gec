@@ -8,6 +8,8 @@ Many of the implemented commands use GitHub and GitLab.
 
 It is in an early stage of development. Breaking changes are possible.
 
+> **:warning: Before continuing, save the link to the official [mirror](https://gitee.com/impredicative/gec) of this repo.**
+
 ## Contents
 * [Links](#links)
 * [Requirements](#requirements)
