@@ -30,13 +30,18 @@ case "${CMD}" in
 
     # Print individual state
     ls -1 | xargs -i ${TOOL} state {}
-#    ls -1 2>&- | xargs -i ${TOOL} state {} || :
 
     # Print cumulative disk usage
     gitdirs_size=$(du -h -s -c ./*/.git | tail -1 | cut -f1)
     encdirs_size=$(du -h -s -c ./*/fs | tail -1 | cut -f1)
     alldirs_size=$(du -h -s | cut -f1)
     printf "${LS_FORMAT}" "" ${gitdirs_size} ${encdirs_size} ${alldirs_size} "(total)"
+    exit
+    ;;
+  lock)
+    mkdir -p "${_GITDIR}"
+    cd "${_GITDIR}"
+    ls -1 | xargs -i ${TOOL} umount {}
     exit
     ;;
 esac
@@ -141,9 +146,13 @@ case "${CMD}" in
     log "Mounted repo read-only"
     ;;
   umount|unmount|dismount)  # Remember to exit $DECDIR before using.
-    log "Unmounting repo"
-    fusermount -u "${DECDIR}"
-    log "Unmounted repo"
+    if mountpoint -q "${DECDIR}"; then
+      log "Unmounting repo"
+      fusermount -u "${DECDIR}"
+      log "Unmounted repo"
+    else
+      log "Repo is already unmounted"
+    fi
     ;;
   commit)
     COMMIT_MESSAGE="$3"

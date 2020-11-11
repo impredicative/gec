@@ -92,6 +92,7 @@ For each repo, these directories are created and used:
 * **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
 * **`list`**: Alias of `ls`.
 * **`ls`**: List the output of the `state` command for all repos in `~/gec/encrypted`.
+* **`lock`**: Unmount all mounted repos.
 
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel-us", in both GitHub and GitLab.
@@ -131,7 +132,7 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 * **`mount [<repo>]`**: Mount in read-write mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
 * **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
 * **`mount.rw`**: Alias of `mount`.
-* **`umount [<repo>]`**: Unmount a previously mounted repo.
+* **`umount [<repo>]`**: Unmount a repo if it is mounted.
 * **`unmount`**: Alias of `umount`.
 
 #### System
@@ -168,7 +169,6 @@ To use a provisioned repo:
 
 ## Roadmap
 * Colorize various outputs.
-* Add command `lock` to unmount all mounted repos.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
 * Consider adding `install` command to install latest release of gec.
 * Consider rewriting using Golang.
