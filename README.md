@@ -35,15 +35,14 @@ If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-U
 
 ## Limitations
 The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
-If a hard limit is violated, a `push` or `send` will simply fail.
-Note that the size of an encrypted file can be just slightly larger than the size of its decrypted file.
+If a hard limit is violated, `gec` may attempt to check it and error early, otherwise a `push` will simply fail.
 
-| Size of | Value | Type | Enforcer | Checked by `gec`         |
-|---------|-------|------|----------|--------------------------|
-| File    | 100M  | Hard | GitHub   | Yes (only approximately) |
-| Push    | 2G    | Hard | GitHub   | No                       |
-| Repo    | 5G    | Soft | GitHub   | No                       |
-| Repo    | 10G   | Hard | GitLab   | Yes (only approximately) |
+| Size of | Value | Type | Enforcer | Action by `gec` |
+|---------|-------|------|----------|-----------------|
+| File    | 100M  | Hard | GitHub   | Error           |
+| Push    | 2G    | Hard | GitHub   | (Not checked)   |
+| Repo    | 5G    | Soft | GitHub   | Warning         |
+| Repo    | 10G   | Hard | GitLab   | Error           |
 
 Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in a decrypted repo.
 
@@ -105,7 +104,7 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 
 #### Informational
 * **`? [<repo>]`**: Alias of `status`.
-* **`check.git [<repo>]`**: Use `git-sizer` to check various sizes of the git repo to determine if a hard limit is exceeded. It is run automatically by `commit` when needed.
+* **`check.git [<repo>]`**: Use `git-sizer` to check various sizes of the git repo to determine if a size limit is exceeded. It is run automatically by `commit` when needed.
 * **`du [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
 * **`du.dec [<repo>]`**:  Print the human-friendly disk usage of the decrypted directory for a depth of one.
 * **`du.enc [<repo>]`**:  Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
@@ -172,7 +171,6 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
-* Warn if exceeding GitHub repo size soft limit.
 * Garbage collect the repos.
 * Improve [repo size estimate](https://github.com/github/git-sizer/issues/66).
 * Colorize various outputs using `tput`.

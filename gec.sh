@@ -84,6 +84,7 @@ logr () { echo "[${TOOL}:${REPO}] ${1}" ; }  # Log raw
 log () { logr "${1}." ; }  # Log
 logn () { echo; log "$1" ; }  # Log after newline
 loge () { log "Failed ${CMD}. $1" >&2 ; }  # Log error
+logw () { log "Warning: $1" >&2 ; }  # Log warning
 
 # Define utility functions
 _du_hcd () {  # Disk usage
@@ -398,8 +399,10 @@ case "${CMD}" in
     if (( $max_checkout_blob_size > 10000000000 )); then
       loge "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitLab's repo size hard limit of 10 GB"
       exit 4
+    elif (( $max_checkout_blob_size > 5000000000 )); then
+      logw "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitHub's repo size soft limit of 5 GB, but under GitLab's repo size hard limit of 10 GB"
     else
-      log "Max checkout blob size of ${max_checkout_blob_size_gb} is under GitLab's repo size hard limit of 10 GB"
+      log "Max checkout blob size of ${max_checkout_blob_size_gb} is under GitHub's repo size soft limit of 5 GB"
     fi
 
 #    This section is disabled because the relevance of the value is unclear.
