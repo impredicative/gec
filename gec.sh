@@ -382,7 +382,7 @@ case "${CMD}" in
   check.git)
     cd ${GITDIR}
     log "Checking sizes of git repo"
-    size_json=$(git-sizer -j --json-version 2)
+    size_json=$(git-sizer -j --json-version 2 --no-progress)
 
     max_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["maxBlobSize"]["value"]')
     max_blob_size_mb=$(echo "$max_blob_size / 1000000" | bc -l | xargs -i printf "%'.1f MB" {})
