@@ -48,6 +48,7 @@ Note that the size of an encrypted file can be just slightly larger than the siz
 1. Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in a decrypted repo.
 
 ## Installation
+The following steps were tested on Ubuntu. On other distros, that `gec` is available in the PATH.
 ```shell script
 RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
