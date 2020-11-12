@@ -3,7 +3,7 @@
 **`gec`** is a Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
 It refrains from doing anything clever, making it possible to fallback to the underlying gocryptfs or git commands if a need should arise.
 
-It transparently uses data encryption, both at rest and on the remotes. It uses version control and leverages redundant remote storage for reliable backup purposes.
+It transparently uses data encryption, both at rest and on the remotes. It uses version control and leverages redundant remote storage for a reliable backup.
 Many of the implemented commands support GitHub and GitLab. It is in an early stage of development, and breaking changes are therefore possible.
 
 > **:warning: Before continuing, save the link to the official [mirror](https://gitee.com/impredicative/gec) of this repo.**
@@ -34,18 +34,18 @@ Many of the implemented commands support GitHub and GitLab. It is in an early st
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be useful.
 
 ## Limitations
-1. The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
+The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
 If a hard limit is violated, a `push` or `send` will simply fail.
 Note that the size of an encrypted file can be just slightly larger than the size of its decrypted file.
 
-    | Subject | Value | Type | Enforcer | Checked by `gec`         |
-    |---------|-------|------|----------|--------------------------|
-    | File    | 100M  | Hard | GitHub   | Yes (only approximately) |
-    | Push    | 2G    | Hard | GitHub   | No                       |
-    | Repo    | 5G    | Soft | GitHub   | No                       |
-    | Repo    | 10G   | Hard | GitLab   | Yes (only approximately) |
+| Size of | Value | Type | Enforcer | Checked by `gec`         |
+|---------|-------|------|----------|--------------------------|
+| File    | 100M  | Hard | GitHub   | Yes (only approximately) |
+| Push    | 2G    | Hard | GitHub   | No                       |
+| Repo    | 5G    | Soft | GitHub   | No                       |
+| Repo    | 10G   | Hard | GitLab   | Yes (only approximately) |
 
-1. Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in a decrypted repo.
+Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in a decrypted repo.
 
 ## Installation
 The following steps were tested on Ubuntu. On other distros, ensure that `gec` is available in the PATH.
@@ -172,6 +172,7 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
+* Warn if exceeding GitHub repo size soft limit.
 * Garbage collect the repos.
 * Improve [repo size estimate](https://github.com/github/git-sizer/issues/66).
 * Colorize various outputs using `tput`.
