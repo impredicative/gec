@@ -35,15 +35,15 @@ If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-U
 
 ## Limitations
 1. The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
-These limits are not checked or enforced by this tool. If a hard limit is violated, a `push` or `send` will simply fail.
+If a hard limit is violated, a `push` or `send` will simply fail.
 Note that the size of an encrypted file can be just slightly larger than the size of its decrypted file.
 
-    | Subject | Value | Type | Enforcer |
-    |---------|-------|------|----------|
-    | File    | 100M  | Hard | GitHub   |
-    | Push    | 2G    | Hard | GitHub   |
-    | Repo    | 5G    | Soft | GitHub   |
-    | Repo    | 10G   | Hard | GitLab   |
+    | Subject | Value | Type | Enforcer | Checked by `gec`         |
+    |---------|-------|------|----------|--------------------------|
+    | File    | 100M  | Hard | GitHub   | Yes (only approximately) |
+    | Push    | 2G    | Hard | GitHub   | No                       |
+    | Repo    | 5G    | Soft | GitHub   | No                       |
+    | Repo    | 10G   | Hard | GitLab   | Yes (only approximately) |
 
 1. Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in a decrypted repo.
 
@@ -171,6 +171,8 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
-* Colorize various outputs.
+* Garbage collect the repos.
+* Improve [repo size estimate](https://github.com/github/git-sizer/issues/66).
+* Colorize various outputs using `tput`.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
 * Consider rewriting using Golang.
