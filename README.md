@@ -6,7 +6,7 @@ It refrains from doing anything clever, making it possible to fallback to the un
 It transparently uses data encryption, both at rest and on the remotes. It uses version control and leverages redundant remote storage for a reliable backup.
 Many of the implemented commands support GitHub and GitLab. It is in an early stage of development, and breaking changes are therefore possible.
 
-> **:warning: Before continuing, save the link to the official [mirror](https://gitee.com/impredicative/gec) of this repo.**
+> **:warning: Before continuing, save the link to the official [Gitee mirror](https://gitee.com/impredicative/gec) of this repo.**
 
 ## Contents
 * [Links](#links)
@@ -70,7 +70,7 @@ On each device:
 1. Run `gec config core.owner <owner>` once for all future repos.
 1. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Use and securely save a passphrase for this key to minimize the risk of any unauthorized push.
 1. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in both GitHub and GitLab.
-1. Create or prepend to `~/.ssh/config` the contents:
+1. Create or prepend (not append) to `~/.ssh/config` the specific contents:
     ```shell script
     Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
         IdentityFile ~/.ssh/id_gec
@@ -78,7 +78,7 @@ On each device:
 1. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as is advised in `man ssh_config`.
 
 ## Directories
-Storage repos are created in `~/gec/`. This location is created automatically. Both encrypted and decrypted files are organized in this location.
+Storage repos are created in `~/gec/`. This location is created automatically. Both encrypted and decrypted repos and their files are organized in this location.
 Although this location is not currently configurable, a softlink or hardlink can be used to redirect it elsewhere if needed.
 
 For each repo, these directories are created and used:
