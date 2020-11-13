@@ -313,7 +313,6 @@ case "${CMD}" in
     fi
 
     # Measure disk usage
-    mkdir -p "${ENCDIR}"
     GITDIR_SIZE=$(_du_hs "${GITDIR}/.git")
     ENCDIR_SIZE=$(_du_hs "${ENCDIR}")
     ALLDIR_SIZE=$(_du_hs "${GITDIR}")
