@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+TPUT_BOLD=$(tput bold)
+TPUT_RED=$(tput setaf 1)
+TPUT_GREEN=$(tput setaf 2)
+TPUT_GREEN=$(tput setaf 3)
+TPUT_BLUE=$(tput setaf 4)
+TPUT_MAGNETA=$(tput setaf 5)
+TPUT_CYAN=$(tput setaf 6)
+TPUT_WHITE=$(tput setaf 7)
+TPUT_RESET=$(tput sgr0)
+
 # Define repo-agnostic vars
 TOOL="$(basename "$0")"
 if [ "$#" -ge 1 ]; then
@@ -13,7 +23,7 @@ CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gec"
 _GITDIR="${_APPDIR}/encrypted"
 _DECDIR="${_APPDIR}/decrypted"
-LS_FORMAT="%11s .git=%4s enc=%4s all=%4s %s\n"
+LS_FORMAT="%11s .git=${TPUT_CYAN}${TPUT_BOLD}%4s${TPUT_RESET} enc=${TPUT_MAGNETA}${TPUT_BOLD}%4s${TPUT_RESET} all=${TPUT_CYAN}%4s${TPUT_RESET} ${TPUT_BLUE}${TPUT_BOLD}%s${TPUT_RESET}\n"
 
 touch -a "${CONFIGFILE}"
 
