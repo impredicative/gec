@@ -172,7 +172,7 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
-* Improve [repo size estimate](https://github.com/github/git-sizer/issues/66).
+* Remove requirement of `git-sizer`.
 * Colorize various outputs using `tput`.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
 * Consider rewriting using Golang.
