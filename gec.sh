@@ -18,8 +18,20 @@ LS_FORMAT="%11s .git=%4s enc=%4s all=%4s %s\n"
 touch -a "${CONFIGFILE}"
 
 # Define utility functions
-_du_hsc () {  # Disk usage
+_du_hs () {  # Disk usage for single match
+  du -h -s "$@" | cut -f1
+}
+_du_hsc () {  # Total disk usage for single or multiple matches
   du -h -s -c "$@" | tail -1 | cut -f1
+}
+_du_hcd () {  # CD and disk usage for depth of 1
+  cd "$1"
+  du -h -c -d 1
+}
+_shell () {  # Shell into dir
+  cd "$1"
+  USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
+  $USER_SHELL
 }
 
 # Run repo-agnostic command
@@ -47,7 +59,7 @@ case "${CMD}" in
     # Print individual state
     ls -1d ${PATTERN} | uniq | xargs -i ${TOOL} state {}
 
-    # Print cumulative disk usage1)
+    # Print cumulative disk usage
     gitdirs_size=$(_du_hsc ./${PATTERN}/.git)
     encdirs_size=$(_du_hsc ./${PATTERN}/fs)
     alldirs_size=$(_du_hsc ./${PATTERN})
@@ -85,17 +97,6 @@ log () { logr "${1}." ; }  # Log
 logn () { echo; log "$1" ; }  # Log after newline
 loge () { log "Failed ${CMD}. $1" >&2 ; }  # Log error
 logw () { log "Warning: $1" >&2 ; }  # Log warning
-
-# Define utility functions
-_du_hcd () {  # Disk usage
-  cd "$1"
-  du -h -c -d 1
-}
-_shell () {  # Shell into dir
-  cd "$1"
-  USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
-  $USER_SHELL
-}
 
 # Run repo-specific command
 case "${CMD}" in
@@ -303,9 +304,9 @@ case "${CMD}" in
 
     # Measure disk usage
     mkdir -p "${ENCDIR}"
-    GITDIR_SIZE=$(du -h -s "${GITDIR}/.git" | cut -f1)
-    ENCDIR_SIZE=$(du -h -s "${ENCDIR}" | cut -f1)
-    ALLDIR_SIZE=$(du -h -s "${GITDIR}" | cut -f1)
+    GITDIR_SIZE=$(_du_hs "${GITDIR}/.git")
+    ENCDIR_SIZE=$(_du_hs "${ENCDIR}")
+    ALLDIR_SIZE=$(_du_hs "${GITDIR}")
 
     # Print state
     printf "${LS_FORMAT}" "${MOUNT_STATE}" ${GITDIR_SIZE} ${ENCDIR_SIZE} ${ALLDIR_SIZE} ${REPO}
@@ -388,10 +389,10 @@ case "${CMD}" in
   gc)
     cd ${GITDIR}
     shift 2
-    repo_size=$(_du_hsc "${GITDIR}/.git")
+    repo_size=$(_du_hs "${GITDIR}/.git")
     log "Running git garbage collection on .git directory having pre-gc size ${repo_size}"
     git gc "$@"
-    repo_size=$(_du_hsc "${GITDIR}/.git")
+    repo_size=$(_du_hs "${GITDIR}/.git")
     log "Ran git garbage collection on .git directory having post-gc size ${repo_size}"
     ;;
   check.git)
