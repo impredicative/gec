@@ -4,7 +4,7 @@ set -euo pipefail
 TPUT_BOLD=$(tput bold)
 TPUT_RED=$(tput setaf 1)
 TPUT_GREEN=$(tput setaf 2)
-TPUT_GREEN=$(tput setaf 3)
+TPUT_YELLOW=$(tput setaf 3)
 TPUT_BLUE=$(tput setaf 4)
 TPUT_MAGNETA=$(tput setaf 5)
 TPUT_CYAN=$(tput setaf 6)
@@ -23,7 +23,7 @@ CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gec"
 _GITDIR="${_APPDIR}/encrypted"
 _DECDIR="${_APPDIR}/decrypted"
-LS_FORMAT="%11s .git=${TPUT_CYAN}${TPUT_BOLD}%4s${TPUT_RESET} enc=${TPUT_MAGNETA}${TPUT_BOLD}%4s${TPUT_RESET} all=${TPUT_CYAN}%4s${TPUT_RESET} ${TPUT_BLUE}${TPUT_BOLD}%s${TPUT_RESET}\n"
+LS_FORMAT="%s .git=${TPUT_CYAN}${TPUT_BOLD}%4s${TPUT_RESET} enc=${TPUT_MAGNETA}${TPUT_BOLD}%4s${TPUT_RESET} all=${TPUT_CYAN}%4s${TPUT_RESET} ${TPUT_BLUE}${TPUT_BOLD}%s${TPUT_RESET}\n"
 
 touch -a "${CONFIGFILE}"
 
@@ -73,7 +73,7 @@ case "${CMD}" in
     gitdirs_size=$(_du_hsc ./${PATTERN}/.git)
     encdirs_size=$(_du_hsc ./${PATTERN}/fs)
     alldirs_size=$(_du_hsc ./${PATTERN})
-    printf "${LS_FORMAT}" "" ${gitdirs_size} ${encdirs_size} ${alldirs_size} "(total)"
+    printf "${LS_FORMAT}" "          " ${gitdirs_size} ${encdirs_size} ${alldirs_size} "(total)"
     exit
     ;;
   lock)
@@ -307,9 +307,9 @@ case "${CMD}" in
     # Get mount state
     if mountpoint -q "${DECDIR}"; then
       MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
-      MOUNT_STATE="mounted ${MOUNT_OPTION}"
+      MOUNT_STATE="${TPUT_GREEN}${TPUT_BOLD}mounted ${MOUNT_OPTION}${TPUT_RESET}"
     else
-      MOUNT_STATE="unmounted"
+      MOUNT_STATE="dismounted"
     fi
 
     # Measure disk usage
