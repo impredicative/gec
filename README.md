@@ -125,6 +125,7 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 * **`amend <repo> "<commit_msg>"`**: Add and amend all changes to most recent commit. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into its git repo directory, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`gc [<repo>] [options]`**: Run git garbage collection on the repo. Options, if any, are passed to `git gc`. If specifying any options, to auto-determine `<repo>`, specify a period in its place.
 * **`pull [<repo>]`**: Pull commits from remote. For safety, a prerequisite is that the repo must be in a dismounted state.
 * **`push [<repo>]`**: Push commits to remote.
 * **`send <repo> "<commit_msg>"`**: (`commit`+`push`) Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
@@ -171,7 +172,6 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
-* Garbage collect the repos.
 * Improve [repo size estimate](https://github.com/github/git-sizer/issues/66).
 * Colorize various outputs using `tput`.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.

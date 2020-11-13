@@ -380,6 +380,15 @@ case "${CMD}" in
     ${TOOL} rm ${REPO}
     ${TOOL} del ${REPO}
     ;;
+  gc)
+    cd ${GITDIR}
+    shift 2
+    repo_size=$(_du_hsc "${GITDIR}/.git")
+    log "Running git garbage collection on .git directory having pre-gc size ${repo_size}"
+    git gc "$@"
+    repo_size=$(_du_hsc "${GITDIR}/.git")
+    log "Ran git garbage collection on .git directory having post-gc size ${repo_size}"
+    ;;
   check.git)
     cd ${GITDIR}
     log "Checking sizes of git repo"
