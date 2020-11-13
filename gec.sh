@@ -190,6 +190,11 @@ case "${CMD}" in
       git log --color=always --decorate -1 | grep -v '^Author: '
 
       echo
+      log "Running git garbage collection as necessary"
+      git gc --auto
+      log "Ran git garbage collection as necessary"
+
+      echo
       if which git-sizer >/dev/null ; then
         ${TOOL} check.git ${REPO}
       else
@@ -205,7 +210,7 @@ case "${CMD}" in
     cd "${GITDIR}"
 
     log "Adding changes"
-    git add -A -v
+    git add -A
     log "Added changes"
 
     if ! git diff-index --quiet @; then
