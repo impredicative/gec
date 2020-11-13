@@ -390,10 +390,12 @@ case "${CMD}" in
     cd ${GITDIR}
     shift 2
     repo_size=$(_du_hs "${GITDIR}/.git")
-    log "Running git garbage collection on .git directory having pre-gc size ${repo_size}"
+    pack_size=$(_du_hs "${GITDIR}/.git/objects/pack")
+    logr "Running git garbage collection having pre-gc sizes: .git=${repo_size} pack=${pack_size}"
     git gc "$@"
     repo_size=$(_du_hs "${GITDIR}/.git")
-    log "Ran git garbage collection on .git directory having post-gc size ${repo_size}"
+    pack_size=$(_du_hs "${GITDIR}/.git/objects/pack")
+    logr "Ran git garbage collection having post-gc sizes: .git=${repo_size} pack=${pack_size}"
     ;;
   check.git)
     cd ${GITDIR}
