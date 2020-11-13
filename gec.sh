@@ -402,35 +402,39 @@ case "${CMD}" in
     log "Checking sizes of git repo"
     size_json=$(git-sizer -j --json-version 2 --no-progress)
 
+    # Check approximation of largest file size
     max_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["maxBlobSize"]["value"]')
     max_blob_size_mb=$(echo "$max_blob_size / 1000000" | bc -l | xargs -i printf "%'.1f MB" {})
     if (( $max_blob_size > 100000000 ));then
-      loge "Max blob size of ${max_blob_size_mb} is over GitHub's hard limit of 100 MB"
+      loge "Largest blob size of ${max_blob_size_mb} is over GitHub's file size hard limit of 100 MB"
       exit 4
     else
-      log "Max blob size of ${max_blob_size_mb} is under GitHub's hard limit of 100 MB"
+      log "Largest blob size of ${max_blob_size_mb} is under GitHub's file size hard limit of 100 MB"
     fi
 
-    max_checkout_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["maxCheckoutBlobSize"]["value"]')
-    max_checkout_blob_size_gb=$(echo "$max_checkout_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
-    if (( $max_checkout_blob_size > 10000000000 )); then
-      loge "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitLab's repo size hard limit of 10 GB"
-      exit 4
-    elif (( $max_checkout_blob_size > 5000000000 )); then
-      logw "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitHub's repo size soft limit of 5 GB, but under GitLab's repo size hard limit of 10 GB"
-    else
-      log "Max checkout blob size of ${max_checkout_blob_size_gb} is under GitHub's repo size soft limit of 5 GB"
-    fi
-
-#    This section is disabled because the relevance of the value is unclear.
-#    unique_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["uniqueBlobSize"]["value"]')
-#    unique_blob_size_gb=$(echo "$unique_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
+    # This section is disabled because its relevance is unknown.
+#    max_checkout_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["maxCheckoutBlobSize"]["value"]')
+#    max_checkout_blob_size_gb=$(echo "$max_checkout_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
 #    if (( $max_checkout_blob_size > 10000000000 )); then
-#      loge "Unique blob size of ${unique_blob_size_gb} is over GitLab's repo size hard limit of 10 GB"
+#      loge "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitLab's repo size hard limit of 10 GB"
 #      exit 4
+#    elif (( $max_checkout_blob_size > 5000000000 )); then
+#      logw "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitHub's repo size soft limit of 5 GB, but under GitLab's repo size hard limit of 10 GB"
 #    else
-#      log "Unique blob size of ${unique_blob_size_gb} is under GitLab's repo size hard limit of 10 GB"
+#      log "Max checkout blob size of ${max_checkout_blob_size_gb} is under GitHub's repo size soft limit of 5 GB"
 #    fi
+
+    # Check approximation of total file size
+    unique_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["uniqueBlobSize"]["value"]')
+    unique_blob_size_gb=$(echo "$unique_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
+    if (( $unique_blob_size > 10000000000 )); then
+      loge "Total blob size of ${unique_blob_size_gb} is over GitLab's repo size hard limit of 10 GB"
+      exit 4
+    elif (( $unique_blob_size > 5000000000 )); then
+      logw "Total blob size of ${unique_blob_size_gb} is over GitHub's repo size soft limit of 5 GB, but under GitLab's repo size hard limit of 10 GB"
+    else
+      log "Total blob size of ${unique_blob_size_gb} is under GitHub's repo size soft limit of 5 GB"
+    fi
 
     log "Checked sizes of git repo"
     ;;
