@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Define repo-agnostic vars
+TOOL="$(basename "$0")"
 TPUT_BOLD=$(tput bold)
 TPUT_RED=$(tput setaf 1)
 TPUT_GREEN=$(tput setaf 2)
@@ -11,12 +13,18 @@ TPUT_CYAN=$(tput setaf 6)
 TPUT_WHITE=$(tput setaf 7)
 TPUT_RESET=$(tput sgr0)
 
-# Define repo-agnostic vars
-TOOL="$(basename "$0")"
+# Define repo-agnostic logging functions
+logr () { echo "[${TOOL}] ${1}" ; }  # Log raw
+log () { logr "${1}." ; }  # Log
+logn () { echo; log "$1" ; }  # Log after newline
+loge () { log "Error: $1" >&2 ; }  # Log error
+logw () { log "Warning: $1" >&2 ; }  # Log warning
+
+# Define additional repo-agnostic vars
 if [ "$#" -ge 1 ]; then
   CMD="$1"
 else
-   echo "${TOOL}: Provide a command as a positional argument." >&2
+   loge "Provide a command as a positional argument"
    exit 1
 fi
 CONFIGFILE="${HOME}/.gec"
@@ -52,7 +60,7 @@ case "${CMD}" in
     FILE="$0"
     wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh -O "${FILE}"
     chmod +x "${FILE}"
-    echo "[gec] Installed ${release} to ${FILE}"
+    log "Installed ${release} to ${FILE}"
     exit
     ;;
   config)
@@ -92,7 +100,7 @@ else
     ${_GITDIR}/*/*) REPO=$(realpath --relative-to="${_GITDIR}" "${PWD}" | cut -d/ -f1);;
     ${_DECDIR}/*/*) REPO=$(realpath --relative-to="${_DECDIR}" "${PWD}" | cut -d/ -f1);;
     *)
-     echo "${TOOL}: Failed to identify repo. Provide it as a positional argument or change to its directory." >&2
+     loge "Failed to identify repo. Provide it as a positional argument or change to its directory"
      exit 1
      ;;
   esac
@@ -101,7 +109,7 @@ GITDIR="${_GITDIR}/${REPO}"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
 
-# Define logging functions
+# Define repo-specific logging functions
 logr () { echo "[${TOOL}:${REPO}] ${1}" ; }  # Log raw
 log () { logr "${1}." ; }  # Log
 logn () { echo; log "$1" ; }  # Log after newline
