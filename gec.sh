@@ -246,9 +246,9 @@ case "${CMD}" in
   pull)
     if ! mountpoint -q "${DECDIR}"; then
       cd "${GITDIR}"
-      log "Pulling commits"
-      git pull
-      log "Pulled commits"
+      log "Pulling commits (fast-forward only)"
+      git pull --ff-only origin
+      log "Pulled commits (fast-forward only)"
     else
       loge "Unmount first"
       exit 2
