@@ -152,13 +152,16 @@ The password and a printed master key must be securely saved.
 * **`shell.enc [<repo>]`**: Provide a shell into the encrypted filesystem directory.
 
 #### Compound
-* **`init <repo>`**: (`create`+`clone`+`init.fs`+`send`) Create new repo using access tokens, clone it locally, initialize encrypted filesystem, commit, and push.
+* **`init <repo>`**: (`create`+`clone`+`init.fs`+`send`) Create new repo remotely, clone it locally, initialize encrypted filesystem, commit, and push.
 A new password is requested. The password and a printed master key must be securely saved.
+The required GitHub and GitLab tokens must have access to their `repo` and `api` scopes respectively.
 * **`destroy <repo>`**: (`rm`+`del`) Interactively remove all local repo directories, and delete repo from GitHub and GitLab.
 * **`done <repo> "<commit_msg>"`**: (`unmount`+`send`) Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. 
 To auto-determine `<repo>`, specify a period in its place.
 * **`rename <repo> <new_name>`**: Rename repo remotely and locally, and update its locally configured remotes. The repo must be in a dismounted state. 
-The new name must not already be in use. After renaming, remember to store the password for the repo under its new name.
+The new name must not already be in use.
+The required GitHub and GitLab tokens must have access to their `repo` and `api` scopes respectively.
+After renaming, remember to store the password for the repo under its new name.
 * **`use [<repo>]`**: (`mount`+`shell.dec`) Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.ro [<repo>]`**: (`mount.ro`+`shell.dec`) Mount read-only if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.rw`**: Alias of `use`.
