@@ -120,33 +120,38 @@ For your security, the tokens are not saved by `gec`.
 The GitHub and GitLab tokens must have access to their `repo` and `api` scopes respectively.
 * **`del [<repo>]`**: Delete an existing repo in GitHub and GitLab.
 The GitHub and GitLab tokens must have access to their `delete_repo` and `api` scopes respectively.
+Also see the `rm` and `destroy` commands.
 
 #### git oriented
 * **`amend <repo> "<commit_msg>"`**: Add and amend all changes to most recent commit. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into its git repo directory, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
-* **`gc [<repo>] [options]`**: Run git garbage collection on the repo. Options, if any, are passed to `git gc`. If specifying any options, to auto-determine `<repo>`, specify a period in its place.
+* **`gc [<repo>] [options]`**: Run git garbage collection on the repo. Options, if any, are passed to `git gc`. 
+If specifying any options, to auto-determine `<repo>`, specify a period in its place.
 * **`pull [<repo>]`**: Pull commits from remote. For safety, a prerequisite is that the repo must be in a dismounted state.
 * **`push [<repo>]`**: Push commits to remote.
 * **`send <repo> "<commit_msg>"`**: (`commit`+`push`) Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+Also see the `done` command.
 
 #### gocryptfs oriented
 * **`dismount`**: Alias of `umount`.
-* **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made. A new password is requested. The password and a printed master key must be securely saved.
-* **`mount [<repo>]`**: Mount in read-write mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
-* **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state.
-* **`mount.rw`**: Alias of `mount`.
+* **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made. A new password is requested. 
+The password and a printed master key must be securely saved.
+* **`mount [<repo>]`**: Mount in read-write mode a repo into its decrypted mountpoint. The repo must be in a dismounted state. Also see the `use` command.
+* **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state. Also see the `use.ro` command.
+* **`mount.rw`**: Alias of `mount`. Also see the `use.rw` command.
 * **`umount [<repo>]`**: Unmount a repo if it is mounted.
 * **`unmount`**: Alias of `umount`.
 
 #### System
-* **`rm [<repo>]`**: Interactively remove all directories of the repo.
+* **`rm [<repo>]`**: Interactively remove all directories of the repo. Also see the `del` and `destroy` commands.
 * **`shell [<repo>]`**: Provide a shell into the git repo directory.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
 * **`shell.enc [<repo>]`**: Provide a shell into the encrypted filesystem directory.
 
 #### Compound
 * **`init <repo>`**: (`create`+`clone`+`init.fs`+`send`) Create new repo using access tokens, clone it locally, initialize encrypted filesystem, commit, and push.
+A new password is requested. The password and a printed master key must be securely saved.
 * **`destroy <repo>`**: (`rm`+`del`) Interactively remove all repo directories, and delete repo from GitHub and GitLab.
 * **`done <repo> "<commit_msg>"`**: (`unmount`+`send`) Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`use [<repo>]`**: (`mount`+`shell.dec`) Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
@@ -173,4 +178,7 @@ To use a provisioned repo:
 
 ## Roadmap
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
+* Try implementing a `mv` command to rename a repo both locally and remotely.
+* Add installation instructions for gocryptfs.
+* Test with latest release of gocryptfs.
 * Consider rewriting using Golang.
