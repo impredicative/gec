@@ -365,13 +365,19 @@ case "${CMD}" in
       logn "Removing decryption directory"
       rm -rfI "${DECDIR}"
       log "Removed decryption directory"
+    else
+      logw "Decryption directory ${DECDIR} cannot be removed because it does not exist"
     fi
 
-    logn "Removing git directory"
-    rm -rfI "${GITDIR}"
-    log "Removed git directory"
+    if [ -d "${GITDIR}" ]; then
+      logn "Removing git directory"
+      rm -rfI "${GITDIR}"
+      log "Removed git directory"
+    else
+      logw "Git directory ${GITDIR} cannot be removed because it does not exist"
+    fi
 
-    logn "Removed directories"
+    log "Removed directories"
     ;;
   del)
     GITUSER=$(${TOOL} config core.owner)
