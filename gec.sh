@@ -205,8 +205,6 @@ case "${CMD}" in
       logr "Committing: ${COMMIT_MESSAGE}"
       git commit -m "${COMMIT_MESSAGE}"
       logr "Committed: ${COMMIT_MESSAGE}"
-
-      echo
       git log --color=always --decorate -1 | grep -v '^Author: '
 
       logn "Running git garbage collection as necessary"
