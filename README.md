@@ -155,7 +155,10 @@ The password and a printed master key must be securely saved.
 * **`init <repo>`**: (`create`+`clone`+`init.fs`+`send`) Create new repo using access tokens, clone it locally, initialize encrypted filesystem, commit, and push.
 A new password is requested. The password and a printed master key must be securely saved.
 * **`destroy <repo>`**: (`rm`+`del`) Interactively remove all repo directories, and delete repo from GitHub and GitLab.
-* **`done <repo> "<commit_msg>"`**: (`unmount`+`send`) Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`done <repo> "<commit_msg>"`**: (`unmount`+`send`) Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. 
+To auto-determine `<repo>`, specify a period in its place.
+* **`rename <repo> <new_name>`**: Rename repo remotely and locally, and update its locally configured remotes. The repo must be in a dismounted state. 
+The new name must not already be in use.
 * **`use [<repo>]`**: (`mount`+`shell.dec`) Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.ro [<repo>]`**: (`mount.ro`+`shell.dec`) Mount read-only if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.rw`**: Alias of `use`.
@@ -179,8 +182,7 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
+* Update installation steps to include `gocryptfs` and `git-sizer` installation as well.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
-* Try implementing a `mv` command to rename a repo both locally and remotely.
-* Add installation instructions for gocryptfs.
 * Test with latest release of gocryptfs.
 * Consider rewriting using Golang.

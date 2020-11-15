@@ -456,6 +456,85 @@ case "${CMD}" in
 
     log "Checked sizes of git repo"
     ;;
+  rename)
+    old_name="${REPO}"
+    new_name="${3:?'Provide a new repo name as a positional argument.'}"
+    log "Renaming remotely and locally to ${new_name}"
+    GITUSER=$(${TOOL} config core.owner)
+
+    # Check if mounted
+    if mountpoint -q "${DECDIR}"; then
+      loge "Unmount first"
+      exit 2
+    fi
+
+    # Rename GitHub repo
+    # Ref: https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#update-a-repository
+    logn "Renaming repo in GitHub"
+    read -s -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
+    echo
+    curl -sS -f -X PATCH -o /dev/null \
+      -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
+      https://api.github.com/repos/${GITUSER}/${REPO} -d "{\"name\": \"${new_name}\"}"
+    log "Renamed repo in GitHub"
+
+    # Rename GitLab repo
+    # Ref: https://docs.gitlab.com/ee/api/projects.html#edit-project
+    logn "Renaming repo in GitLab"
+    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
+    echo
+    curl -sS -f -X PUT -o /dev/null \
+      -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
+      "https://gitlab.com/api/v4/projects/${GITUSER}%2F${REPO}" -d "{\"name\": \"${new_name}\", \"path\": \"${new_name}\"}"
+    log "Renamed repo in GitLab"
+
+    # Move decryption directory
+    if [ -d "${DECDIR}" ]; then
+      new_decdir=$(realpath -ms "${DECDIR}/../${new_name}")
+      if [ ! -d "${new_decdir}" ]; then
+        logn "Moving decryption directory"
+        mv -v "${DECDIR}" "${new_decdir}"
+        log "Moved decryption directory"
+      else
+        loge "Aborting because new decryption directory ${new_decdir} already exists"
+        exit 5
+      fi
+    else
+      logw "Decryption directory ${DECDIR} cannot be moved because it does not exist"
+    fi
+
+    # Move git directory
+    if [ -d "${GITDIR}" ]; then
+      new_gitdir=$(realpath -ms "${GITDIR}/../${new_name}")
+      if [ ! -d "${new_gitdir}" ]; then
+        logn "Moving git directory"
+        mv -v "${GITDIR}" "${new_gitdir}"
+        log "Moved git directory"
+      else
+        loge "Aborting because new git directory ${new_gitdir} already exists"
+        exit 5
+      fi
+    else
+      logw "Git directory ${GITDIR} cannot be moved because it does not exist"
+    fi
+
+    # Update origin URLs
+    if [ -d "${new_gitdir}/.git" ]; then
+      cd "${new_gitdir}"
+      logrn "Updating origin URLs from:"
+      git remote get-url --all origin | sed 's/^/  /'
+      git remote set-url --delete origin git@github.com:${GITUSER}/${old_name}.git
+      git remote set-url --add origin git@github.com:${GITUSER}/${new_name}.git
+      git remote set-url --delete origin git@gitlab.com:${GITUSER}/${old_name}.git
+      git remote set-url --add origin git@gitlab.com:${GITUSER}/${new_name}.git
+      logr "Updated origin URLs to:"
+      git remote get-url --all origin | sed 's/^/  /'
+    else
+      logw "Origin URLs cannot be updated because .git directory ${GITDIR} does not exist"
+    fi
+
+    logn "Renamed remotely and locally to ${new_name}"
+    ;;
   *)
    loge "Unknown command"
    exit 1
