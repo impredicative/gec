@@ -209,8 +209,7 @@ case "${CMD}" in
       echo
       git log --color=always --decorate -1 | grep -v '^Author: '
 
-      echo
-      log "Running git garbage collection as necessary"
+      logn "Running git garbage collection as necessary"
       git gc --auto
       log "Ran git garbage collection as necessary"
 
