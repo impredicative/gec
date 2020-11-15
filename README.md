@@ -102,6 +102,8 @@ In the commands below, `<repo>` refers to an identical repository name, e.g. "tr
 It can be auto-determined if a command is run from its encrypted or decrypted directory.
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
+The minimally relevant repo-specific commands are listed in the **Workflow** section.
+
 #### Informational
 * **`? [<repo>]`**: Alias of `status`.
 * **`check.git [<repo>]`**: Use `git-sizer` to check various sizes of the git repo to determine if a size limit is exceeded. It is run automatically by `commit` when needed.
@@ -166,7 +168,7 @@ To create and provision a new repo:
 * `gec use <repo>`
 * `touch .Trash-1001`  # Avoids deleting files to Trash on Ubuntu
 
-To provision an existing repo with a previously initialized filesystem:
+To provision an existing repo:
 * `gec clone <repo>`
 
 To use a provisioned repo:
