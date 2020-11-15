@@ -146,7 +146,7 @@ The password and a printed master key must be securely saved.
 * **`unmount`**: Alias of `umount`.
 
 #### System
-* **`rm [<repo>]`**: Interactively remove all directories of the repo. Also see the `del` and `destroy` commands.
+* **`rm [<repo>]`**: Interactively remove all local directories of the repo. Also see the `del` and `destroy` commands.
 * **`shell [<repo>]`**: Provide a shell into the git repo directory.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
 * **`shell.enc [<repo>]`**: Provide a shell into the encrypted filesystem directory.
@@ -154,7 +154,7 @@ The password and a printed master key must be securely saved.
 #### Compound
 * **`init <repo>`**: (`create`+`clone`+`init.fs`+`send`) Create new repo using access tokens, clone it locally, initialize encrypted filesystem, commit, and push.
 A new password is requested. The password and a printed master key must be securely saved.
-* **`destroy <repo>`**: (`rm`+`del`) Interactively remove all repo directories, and delete repo from GitHub and GitLab.
+* **`destroy <repo>`**: (`rm`+`del`) Interactively remove all local repo directories, and delete repo from GitHub and GitLab.
 * **`done <repo> "<commit_msg>"`**: (`unmount`+`send`) Unmount repo if mounted, and then add, commit, and push all changes. `<commit_msg>` is not encrypted. 
 To auto-determine `<repo>`, specify a period in its place.
 * **`rename <repo> <new_name>`**: Rename repo remotely and locally, and update its locally configured remotes. The repo must be in a dismounted state. 
