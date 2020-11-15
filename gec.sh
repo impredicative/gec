@@ -111,6 +111,7 @@ DECDIR="${_DECDIR}/${REPO}"
 
 # Define repo-specific logging functions
 logr () { echo "[${TOOL}:${REPO}] ${1}" ; }  # Log raw
+logrn () { echo; logr "$1" ; }  # Log raw after newline
 log () { logr "${1}." ; }  # Log
 logn () { echo; log "$1" ; }  # Log after newline
 loge () { log "Failed ${CMD}. $1" >&2 ; }  # Log error
@@ -387,7 +388,7 @@ case "${CMD}" in
       https://api.github.com/repos/${GITUSER}/${REPO}
     log "Deleted repo in GitHub"
 
-#    # Delete GitLab repo
+    # Delete GitLab repo
     # Ref: https://stackoverflow.com/a/52132529/
     logn "Deleting repo in GitLab"
     read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
