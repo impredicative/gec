@@ -335,7 +335,7 @@ case "${CMD}" in
     git status -bs
     mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
     ;;
-  log)
+  log|logs)
     cd "${GITDIR}"
     git log --color=always --decorate -10 | grep -v '^Author: '
     ;;

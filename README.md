@@ -112,6 +112,7 @@ The minimally relevant repo-specific commands are listed in the **Workflow** sec
 * **`du.enc [<repo>]`**:  Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
 * **`info [<repo>]`**: Alias of `status`.
 * **`log [<repo>]`**: Print the git log for the last ten commits.
+* **`logs [<repo>]`**: Alias of `log`.
 * **`state [<repo>]`**: Print the repo mount state, .git directory disk usage, encrypted filesystem directory disk usage, total disk usage, and repo name.
 * **`status  [<repo>]`**: Print the repo name, mount state, short git status, and mount information if mounted.
 
