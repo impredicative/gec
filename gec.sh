@@ -359,7 +359,7 @@ case "${CMD}" in
       echo
     fi
 
-    log "Removing local directories"
+    log "Interactively removing local directories"
 
     if [ -d "${DECDIR}" ]; then
       logn "Removing local decryption directory"
@@ -377,7 +377,7 @@ case "${CMD}" in
       logw "Git directory ${GITDIR} cannot be removed because it does not exist"
     fi
 
-    log "Removed local directories"
+    log "Interactively removed local directories"
     ;;
   del)
     GITUSER=$(${TOOL} config core.owner)
