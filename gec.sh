@@ -18,7 +18,7 @@ logr () { echo "[${TOOL}] ${1}" ; }  # Log raw
 log () { logr "${1}." ; }  # Log
 logn () { echo; log "$1" ; }  # Log after newline
 loge () { log "Error: $1" >&2 ; }  # Log error
-logw () { log "Warning: $1" >&2 ; }  # Log warning
+logw () { log "warning: $1" >&2 ; }  # Log warning
 
 # Define additional repo-agnostic vars
 if [ "$#" -ge 1 ]; then
@@ -115,7 +115,7 @@ logrn () { echo; logr "$1" ; }  # Log raw after newline
 log () { logr "${1}." ; }  # Log
 logn () { echo; log "$1" ; }  # Log after newline
 loge () { log "Failed ${CMD}. $1" >&2 ; }  # Log error
-logw () { log "Warning: $1" >&2 ; }  # Log warning
+logw () { log "warning: $1" >&2 ; }  # Log warning
 
 # Run repo-specific command
 case "${CMD}" in
