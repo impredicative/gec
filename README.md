@@ -102,7 +102,7 @@ In the commands below, `<repo>` refers to an identical repository name, e.g. "tr
 It can be auto-determined if a command is run from its encrypted or decrypted directory.
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
-The minimally relevant repo-specific commands are listed in the **Workflow** section.
+The minimally relevant repo-specific commands are listed in the [**Workflow**](#workflow) section.
 
 #### Informational
 * **`? [<repo>]`**: Alias of `status`.
