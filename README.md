@@ -75,7 +75,8 @@ On each device:
         IdentityFile ~/.ssh/id_gec
     ```
 1. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as is advised in `man ssh_config`.
-1. Run `ssh -i ~/.ssh/id_gec -T git@github.com` and `ssh -i ~/.ssh/id_gec -T git@gitlab.com` to test access, ensuring that the `<owner>` name is printed for both.
+1. Run `ssh -i ~/.ssh/id_gec -T git@github.com` to test GitHub access, ensuring that the `<owner>` name is printed.
+1. Run `ssh -i ~/.ssh/id_gec -T git@gitlab.com` to test GitLab access, ensuring that the `<owner>` name is printed.
 
 ## Directories
 Storage repos are created in `~/gec/`. This location is created automatically. Both encrypted and decrypted repos and their files are organized in this location.
