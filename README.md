@@ -173,7 +173,7 @@ Refer to the [repo-specific commands](#repo-specific) section for details on usi
 To create and provision a new repo:
 * `gec init <repo>`
 * `gec use <repo>`
-* `touch .Trash-1001`  # Avoids deleting files to Trash on Ubuntu
+* `touch .Trash-${UID}`  # Avoids deleting files to Trash on Ubuntu
 
 To provision an existing repo:
 * `gec clone <repo>`
