@@ -433,18 +433,6 @@ case "${CMD}" in
       log "Largest blob size of ${max_blob_size_mb} is under GitHub's file size hard limit of 100 MB"
     fi
 
-    # This section is disabled because its relevance is unknown.
-#    max_checkout_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["maxCheckoutBlobSize"]["value"]')
-#    max_checkout_blob_size_gb=$(echo "$max_checkout_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
-#    if (( $max_checkout_blob_size > 10000000000 )); then
-#      loge "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitLab's repo size hard limit of 10 GB"
-#      exit 4
-#    elif (( $max_checkout_blob_size > 5000000000 )); then
-#      logw "Max checkout blob size of ${max_checkout_blob_size_gb} is over GitHub's repo size soft limit of 5 GB, but under GitLab's repo size hard limit of 10 GB"
-#    else
-#      log "Max checkout blob size of ${max_checkout_blob_size_gb} is under GitHub's repo size soft limit of 5 GB"
-#    fi
-
     # Check approximation of total file size
     unique_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["uniqueBlobSize"]["value"]')
     unique_blob_size_gb=$(echo "$unique_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
