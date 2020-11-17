@@ -168,7 +168,7 @@ case "${CMD}" in
   init.fs)
     log "Initializing encrypted filesystem"
     mkdir -p "${ENCDIR}"
-    gocryptfs -init -nofail -sharedstorage "${ENCDIR}"
+    gocryptfs -init "${ENCDIR}"
     mkdir -p "${DECDIR}"
     logn "Initialized encrypted filesystem"
     ;;
