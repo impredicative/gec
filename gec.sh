@@ -156,22 +156,34 @@ case "${CMD}" in
       exit 3
     fi
     cd ${DECDIR}
-    log "Checking file sizes in mountpoint"
-    results=$(find -type f -size +100000000c -exec ls -lh --si '{}' \;)
-    if [[ "$results" != "" ]]; then
-      loge "The files listed below exceed GitHub's file size hard limit of 100M"
-      echo "${results}" >&2
+    log "Checking decrypted file sizes"
+    large_files=$(find -type f -size +100000000c -exec ls -lh --si '{}' \;)
+    if [[ "$large_files" != "" ]]; then
+      loge "The decrypted files listed below exceed GitHub's file size hard limit of 100M"
+      echo "${large_files}" >&2
       exit 4
     fi
-    log "Checked file sizes in mountpoint"
+    log "Decrypted files sizes are not over GitHub's hard limit of 100M"
     ;;
   check.git)
     cd ${GITDIR}
     log "Checking sizes of git repo"
-    size_json=$(git-sizer -j --json-version 2 --no-progress)
 
-    # Check approximation of largest file size
-    max_blob_size=$(echo "${size_json}" | jq '.maxBlobSize.value')
+    # Check for large files
+    large_files=$(find ./fs -type f -size +100000000c -exec ls -lh --si '{}' \;)
+    if [[ "$large_files" != "" ]]; then
+      loge "The encrypted files listed below exceed GitHub's file size hard limit of 100M"
+      echo "${large_files}" >&2
+      logr "To list the decrypted analogs of the above files, run: ${TOOL} check.dec ${REPO}"
+      exit 4
+    else
+      log "Encrypted files sizes are not over GitHub's hard limit of 100M"
+    fi
+
+    git_sizer_json=$(git-sizer -j --json-version 2 --no-progress)
+
+    # Check approximation of largest file size using git-sizer
+    max_blob_size=$(echo "${git_sizer_json}" | jq '.maxBlobSize.value')
     max_blob_size_fmt=$(numfmt --to=si $max_blob_size)
     if (( $max_blob_size > 100000000 )); then
       loge "Largest blob size of ${max_blob_size_fmt} is over GitHub's file size hard limit of 100M"
@@ -180,19 +192,19 @@ case "${CMD}" in
       log "Largest blob size of ${max_blob_size_fmt} is not over GitHub's file size hard limit of 100M"
     fi
 
-    # Check approximation of total repo size
-    repo_size=$(echo "${size_json}" | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
+    # Check approximation of total repo size using git-sizer
+    repo_size=$(echo "${git_sizer_json}" | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
     repo_size_fmt=$(numfmt --to=si $repo_size)
     if (( $repo_size > 10000000000 )); then
-      loge "Repo size of ${repo_size_fmt} is over GitLab's repo size hard limit of 10G"
+      loge "Repo size of ${repo_size_fmt} is over GitLab's hard limit of 10G"
       exit 4
     elif (( $repo_size > 5000000000 )); then
-      logw "Repo size of ${repo_size_fmt} is over GitHub's repo size soft limit of 5G, but not over GitLab's repo size hard limit of 10G"
+      logw "Repo size of ${repo_size_fmt} is over GitHub's soft limit of 5G, but not over GitLab's hard limit of 10G"
     else
-      log "Repo size of ${repo_size_fmt} is not over GitHub's repo size soft limit of 5G"
+      log "Repo size of ${repo_size_fmt} is not over GitHub's soft limit of 5G"
     fi
 
-    # Check commit size if pre-commit repo size was given
+    # Check commit size using git-sizer if pre-commit repo size was given
     if (( $# >= 3 )); then
       pre_commit_repo_size="${3}"
       commit_size=$((repo_size-pre_commit_repo_size))
