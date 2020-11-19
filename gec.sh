@@ -55,8 +55,7 @@ _shell () {  # Shell into dir
 # Run repo-agnostic command
 case "${CMD}" in
   install)
-    releases=$(curl -sS -f -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/impredicative/gec/releases)
-    release=$(echo "${releases}" | python -c 'import json,sys; print(json.load(sys.stdin)[0]["tag_name"])')
+    release=$(curl -sS -f -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
     FILE="$0"
     wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh -O "${FILE}"
     chmod +x "${FILE}"
@@ -212,11 +211,7 @@ case "${CMD}" in
       log "Ran git garbage collection as necessary"
 
       echo
-      if which git-sizer >/dev/null ; then
-        ${TOOL} check.git ${REPO}
-      else
-        log "Skipped checking sizes of git repo since git-sizer is unavailable"
-      fi
+      ${TOOL} check.git ${REPO}
 
     else
       log "No changes to commit"
@@ -424,7 +419,7 @@ case "${CMD}" in
     size_json=$(git-sizer -j --json-version 2 --no-progress)
 
     # Check approximation of largest file size
-    max_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["maxBlobSize"]["value"]')
+    max_blob_size=$(echo "${size_json}" | jq '.maxBlobSize.value')
     max_blob_size_mb=$(echo "$max_blob_size / 1000000" | bc -l | xargs -i printf "%'.1f MB" {})
     if (( $max_blob_size > 100000000 ));then
       loge "Largest blob size of ${max_blob_size_mb} is over GitHub's file size hard limit of 100 MB"
@@ -433,16 +428,16 @@ case "${CMD}" in
       log "Largest blob size of ${max_blob_size_mb} is under GitHub's file size hard limit of 100 MB"
     fi
 
-    # Check approximation of total file size
-    unique_blob_size=$(echo "${size_json}" | python -c 'import json,sys; print(json.load(sys.stdin))["uniqueBlobSize"]["value"]')
-    unique_blob_size_gb=$(echo "$unique_blob_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
-    if (( $unique_blob_size > 10000000000 )); then
-      loge "Total blob size of ${unique_blob_size_gb} is over GitLab's repo size hard limit of 10 GB"
+    # Check approximation of total repo size
+    repo_size=$(echo "${size_json}" | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
+    repo_size_gb=$(echo "$repo_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
+    if (( $repo_size > 10000000000 )); then
+      loge "Repo size of ${repo_size_gb} is over GitLab's repo size hard limit of 10 GB"
       exit 4
-    elif (( $unique_blob_size > 5000000000 )); then
-      logw "Total blob size of ${unique_blob_size_gb} is over GitHub's repo size soft limit of 5 GB, but under GitLab's repo size hard limit of 10 GB"
+    elif (( $repo_size > 5000000000 )); then
+      logw "Repo size of ${repo_size_gb} is over GitHub's repo size soft limit of 5 GB, but under GitLab's repo size hard limit of 10 GB"
     else
-      log "Total blob size of ${unique_blob_size_gb} is under GitHub's repo size soft limit of 5 GB"
+      log "Repo size of ${repo_size_gb} is under GitHub's repo size soft limit of 5 GB"
     fi
 
     log "Checked sizes of git repo"

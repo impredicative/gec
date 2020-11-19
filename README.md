@@ -26,12 +26,10 @@ Many of the implemented commands support GitHub and GitLab. Git users will be at
 * Mirror: https://gitee.com/impredicative/gec
 
 ## Requirements
-1. [gocryptfs](https://github.com/rfjakob/gocryptfs/releases) ≥2.0-beta1 (_see [**Installation**](#installation)_)
-1. [git-sizer](https://github.com/github/git-sizer/releases) ≥1.3.0 (optional but advisable) (_see [**Installation**](#installation)_)
-1. git ≥2.25.1
-1. Linux (developed under Ubuntu)
-1. A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account with an identical username!
-If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be useful.
+Linux, along with the tools git, jq, gocryptfs, and git-sizer are required. These tools are covered in the [**Installation**](#installation) section.
+
+A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account is required with an identical username on both sites!
+If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be very useful.
 
 ## Limitations
 The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
@@ -48,18 +46,31 @@ Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be crea
 
 ## Installation
 These steps were tested on Ubuntu. On other distros, ensure that the executables are available in the PATH.
-### gocryptfs
+
+Ensure `git` ≥2.25.1:
+```
+sudo apt install git
+```
+
+Install [`jq`](https://github.com/stedolan/jq/releases) ≥1.5:
+```shell script
+sudo apt install jq
+```
+
+Install [`gocryptfs`](https://github.com/rfjakob/gocryptfs/releases) ≥2.0-beta1:
 ```shell script
 RELEASE=$(curl https://api.github.com/repos/rfjakob/gocryptfs/releases | jq -r .[0].tag_name)
 wget -qO- https://github.com/rfjakob/gocryptfs/releases/download/${RELEASE}/gocryptfs_${RELEASE}_linux-static_amd64.tar.gz | tar -xz -f - -C ~/.local/bin/ gocryptfs
 ```
-### git-sizer
+
+Install [`git-sizer`](https://github.com/github/git-sizer/releases) ≥1.3.0:
 ```shell script
 VERSION=$(curl https://api.github.com/repos/github/git-sizer/releases | jq -r .[0].tag_name | tr -d v)
 wget -qO- https://github.com/github/git-sizer/releases/download/v${VERSION}/git-sizer-${VERSION}-linux-amd64.zip | busybox unzip - git-sizer -d ~/.local/bin/
 chmod +x ~/.local/bin/git-sizer
 ```
-### gec
+
+Install `gec`:
 ```shell script
 RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
@@ -201,6 +212,6 @@ To use a provisioned repo:
 
 ## Roadmap
 * Check push size by measuring difference in pre-commit and post-commit repo sizes.
-* Use uniqueBlobSize.value + uniqueTreeSize.value + uniqueCommitSize.value + uniqueTagSize.value to better approximate the repo size.
 Refer to [this issue](https://github.com/github/git-sizer/issues/66#issuecomment-729078975).
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
+* Consider rewriting using Go.
