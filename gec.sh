@@ -421,36 +421,36 @@ case "${CMD}" in
 
     # Check approximation of largest file size
     max_blob_size=$(echo "${size_json}" | jq '.maxBlobSize.value')
-    max_blob_size_mb=$(echo "$max_blob_size / 1000000" | bc -l | xargs -i printf "%'.1f MB" {})
+    max_blob_size_fmt=$(numfmt --to=si $max_blob_size)
     if (( $max_blob_size > 100000000 ));then
-      loge "Largest blob size of ${max_blob_size_mb} is over GitHub's file size hard limit of 100 MB"
+      loge "Largest blob size of ${max_blob_size_fmt} is over GitHub's file size hard limit of 100M"
       exit 4
     else
-      log "Largest blob size of ${max_blob_size_mb} is not over GitHub's file size hard limit of 100 MB"
+      log "Largest blob size of ${max_blob_size_fmt} is not over GitHub's file size hard limit of 100M"
     fi
 
     # Check approximation of total repo size
     repo_size=$(echo "${size_json}" | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
-    repo_size_gb=$(echo "$repo_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
+    repo_size_fmt=$(numfmt --to=si $repo_size)
     if (( $repo_size > 10000000000 )); then
-      loge "Repo size of ${repo_size_gb} is over GitLab's repo size hard limit of 10 GB"
+      loge "Repo size of ${repo_size_fmt} is over GitLab's repo size hard limit of 10G"
       exit 4
     elif (( $repo_size > 5000000000 )); then
-      logw "Repo size of ${repo_size_gb} is over GitHub's repo size soft limit of 5 GB, but not over GitLab's repo size hard limit of 10 GB"
+      logw "Repo size of ${repo_size_fmt} is over GitHub's repo size soft limit of 5G, but not over GitLab's repo size hard limit of 10G"
     else
-      log "Repo size of ${repo_size_gb} is not over GitHub's repo size soft limit of 5 GB"
+      log "Repo size of ${repo_size_fmt} is not over GitHub's repo size soft limit of 5G"
     fi
 
     # Check commit size if pre-commit repo size was given
     if (( $# >= 3 )); then
       pre_commit_repo_size="${3}"
       commit_size=$((repo_size-pre_commit_repo_size))
-      commit_size_gb=$(echo "$commit_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
+      commit_size_fmt=$(numfmt --to=si $commit_size)
       if (( $commit_size > 2000000000 )); then
-        loge "Commit size of ${commit_size_gb} is over GitHub's push size hard limit of 2 GB"
+        loge "Commit size of ${commit_size_fmt} is over GitHub's push size hard limit of 2G"
         exit 4
       else
-        log "Commit size of ${commit_size_gb} is not over GitHub's push size hard limit of 2 GB"
+        log "Commit size of ${commit_size_fmt} is not over GitHub's push size hard limit of 2G"
       fi
     fi
 
