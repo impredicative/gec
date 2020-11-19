@@ -119,7 +119,7 @@ logw () { log "warning: $1" >&2 ; }  # Log warning
 # Validate repo name
 # Ref: https://stackoverflow.com/a/59082561/ https://gitlab.com/gitlab-org/gitlab/-/issues/21661
 repo_valid_pattern="^[a-zA-Z0-9_][a-zA-Z0-9_-]{0,99}$"
-if ! [[ "$REPO" =~ $repo_valid_pattern ]]; then
+if [[ ! "$REPO" =~ $repo_valid_pattern ]]; then
     loge "Repo name must match pattern ${repo_valid_pattern} so as to ensure broad compatibility"
     exit 1
 fi
