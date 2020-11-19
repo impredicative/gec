@@ -35,12 +35,12 @@ If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-U
 The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
 If a hard limit is violated during a `commit`, `gec` will attempt to check it and error early, otherwise a `push` will simply fail.
 
-| Size of | Value | Type | Enforcer | Action by `gec` |
-|---------|-------|------|----------|-----------------|
-| File    | 100M  | Hard | GitHub   | Error           |
-| Push    | 2G    | Hard | GitHub   | Error           |
-| Repo    | 5G    | Soft | GitHub   | Warning         |
-| Repo    | 10G   | Hard | GitLab   | Error           |
+| Size of | SI Value | Type | Enforcer | Action by `gec` |
+|---------|----------|------|----------|-----------------|
+| File    | 100M     | Hard | GitHub   | Error           |
+| Push    | 2G       | Hard | GitHub   | Error           |
+| Repo    | 5G       | Soft | GitHub   | Warning         |
+| Repo    | 10G      | Hard | GitLab   | Error           |
 
 Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in a decrypted repo.
 
