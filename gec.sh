@@ -202,6 +202,7 @@ case "${CMD}" in
       # Ref: https://stackoverflow.com/a/34093391/
 
       logr "Committing: ${COMMIT_MESSAGE}"
+      pre_commit_repo_size=$(git-sizer -j --json-version 2 --no-progress | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
       git commit -m "${COMMIT_MESSAGE}"
       logr "Committed: ${COMMIT_MESSAGE}"
       git log --color=always --decorate -1 | grep -v '^Author: '
@@ -211,7 +212,7 @@ case "${CMD}" in
       log "Ran git garbage collection as necessary"
 
       echo
-      ${TOOL} check.git ${REPO}
+      ${TOOL} check.git ${REPO} ${pre_commit_repo_size}
 
     else
       log "No changes to commit"
@@ -425,7 +426,7 @@ case "${CMD}" in
       loge "Largest blob size of ${max_blob_size_mb} is over GitHub's file size hard limit of 100 MB"
       exit 4
     else
-      log "Largest blob size of ${max_blob_size_mb} is under GitHub's file size hard limit of 100 MB"
+      log "Largest blob size of ${max_blob_size_mb} is not over GitHub's file size hard limit of 100 MB"
     fi
 
     # Check approximation of total repo size
@@ -435,9 +436,22 @@ case "${CMD}" in
       loge "Repo size of ${repo_size_gb} is over GitLab's repo size hard limit of 10 GB"
       exit 4
     elif (( $repo_size > 5000000000 )); then
-      logw "Repo size of ${repo_size_gb} is over GitHub's repo size soft limit of 5 GB, but under GitLab's repo size hard limit of 10 GB"
+      logw "Repo size of ${repo_size_gb} is over GitHub's repo size soft limit of 5 GB, but not over GitLab's repo size hard limit of 10 GB"
     else
-      log "Repo size of ${repo_size_gb} is under GitHub's repo size soft limit of 5 GB"
+      log "Repo size of ${repo_size_gb} is not over GitHub's repo size soft limit of 5 GB"
+    fi
+
+    # Check commit size if pre-commit repo size was given
+    if (( $# >= 3 )); then
+      pre_commit_repo_size="${3}"
+      commit_size=$((repo_size-pre_commit_repo_size))
+      commit_size_gb=$(echo "$commit_size / 1000000000" | bc -l | xargs -i printf "%'.1f GB" {})
+      if (( $commit_size > 2000000000 )); then
+        loge "Commit size of ${commit_size_gb} is over GitHub's push size hard limit of 2 GB"
+        exit 4
+      else
+        log "Commit size of ${commit_size_gb} is not over GitHub's push size hard limit of 2 GB"
+      fi
     fi
 
     log "Checked sizes of git repo"

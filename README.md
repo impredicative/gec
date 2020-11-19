@@ -38,7 +38,7 @@ If a hard limit is violated, `gec` may attempt to check it and error early, othe
 | Size of | Value | Type | Enforcer | Action by `gec` |
 |---------|-------|------|----------|-----------------|
 | File    | 100M  | Hard | GitHub   | Error           |
-| Push    | 2G    | Hard | GitHub   | (Not checked)   |
+| Push    | 2G    | Hard | GitHub   | Error           |
 | Repo    | 5G    | Soft | GitHub   | Warning         |
 | Repo    | 10G   | Hard | GitLab   | Error           |
 
@@ -131,7 +131,7 @@ The minimally relevant repo-specific commands are listed in the [**Workflow**](#
 
 #### Informational
 * **`? [<repo>]`**: Alias of `status`.
-* **`check.git [<repo>]`**: Use `git-sizer` to check various sizes of the git repo to determine if a size limit is exceeded. It is run automatically by `commit` when needed.
+* **`check.git [<repo>]`**: Use `git-sizer` to check various sizes of the git repo. Error if a size limit is exceeded. It is run automatically by `commit` when needed.
 * **`du [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
 * **`du.dec [<repo>]`**:  Print the human-friendly disk usage of the decrypted directory for a depth of one.
 * **`du.enc [<repo>]`**:  Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
@@ -211,6 +211,5 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
-* Check push size by measuring difference in pre-commit and post-commit repo sizes.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
 * Consider rewriting using Go.
