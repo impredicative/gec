@@ -211,6 +211,5 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
-* Validate repo name against character set.
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
 * Consider rewriting using Go.

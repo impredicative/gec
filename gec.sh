@@ -116,6 +116,14 @@ logn () { echo; log "$1" ; }  # Log after newline
 loge () { log "Failed ${CMD}. $1" >&2 ; }  # Log error
 logw () { log "warning: $1" >&2 ; }  # Log warning
 
+# Validate repo name
+# Ref: https://stackoverflow.com/a/59082561/ https://gitlab.com/gitlab-org/gitlab/-/issues/21661
+repo_pattern="^[a-zA-Z0-9][a-zA-Z0-9_-]{0,99}$"
+if ! [[ "$REPO" =~ $repo_pattern ]]; then
+    loge "Repo name must match pattern ${repo_pattern} to ensure broad compatibility"
+    exit 1
+fi
+
 # Run repo-specific command
 case "${CMD}" in
   amend)
