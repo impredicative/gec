@@ -54,6 +54,11 @@ _shell () {  # Shell into dir
 
 # Run repo-agnostic command
 case "${CMD}" in
+  config)
+    shift
+    git config -f "${CONFIGFILE}" "$@"
+    exit
+    ;;
   install)
     release=$(curl -sS -f -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
     FILE="$0"
@@ -62,9 +67,10 @@ case "${CMD}" in
     log "Installed ${release} to ${FILE}"
     exit
     ;;
-  config)
-    shift
-    git config -f "${CONFIGFILE}" "$@"
+  lock)
+    mkdir -p "${_GITDIR}"
+    cd "${_GITDIR}"
+    ls -1 | xargs -i ${TOOL} umount {}
     exit
     ;;
   ls|list)
@@ -81,12 +87,6 @@ case "${CMD}" in
     encdirs_size=$(_du_hsc ./${PATTERN}/fs)
     gitdirs_size=$(_du_hsc ./${PATTERN}/.git)
     printf "${LS_FORMAT}" "          " ${alldirs_size} ${encdirs_size} ${gitdirs_size} "(total)"
-    exit
-    ;;
-  lock)
-    mkdir -p "${_GITDIR}"
-    cd "${_GITDIR}"
-    ls -1 | xargs -i ${TOOL} umount {}
     exit
     ;;
 esac
