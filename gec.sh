@@ -31,7 +31,7 @@ CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gec"
 _GITDIR="${_APPDIR}/encrypted"
 _DECDIR="${_APPDIR}/decrypted"
-LS_FORMAT="%s all=${TPUT_CYAN}%4s${TPUT_RESET} enc=${TPUT_MAGNETA}${TPUT_BOLD}%4s${TPUT_RESET} .git=${TPUT_CYAN}${TPUT_BOLD}%4s${TPUT_RESET} ${TPUT_BLUE}${TPUT_BOLD}%s${TPUT_RESET}\n"
+LS_FORMAT="all=${TPUT_CYAN}%4s${TPUT_RESET} enc=${TPUT_MAGNETA}${TPUT_BOLD}%4s${TPUT_RESET} .git=${TPUT_CYAN}${TPUT_BOLD}%4s${TPUT_RESET} %s ${TPUT_BLUE}${TPUT_BOLD}%s${TPUT_RESET}\n"
 
 touch -a "${CONFIGFILE}"
 
@@ -86,7 +86,7 @@ case "${CMD}" in
     alldirs_size=$(_du_hsc ./${PATTERN})
     encdirs_size=$(_du_hsc ./${PATTERN}/fs)
     gitdirs_size=$(_du_hsc ./${PATTERN}/.git)
-    printf "${LS_FORMAT}" "          " ${alldirs_size} ${encdirs_size} ${gitdirs_size} "(total)"
+    printf "${LS_FORMAT}" ${alldirs_size} ${encdirs_size} ${gitdirs_size} "          " "(total)"
     exit
     ;;
 esac
@@ -493,7 +493,7 @@ case "${CMD}" in
     GITDIR_SIZE=$(_du_hs "${GITDIR}/.git")
 
     # Print state
-    printf "${LS_FORMAT}" "${MOUNT_STATE}" ${ALLDIR_SIZE} ${ENCDIR_SIZE} ${GITDIR_SIZE} ${REPO}
+    printf "${LS_FORMAT}" ${ALLDIR_SIZE} ${ENCDIR_SIZE} ${GITDIR_SIZE} "${MOUNT_STATE}" ${REPO}
     ;;
   status|info|?)
     ${TOOL} state ${REPO}
