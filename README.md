@@ -33,7 +33,7 @@ If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-U
 
 ## Limitations
 The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
-If a hard limit is violated, `gec` may attempt to check it and error early, otherwise a `push` will simply fail.
+If a hard limit is violated during a `commit`, `gec` will attempt to check it and error early, otherwise a `push` will simply fail.
 
 | Size of | Value | Type | Enforcer | Action by `gec` |
 |---------|-------|------|----------|-----------------|
