@@ -31,7 +31,7 @@ CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gec"
 _GITDIR="${_APPDIR}/encrypted"
 _DECDIR="${_APPDIR}/decrypted"
-LS_FORMAT="%s .git=${TPUT_CYAN}${TPUT_BOLD}%4s${TPUT_RESET} enc=${TPUT_MAGNETA}${TPUT_BOLD}%4s${TPUT_RESET} all=${TPUT_CYAN}%4s${TPUT_RESET} ${TPUT_BLUE}${TPUT_BOLD}%s${TPUT_RESET}\n"
+LS_FORMAT="%s all=${TPUT_CYAN}%4s${TPUT_RESET} enc=${TPUT_MAGNETA}${TPUT_BOLD}%4s${TPUT_RESET} .git=${TPUT_CYAN}${TPUT_BOLD}%4s${TPUT_RESET} ${TPUT_BLUE}${TPUT_BOLD}%s${TPUT_RESET}\n"
 
 touch -a "${CONFIGFILE}"
 
@@ -77,10 +77,10 @@ case "${CMD}" in
     ls -1d ${PATTERN} | uniq | xargs -i ${TOOL} state {}
 
     # Print cumulative disk usage
-    gitdirs_size=$(_du_hsc ./${PATTERN}/.git)
-    encdirs_size=$(_du_hsc ./${PATTERN}/fs)
     alldirs_size=$(_du_hsc ./${PATTERN})
-    printf "${LS_FORMAT}" "          " ${gitdirs_size} ${encdirs_size} ${alldirs_size} "(total)"
+    encdirs_size=$(_du_hsc ./${PATTERN}/fs)
+    gitdirs_size=$(_du_hsc ./${PATTERN}/.git)
+    printf "${LS_FORMAT}" "          " ${alldirs_size} ${encdirs_size} ${gitdirs_size} "(total)"
     exit
     ;;
   lock)
@@ -314,12 +314,12 @@ case "${CMD}" in
     fi
 
     # Measure disk usage
-    GITDIR_SIZE=$(_du_hs "${GITDIR}/.git")
-    ENCDIR_SIZE=$(_du_hs "${ENCDIR}")
     ALLDIR_SIZE=$(_du_hs "${GITDIR}")
+    ENCDIR_SIZE=$(_du_hs "${ENCDIR}")
+    GITDIR_SIZE=$(_du_hs "${GITDIR}/.git")
 
     # Print state
-    printf "${LS_FORMAT}" "${MOUNT_STATE}" ${GITDIR_SIZE} ${ENCDIR_SIZE} ${ALLDIR_SIZE} ${REPO}
+    printf "${LS_FORMAT}" "${MOUNT_STATE}" ${ALLDIR_SIZE} ${ENCDIR_SIZE} ${GITDIR_SIZE} ${REPO}
     ;;
   status|info|?)
     ${TOOL} state ${REPO}
