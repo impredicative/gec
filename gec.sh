@@ -150,6 +150,21 @@ case "${CMD}" in
       log "No changes to amend"
     fi
     ;;
+  check.dec)
+    if ! mountpoint -q "${DECDIR}"; then
+      loge "Mount first"
+      exit 3
+    fi
+    cd ${DECDIR}
+    log "Checking file sizes in mountpoint"
+    results=$(find -type f -size +100000000c -exec ls -lh --si '{}' \;)
+    if [[ "$results" != "" ]]; then
+      loge "The files listed below exceed GitHub's file size hard limit of 100M"
+      echo "${results}" >&2
+      exit 4
+    fi
+    log "Checked file sizes in mountpoint"
+    ;;
   check.git)
     cd ${GITDIR}
     log "Checking sizes of git repo"
@@ -158,7 +173,7 @@ case "${CMD}" in
     # Check approximation of largest file size
     max_blob_size=$(echo "${size_json}" | jq '.maxBlobSize.value')
     max_blob_size_fmt=$(numfmt --to=si $max_blob_size)
-    if (( $max_blob_size > 100000000 ));then
+    if (( $max_blob_size > 100000000 )); then
       loge "Largest blob size of ${max_blob_size_fmt} is over GitHub's file size hard limit of 100M"
       exit 4
     else
@@ -216,11 +231,16 @@ case "${CMD}" in
     if ! git diff-index --quiet @; then
       # Ref: https://stackoverflow.com/a/34093391/
 
-      logr "Committing: ${COMMIT_MESSAGE}"
+      if mountpoint -q "${DECDIR}"; then
+        echo
+        ${TOOL} check.dec ${REPO}
+      fi
+
+      logn "Committing changes"
       pre_commit_repo_size=$(git-sizer -j --json-version 2 --no-progress | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
       git commit -m "${COMMIT_MESSAGE}"
-      logr "Committed: ${COMMIT_MESSAGE}"
       git log --color=always --decorate -1 | grep -v '^Author: '
+      log "Committed changes"
 
       logn "Running git garbage collection as necessary"
       git gc --auto
