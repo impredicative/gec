@@ -212,6 +212,5 @@ To use a provisioned repo:
 
 ## Roadmap
 * Check push size by measuring difference in pre-commit and post-commit repo sizes.
-Refer to [this issue](https://github.com/github/git-sizer/issues/66#issuecomment-729078975).
 * Add commands `check.dec`, `check.enc`, and `check` to check file sizes, also during `commit`.
 * Consider rewriting using Go.
