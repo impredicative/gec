@@ -118,106 +118,6 @@ logw () { log "warning: $1" >&2 ; }  # Log warning
 
 # Run repo-specific command
 case "${CMD}" in
-  create)
-    GITUSER=$(${TOOL} config core.owner)
-    log "Creating repo in GitHub and GitLab"
-
-    # Create GitHub repo
-    # Ref: https://stackoverflow.com/a/64636218/
-    logn "Creating repo in GitHub"
-    read -s -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
-    echo
-    curl -sS -f -X POST -o /dev/null \
-      -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
-      https://api.github.com/user/repos -d "{\"name\": \"${REPO}\", \"private\": true}"
-    log "Created repo in GitHub"
-
-    # Create GitLab repo
-    # Ref: https://stackoverflow.com/a/64656788/
-    # This is optional as the repo is automatically created upon first push.
-    logn "Creating repo in GitLab"
-    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
-    echo
-    curl -sS -f -X POST -o /dev/null \
-      -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
-      "https://gitlab.com/api/v4/projects" -d "{\"path\": \"${REPO}\", \"visibility\": \"private\"}"
-    log "Created repo in GitLab"
-
-    logn "Created repo in GitHub and GitLab"
-    ;;
-  clone)
-    log "Cloning and configuring repo"
-
-    GITUSER=$(${TOOL} config core.owner)
-    mkdir -p "${GITDIR}" && cd "$_"
-    logn "Cloning repo from GitHub"
-    git clone -c http.postBuffer=2000000000 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
-    log "Cloned repo from GitHub"
-    git remote set-url --add origin git@gitlab.com:${GITUSER}/${REPO}.git
-    logn "Added GitLab URL"
-
-    logn "Cloned and configured repo"
-    ;;
-  init)
-    ${TOOL} create ${REPO}
-    ${TOOL} clone ${REPO}
-    ${TOOL} init.fs ${REPO}
-    ${TOOL} send ${REPO} "Initialized"
-    ;;
-  init.fs)
-    log "Initializing encrypted filesystem"
-    mkdir -p "${ENCDIR}"
-    gocryptfs -init "${ENCDIR}"
-    mkdir -p "${DECDIR}"
-    logn "Initialized encrypted filesystem"
-    ;;
-  mount|mount.rw)
-    log "Mounting repo read-write"
-    gocryptfs -nofail -sharedstorage -rw "${ENCDIR}" "${DECDIR}"
-    log "Mounted repo read-write"
-    ;;
-  mount.ro)
-    log "Mounting repo read-only"
-    gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
-    log "Mounted repo read-only"
-    ;;
-  umount|unmount|dismount)  # Remember to exit $DECDIR before using.
-    if mountpoint -q "${DECDIR}"; then
-      log "Unmounting repo"
-      fusermount -u "${DECDIR}"
-      log "Unmounted repo"
-    else
-      log "Repo is already unmounted"
-    fi
-    ;;
-  commit)
-    COMMIT_MESSAGE="${3:?'Provide a commit message as a positional argument.'}"
-    cd "${GITDIR}"
-
-    log "Adding changes"
-    git add -A -v
-    log "Added changes"
-
-    if ! git diff-index --quiet @; then
-      # Ref: https://stackoverflow.com/a/34093391/
-
-      logr "Committing: ${COMMIT_MESSAGE}"
-      pre_commit_repo_size=$(git-sizer -j --json-version 2 --no-progress | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
-      git commit -m "${COMMIT_MESSAGE}"
-      logr "Committed: ${COMMIT_MESSAGE}"
-      git log --color=always --decorate -1 | grep -v '^Author: '
-
-      logn "Running git garbage collection as necessary"
-      git gc --auto
-      log "Ran git garbage collection as necessary"
-
-      echo
-      ${TOOL} check.git ${REPO} ${pre_commit_repo_size}
-
-    else
-      log "No changes to commit"
-    fi
-    ;;
   amend)
     COMMIT_MESSAGE="${3:?'Provide a commit message as a positional argument.'}"
     cd "${GITDIR}"
@@ -236,183 +136,6 @@ case "${CMD}" in
     else
       log "No changes to amend"
     fi
-    ;;
-  pull)
-    if ! mountpoint -q "${DECDIR}"; then
-      cd "${GITDIR}"
-      log "Pulling commits (fast-forward only)"
-      git pull --ff-only origin
-      log "Pulled commits (fast-forward only)"
-    else
-      loge "Unmount first"
-      exit 2
-    fi
-    ;;
-  push)
-    cd "${GITDIR}"
-    log "Pushing commits"
-    git push -v
-    log "Pushed commits"
-    ;;
-  send)
-    ${TOOL} commit ${REPO} "${@:3}"
-    echo
-    ${TOOL} push ${REPO}
-    ;;
-  done)
-    if mountpoint -q "${DECDIR}"; then
-      ${TOOL} umount ${REPO}
-    else
-      log "Repo is unmounted"
-    fi
-    ${TOOL} send ${REPO} "${@:3}"
-    ;;
-  shell)
-    _shell "${GITDIR}"
-    ;;
-  shell.dec)  # Remember to exit the shell after using, otherwise umount won't work.
-    if mountpoint -q "${DECDIR}"; then
-      _shell "${DECDIR}"
-    else
-      loge "Mount first"
-      exit 2
-    fi
-    ;;
-  shell.enc)
-    _shell "${ENCDIR}"
-    ;;
-  use|use.rw)
-    if mountpoint -q "${DECDIR}"; then
-      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
-      if [ "${MOUNT_OPTION}" != "rw" ]; then
-        ${TOOL} umount ${REPO}
-        ${TOOL} mount ${REPO}
-      fi
-    else
-      ${TOOL} mount ${REPO}
-    fi
-    ${TOOL} shell.dec ${REPO}
-    ;;
-  use.ro)
-    if mountpoint -q "${DECDIR}"; then
-      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
-      if [ "${MOUNT_OPTION}" != "ro" ]; then
-        ${TOOL} umount ${REPO}
-        ${TOOL} mount ${REPO}
-      fi
-    else
-      ${TOOL} mount ${REPO}
-    fi
-    ${TOOL} shell.dec ${REPO}
-    ;;
-  state)
-    # Get mount state
-    if mountpoint -q "${DECDIR}"; then
-      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
-      MOUNT_STATE="${TPUT_GREEN}${TPUT_BOLD}mounted ${MOUNT_OPTION}${TPUT_RESET}"
-    else
-      MOUNT_STATE="dismounted"
-    fi
-
-    # Measure disk usage
-    ALLDIR_SIZE=$(_du_hs "${GITDIR}")
-    ENCDIR_SIZE=$(_du_hs "${ENCDIR}")
-    GITDIR_SIZE=$(_du_hs "${GITDIR}/.git")
-
-    # Print state
-    printf "${LS_FORMAT}" "${MOUNT_STATE}" ${ALLDIR_SIZE} ${ENCDIR_SIZE} ${GITDIR_SIZE} ${REPO}
-    ;;
-  status|info|?)
-    ${TOOL} state ${REPO}
-    cd "${GITDIR}"
-    echo
-    git status -bs
-    mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
-    ;;
-  log|logs)
-    cd "${GITDIR}"
-    git log --color=always --decorate -10 | grep -v '^Author: '
-    ;;
-  du)
-    _du_hcd "${GITDIR}"
-    ;;
-  du.enc)
-    _du_hcd "${ENCDIR}"
-    ;;
-  du.dec)
-    if mountpoint -q "${DECDIR}"; then
-      _du_hcd "${DECDIR}"
-    else
-      loge "Mount first"
-      exit 3
-    fi
-    ;;
-  rm)
-    if mountpoint -q "${DECDIR}"; then
-      ${TOOL} umount ${REPO}
-      echo
-    fi
-
-    log "Interactively removing local directories"
-
-    if [ -d "${DECDIR}" ]; then
-      logn "Removing local decryption directory"
-      rm -rfI "${DECDIR}"
-      log "Removed local decryption directory"
-    else
-      logw "Decryption directory ${DECDIR} cannot be removed because it does not exist"
-    fi
-
-    if [ -d "${GITDIR}" ]; then
-      logn "Removing local git directory"
-      rm -rfI "${GITDIR}"
-      log "Removed local git directory"
-    else
-      logw "Git directory ${GITDIR} cannot be removed because it does not exist"
-    fi
-
-    log "Interactively removed local directories"
-    ;;
-  del)
-    GITUSER=$(${TOOL} config core.owner)
-    log "Deleting repo in GitHub and GitLab"
-
-    # Delete GitHub repo
-    # Ref: https://stackoverflow.com/a/30644156/
-    logn "Deleting repo in GitHub"
-    read -s -p "GitHub token with access to 'delete_repo' scope: " GITHUB_TOKEN
-    echo
-    curl -sS -f -X DELETE -o /dev/null \
-      -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
-      https://api.github.com/repos/${GITUSER}/${REPO}
-    log "Deleted repo in GitHub"
-
-    # Delete GitLab repo
-    # Ref: https://stackoverflow.com/a/52132529/
-    logn "Deleting repo in GitLab"
-    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
-    echo
-    curl -sS -f -X DELETE -o /dev/null \
-      -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
-      "https://gitlab.com/api/v4/projects/${GITUSER}%2F${REPO}"
-    log "Deleted repo in GitLab"
-
-    logn "Deleted repo in GitHub and GitLab"
-    ;;
-  destroy)
-    ${TOOL} rm ${REPO}
-    ${TOOL} del ${REPO}
-    ;;
-  gc)
-    cd ${GITDIR}
-    shift 2
-    repo_size=$(_du_hs "${GITDIR}/.git")
-    pack_size=$(_du_hs "${GITDIR}/.git/objects/pack")
-    logr "Running git garbage collection having pre-gc sizes: .git=${repo_size} pack=${pack_size}"
-    git gc "$@"
-    repo_size=$(_du_hs "${GITDIR}/.git")
-    pack_size=$(_du_hs "${GITDIR}/.git/objects/pack")
-    logr "Ran git garbage collection having post-gc sizes: .git=${repo_size} pack=${pack_size}"
     ;;
   check.git)
     cd ${GITDIR}
@@ -455,6 +178,181 @@ case "${CMD}" in
     fi
 
     log "Checked sizes of git repo"
+    ;;
+  clone)
+    log "Cloning and configuring repo"
+
+    GITUSER=$(${TOOL} config core.owner)
+    mkdir -p "${GITDIR}" && cd "$_"
+    logn "Cloning repo from GitHub"
+    git clone -c http.postBuffer=2000000000 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
+    log "Cloned repo from GitHub"
+    git remote set-url --add origin git@gitlab.com:${GITUSER}/${REPO}.git
+    logn "Added GitLab URL"
+
+    logn "Cloned and configured repo"
+    ;;
+  commit)
+    COMMIT_MESSAGE="${3:?'Provide a commit message as a positional argument.'}"
+    cd "${GITDIR}"
+
+    log "Adding changes"
+    git add -A -v
+    log "Added changes"
+
+    if ! git diff-index --quiet @; then
+      # Ref: https://stackoverflow.com/a/34093391/
+
+      logr "Committing: ${COMMIT_MESSAGE}"
+      pre_commit_repo_size=$(git-sizer -j --json-version 2 --no-progress | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
+      git commit -m "${COMMIT_MESSAGE}"
+      logr "Committed: ${COMMIT_MESSAGE}"
+      git log --color=always --decorate -1 | grep -v '^Author: '
+
+      logn "Running git garbage collection as necessary"
+      git gc --auto
+      log "Ran git garbage collection as necessary"
+
+      echo
+      ${TOOL} check.git ${REPO} ${pre_commit_repo_size}
+
+    else
+      log "No changes to commit"
+    fi
+    ;;
+  create)
+    GITUSER=$(${TOOL} config core.owner)
+    log "Creating repo in GitHub and GitLab"
+
+    # Create GitHub repo
+    # Ref: https://stackoverflow.com/a/64636218/
+    logn "Creating repo in GitHub"
+    read -s -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
+    echo
+    curl -sS -f -X POST -o /dev/null \
+      -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
+      https://api.github.com/user/repos -d "{\"name\": \"${REPO}\", \"private\": true}"
+    log "Created repo in GitHub"
+
+    # Create GitLab repo
+    # Ref: https://stackoverflow.com/a/64656788/
+    # This is optional as the repo is automatically created upon first push.
+    logn "Creating repo in GitLab"
+    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
+    echo
+    curl -sS -f -X POST -o /dev/null \
+      -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
+      "https://gitlab.com/api/v4/projects" -d "{\"path\": \"${REPO}\", \"visibility\": \"private\"}"
+    log "Created repo in GitLab"
+
+    logn "Created repo in GitHub and GitLab"
+    ;;
+  del)
+    GITUSER=$(${TOOL} config core.owner)
+    log "Deleting repo in GitHub and GitLab"
+
+    # Delete GitHub repo
+    # Ref: https://stackoverflow.com/a/30644156/
+    logn "Deleting repo in GitHub"
+    read -s -p "GitHub token with access to 'delete_repo' scope: " GITHUB_TOKEN
+    echo
+    curl -sS -f -X DELETE -o /dev/null \
+      -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
+      https://api.github.com/repos/${GITUSER}/${REPO}
+    log "Deleted repo in GitHub"
+
+    # Delete GitLab repo
+    # Ref: https://stackoverflow.com/a/52132529/
+    logn "Deleting repo in GitLab"
+    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
+    echo
+    curl -sS -f -X DELETE -o /dev/null \
+      -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
+      "https://gitlab.com/api/v4/projects/${GITUSER}%2F${REPO}"
+    log "Deleted repo in GitLab"
+
+    logn "Deleted repo in GitHub and GitLab"
+    ;;
+  destroy)
+    ${TOOL} rm ${REPO}
+    ${TOOL} del ${REPO}
+    ;;
+  done)
+    if mountpoint -q "${DECDIR}"; then
+      ${TOOL} umount ${REPO}
+    else
+      log "Repo is unmounted"
+    fi
+    ${TOOL} send ${REPO} "${@:3}"
+    ;;
+  du)
+    _du_hcd "${GITDIR}"
+    ;;
+  du.dec)
+    if mountpoint -q "${DECDIR}"; then
+      _du_hcd "${DECDIR}"
+    else
+      loge "Mount first"
+      exit 3
+    fi
+    ;;
+  du.enc)
+    _du_hcd "${ENCDIR}"
+    ;;
+  gc)
+    cd ${GITDIR}
+    shift 2
+    repo_size=$(_du_hs "${GITDIR}/.git")
+    pack_size=$(_du_hs "${GITDIR}/.git/objects/pack")
+    logr "Running git garbage collection having pre-gc sizes: .git=${repo_size} pack=${pack_size}"
+    git gc "$@"
+    repo_size=$(_du_hs "${GITDIR}/.git")
+    pack_size=$(_du_hs "${GITDIR}/.git/objects/pack")
+    logr "Ran git garbage collection having post-gc sizes: .git=${repo_size} pack=${pack_size}"
+    ;;
+  init)
+    ${TOOL} create ${REPO}
+    ${TOOL} clone ${REPO}
+    ${TOOL} init.fs ${REPO}
+    ${TOOL} send ${REPO} "Initialized"
+    ;;
+  init.fs)
+    log "Initializing encrypted filesystem"
+    mkdir -p "${ENCDIR}"
+    gocryptfs -init "${ENCDIR}"
+    mkdir -p "${DECDIR}"
+    logn "Initialized encrypted filesystem"
+    ;;
+  log|logs)
+    cd "${GITDIR}"
+    git log --color=always --decorate -10 | grep -v '^Author: '
+    ;;
+  mount|mount.rw)
+    log "Mounting repo read-write"
+    gocryptfs -nofail -sharedstorage -rw "${ENCDIR}" "${DECDIR}"
+    log "Mounted repo read-write"
+    ;;
+  mount.ro)
+    log "Mounting repo read-only"
+    gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
+    log "Mounted repo read-only"
+    ;;
+  pull)
+    if ! mountpoint -q "${DECDIR}"; then
+      cd "${GITDIR}"
+      log "Pulling commits (fast-forward only)"
+      git pull --ff-only origin
+      log "Pulled commits (fast-forward only)"
+    else
+      loge "Unmount first"
+      exit 2
+    fi
+    ;;
+  push)
+    cd "${GITDIR}"
+    log "Pushing commits"
+    git push -v
+    log "Pushed commits"
     ;;
   rename)
     old_name="${REPO}"
@@ -534,6 +432,108 @@ case "${CMD}" in
     fi
 
     logn "Renamed remotely and locally to ${new_name}"
+    ;;
+  rm)
+    if mountpoint -q "${DECDIR}"; then
+      ${TOOL} umount ${REPO}
+      echo
+    fi
+
+    log "Interactively removing local directories"
+
+    if [ -d "${DECDIR}" ]; then
+      logn "Removing local decryption directory"
+      rm -rfI "${DECDIR}"
+      log "Removed local decryption directory"
+    else
+      logw "Decryption directory ${DECDIR} cannot be removed because it does not exist"
+    fi
+
+    if [ -d "${GITDIR}" ]; then
+      logn "Removing local git directory"
+      rm -rfI "${GITDIR}"
+      log "Removed local git directory"
+    else
+      logw "Git directory ${GITDIR} cannot be removed because it does not exist"
+    fi
+
+    log "Interactively removed local directories"
+    ;;
+  send)
+    ${TOOL} commit ${REPO} "${@:3}"
+    echo
+    ${TOOL} push ${REPO}
+    ;;
+  shell)
+    _shell "${GITDIR}"
+    ;;
+  shell.dec)  # Remember to exit the shell after using, otherwise umount won't work.
+    if mountpoint -q "${DECDIR}"; then
+      _shell "${DECDIR}"
+    else
+      loge "Mount first"
+      exit 2
+    fi
+    ;;
+  shell.enc)
+    _shell "${ENCDIR}"
+    ;;
+  state)
+    # Get mount state
+    if mountpoint -q "${DECDIR}"; then
+      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
+      MOUNT_STATE="${TPUT_GREEN}${TPUT_BOLD}mounted ${MOUNT_OPTION}${TPUT_RESET}"
+    else
+      MOUNT_STATE="dismounted"
+    fi
+
+    # Measure disk usage
+    ALLDIR_SIZE=$(_du_hs "${GITDIR}")
+    ENCDIR_SIZE=$(_du_hs "${ENCDIR}")
+    GITDIR_SIZE=$(_du_hs "${GITDIR}/.git")
+
+    # Print state
+    printf "${LS_FORMAT}" "${MOUNT_STATE}" ${ALLDIR_SIZE} ${ENCDIR_SIZE} ${GITDIR_SIZE} ${REPO}
+    ;;
+  status|info|?)
+    ${TOOL} state ${REPO}
+    cd "${GITDIR}"
+    echo
+    git status -bs
+    mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
+    ;;
+  umount|unmount|dismount)  # Remember to exit $DECDIR before using.
+    if mountpoint -q "${DECDIR}"; then
+      log "Unmounting repo"
+      fusermount -u "${DECDIR}"
+      log "Unmounted repo"
+    else
+      log "Repo is already unmounted"
+    fi
+    ;;
+  use|use.rw)
+    if mountpoint -q "${DECDIR}"; then
+      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
+      if [ "${MOUNT_OPTION}" != "rw" ]; then
+        ${TOOL} umount ${REPO}
+        ${TOOL} mount ${REPO}
+      fi
+    else
+      ${TOOL} mount ${REPO}
+    fi
+    ${TOOL} shell.dec ${REPO}
+    ;;
+  use.ro)
+    if mountpoint -q "${DECDIR}"; then
+      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
+      if [ "${MOUNT_OPTION}" != "ro" ]; then
+        ${TOOL} umount ${REPO}
+        ${TOOL} mount ${REPO}
+      fi
+    else
+      ${TOOL} mount ${REPO}
+    fi
+    ${TOOL} shell.dec ${REPO}
     ;;
   *)
    loge "Unknown command"
