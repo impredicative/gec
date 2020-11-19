@@ -311,12 +311,11 @@ case "${CMD}" in
     ${TOOL} del ${REPO}
     ;;
   done)
-    if mountpoint -q "${DECDIR}"; then
-      ${TOOL} umount ${REPO}
-    else
-      log "Repo is unmounted"
-    fi
     ${TOOL} send ${REPO} "${@:3}"
+
+    # Note: `umount` must be done only after `send`. `send` performs `commit` which performs `check.dec` which requires mount.
+    echo
+    ${TOOL} umount ${REPO}
     ;;
   du)
     _du_hcd "${GITDIR}"
@@ -541,7 +540,7 @@ case "${CMD}" in
       fusermount -u "${DECDIR}"
       log "Unmounted repo"
     else
-      log "Repo is already unmounted"
+      log "Repo is unmounted"
     fi
     ;;
   use|use.rw)
