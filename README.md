@@ -25,12 +25,6 @@ Many of the implemented commands support GitHub and GitLab. Git users will be at
 * Changelog: https://github.com/impredicative/gec/releases
 * Mirror: https://gitee.com/impredicative/gec
 
-## Requirements
-Linux, along with the tools git, jq, gocryptfs, and git-sizer are required. These tools are covered in the [**Installation**](#installation) section.
-
-A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account is required with an identical username on both sites!
-If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be very useful.
-
 ## Limitations
 The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
 If a hard limit is violated during a `commit`, `gec` will attempt to check it and error early, otherwise a `push` will simply fail.
@@ -43,6 +37,12 @@ If a hard limit is violated during a `commit`, `gec` will attempt to check it an
 | Repo    | 10G      | Hard | GitLab   | Error           |
 
 Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in a decrypted repo.
+
+## Requirements
+Linux, along with the tools git, jq, gocryptfs, and git-sizer are required. These tools are covered in the [**Installation**](#installation) section.
+
+A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account is required with an identical username on both sites!
+If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be very useful.
 
 ## Installation
 These steps were tested on Ubuntu. On other distros, ensure that the executables are available in the PATH.
