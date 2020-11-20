@@ -184,7 +184,7 @@ The password and a printed master key must be securely saved.
 A new password is requested. The password and a printed master key must be securely saved.
 The required GitHub and GitLab tokens must have access to their `repo` and `api` scopes respectively.
 * **`destroy <repo>`**: (`rm`+`del`) Interactively remove all local repo directories, and delete repo from GitHub and GitLab.
-* **`done <repo> "<commit_msg>"`**: (`send`+`umount`) Add, commit, and push all changes. Unmount repo if mounted. `<commit_msg>` is not encrypted. 
+* **`done <repo> "<commit_msg>"`**: (`check.dec`+`umount`+`send`) Add, commit, and push all changes. Unmount repo if mounted. `<commit_msg>` is not encrypted. 
 To auto-determine `<repo>`, specify a period in its place.
 * **`rename <repo> <new_name>`**: Rename repo remotely and locally, and update its locally configured remotes. The repo must be in a dismounted state. 
 The new name must not already be in use.

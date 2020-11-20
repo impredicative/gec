@@ -323,11 +323,14 @@ case "${CMD}" in
     ${TOOL} del ${REPO}
     ;;
   done)
-    ${TOOL} send ${REPO} "${@:3}"
-
-    # Note: `umount` must be done only after `send`. `send` performs `commit` which performs `check.dec` which requires mount.
+    if mountpoint -q "${DECDIR}"; then
+        echo
+        ${TOOL} check.dec ${REPO}
+    fi
     echo
     ${TOOL} umount ${REPO}
+    echo
+    ${TOOL} send ${REPO} "${@:3}"
     ;;
   du)
     _du_hcd "${GITDIR}"
