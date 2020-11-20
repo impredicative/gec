@@ -10,8 +10,8 @@ Many of the implemented commands support GitHub and GitLab. Git users will be at
 
 ## Contents
 * [Links](#links)
-* [Requirements](#requirements)
 * [Limitations](#limitations)
+* [Requirements](#requirements)
 * [Installation](#installation)
 * [Development](#development)
 * [Setup](#setup)
