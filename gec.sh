@@ -539,7 +539,7 @@ case "${CMD}" in
     # Print state
     printf "${LS_FORMAT}" ${ALLDIR_SIZE} ${ENCDIR_SIZE} ${GITDIR_SIZE} "${MOUNT_STATE}" ${REPO}
     ;;
-  status|info|?)
+  status|info)
     ${TOOL} state ${REPO}
     cd "${GITDIR}"
     echo

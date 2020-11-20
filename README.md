@@ -130,7 +130,6 @@ When it can be auto-determined, to disambiguate a command's arguments that follo
 The minimally relevant repo-specific commands are listed in the [**Workflow**](#workflow) section.
 
 #### Informational
-* **`? [<repo>]`**: Alias of `status`.
 * **`check.dec [<repo>]`**: Check decrypted file sizes. Error if a size limit is exceeded. The repo must be in a mounted state. 
 It is run automatically by `commit` when needed if mounted.
 * **`check.git [<repo>]`**: Check encrypted file sizes, and use `git-sizer` to check various other sizes of the git repo. Error if a size limit is exceeded. 
