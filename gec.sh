@@ -68,9 +68,17 @@ case "${CMD}" in
     exit
     ;;
   lock)
-    mkdir -p "${_GITDIR}"
-    cd "${_GITDIR}"
-    ls -1 | xargs -i ${TOOL} umount {}
+    mkdir -p "${_DECDIR}"
+    log "Unmounting all mounted repos"
+    if findmnt -t fuse.gocryptfs -n -o target | grep "^${_DECDIR}/" | xargs -i basename "{}" | xargs -i ${TOOL} umount {}; then
+      # Note: grep returns nonzero exitcode if there are no matching lines. To force 0 exitcode, use { grep "^${_DECDIR}/" || :; }
+      log "Unmounted all mounted repos"
+    else
+      log "No repo is mounted"
+    fi
+#    mkdir -p "${_GITDIR}"
+#    cd "${_GITDIR}"
+#    ls -1 | xargs -i ${TOOL} umount {}
     exit
     ;;
   ls|list)
