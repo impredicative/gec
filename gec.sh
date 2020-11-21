@@ -36,6 +36,9 @@ LS_FORMAT="all=${TPUT_CYAN}%4s${TPUT_RESET} enc=${TPUT_MAGNETA}${TPUT_BOLD}%4s${
 touch -a "${CONFIGFILE}"
 
 # Define utility functions
+_contains () {  # Space-separated list $1 contains line $2
+  echo "$1" | tr ' ' '\n' | grep -F -x -q "$2"
+}
 _du_hs () {  # Disk usage for single match
   du -h -s "$@" | cut -f1
 }
@@ -135,6 +138,22 @@ repo_invalid_pattern="--"
 if [[ "$REPO" =~ $repo_invalid_pattern ]]; then
     loge "Repo name must not match pattern ${repo_invalid_pattern} so as to ensure broad compatibility"
     exit 1
+fi
+
+# Validate repo existence
+# Ref: https://stackoverflow.com/a/64945650/
+mkdir -p "${_GITDIR}"
+known_repos=$(ls -1 "${_GITDIR}")
+if _contains "${known_repos}" "${REPO}"; then
+  if _contains "clone init" "${CMD}"; then
+    loge "Repo already exists locally"
+    exit 1
+  fi
+else
+  if ! _contains "clone create del init init.fs" "${CMD}"; then
+    loge "Repo doesn't exist locally"
+    exit 1
+  fi
 fi
 
 # Run repo-specific command

@@ -213,4 +213,4 @@ To use a provisioned repo:
 * `gec umount <repo>`  # If files not changed
 
 ## Roadmap
-* Consider rewriting using Go.
+* Consider rewriting using PowerShell or Nim or Go.
