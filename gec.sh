@@ -116,6 +116,7 @@ else
   esac
 fi
 GITDIR="${_GITDIR}/${REPO}"
+DOTGITDIR="${GITDIR}/.git"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
 
@@ -376,12 +377,12 @@ case "${CMD}" in
   gc)
     cd ${GITDIR}
     shift 2
-    repo_size=$(_du_hs "${GITDIR}/.git")
-    pack_size=$(_du_hs "${GITDIR}/.git/objects/pack")
+    repo_size=$(_du_hs "${DOTGITDIR}")
+    pack_size=$(_du_hs "${DOTGITDIR}/objects/pack")
     logr "Running git garbage collection having pre-gc sizes: .git=${repo_size} pack=${pack_size}"
     git gc "$@"
-    repo_size=$(_du_hs "${GITDIR}/.git")
-    pack_size=$(_du_hs "${GITDIR}/.git/objects/pack")
+    repo_size=$(_du_hs "${DOTGITDIR}")
+    pack_size=$(_du_hs "${DOTGITDIR}/objects/pack")
     logr "Ran git garbage collection having post-gc sizes: .git=${repo_size} pack=${pack_size}"
     ;;
   init)
@@ -564,10 +565,10 @@ case "${CMD}" in
     # Measure disk usage
     ALLDIR_SIZE=$(_du_hs "${GITDIR}")
     ENCDIR_SIZE=$(_du_hs "${ENCDIR}")
-    GITDIR_SIZE=$(_du_hs "${GITDIR}/.git")
+    DOTGITDIR_SIZE=$(_du_hs "${DOTGITDIR}")
 
     # Print state
-    printf "${LS_FORMAT}" ${ALLDIR_SIZE} ${ENCDIR_SIZE} ${GITDIR_SIZE} "${MOUNT_STATE}" ${REPO}
+    printf "${LS_FORMAT}" ${ALLDIR_SIZE} ${ENCDIR_SIZE} ${DOTGITDIR_SIZE} "${MOUNT_STATE}" ${REPO}
     ;;
   status|info)
     ${TOOL} state ${REPO}
