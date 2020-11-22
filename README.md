@@ -132,7 +132,7 @@ The minimally relevant repo-specific commands are listed in the [**Workflow**](#
 #### Informational
 * **`check.dec [<repo>]`**: Check decrypted file sizes. Error if a size limit is exceeded. The repo must be in a mounted state. 
 It is run automatically by `commit` when needed if mounted.
-* **`check.git [<repo>]`**: Check encrypted file sizes, and use `git-sizer` to check various other sizes of the git repo. Error if a size limit is exceeded. 
+* **`check.git [<repo>]`**: Check encrypted file sizes, and use `git-sizer` to check the size of the git repo. Error if a size limit is exceeded. 
 It is run automatically by `commit` when needed.
 * **`du [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
 * **`du.dec [<repo>]`**:  Print the human-friendly disk usage of the decrypted directory for a depth of one. The repo must be in a mounted state.

@@ -210,15 +210,16 @@ case "${CMD}" in
 
     git_sizer_json=$(git-sizer -j --json-version 2 --no-progress)
 
-    # Check approximation of largest file size using git-sizer
-    max_blob_size=$(echo "${git_sizer_json}" | jq '.maxBlobSize.value')
-    max_blob_size_fmt=$(numfmt --to=si $max_blob_size)
-    if (( $max_blob_size > 100000000 )); then
-      loge "Largest blob size of ${max_blob_size_fmt} is over GitHub's file size hard limit of 100M"
-      exit 4
-    else
-      log "Largest blob size of ${max_blob_size_fmt} is not over GitHub's file size hard limit of 100M"
-    fi
+#    # Check approximation of largest file size using git-sizer
+#    max_blob_size=$(echo "${git_sizer_json}" | jq '.maxBlobSize.value')
+#    max_blob_size_fmt=$(numfmt --to=si $max_blob_size)
+#    if (( $max_blob_size > 100000000 )); then
+#      loge "Largest blob size of ${max_blob_size_fmt} is over GitHub's file size hard limit of 100M"
+#      exit 4
+#    else
+#      log "Largest blob size of ${max_blob_size_fmt} is not over GitHub's file size hard limit of 100M"
+#    fi
+#   Note: This check is disabled because it is obsoleted by the previous check for large files.
 
     # Check approximation of total repo size using git-sizer
     repo_size=$(echo "${git_sizer_json}" | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
