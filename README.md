@@ -174,7 +174,7 @@ The password and a printed master key must be securely saved.
 * **`unmount`**: Alias of `umount`.
 
 #### System
-* **`rm [<repo>]`**: Interactively remove all local directories of the repo. Also see the `del` and `destroy` commands.
+* **`rm <repo>`**: Interactively remove all local directories of the repo. Also see the `del` and `destroy` commands.
 * **`shell [<repo>]`**: Provide a shell into the git repo directory.
 * **`shell.dec [<repo>]`**: Provide a shell into the decrypted mountpoint of a mounted repo.
 * **`shell.enc [<repo>]`**: Provide a shell into the encrypted filesystem directory.

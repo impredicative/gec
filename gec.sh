@@ -517,19 +517,28 @@ case "${CMD}" in
     log "Interactively removing local directories"
 
     if [ -d "${DECDIR}" ]; then
-      logn "Removing local decryption directory"
+      logrn "Removing local decryption directory: ${DECDIR}"
       rm -rfI "${DECDIR}"
-      log "Removed local decryption directory"
+      logr "Removed local decryption directory: ${DECDIR}"
     else
       logw "Decryption directory ${DECDIR} cannot be removed because it does not exist"
     fi
 
-    if [ -d "${GITDIR}" ]; then
-      logn "Removing local git directory"
-      rm -rfI "${GITDIR}"
-      log "Removed local git directory"
+    if [ -d "${DOTGITDIR}" ]; then
+      logrn "Removing local .git directory: ${DOTGITDIR}"
+      rm -rf "${DOTGITDIR}"
+      # Note: -I is not used above to prevent numerous prompts of: "rm: remove write-protected regular file"
+      logr "Removed local .git directory: ${DOTGITDIR}"
     else
-      logw "Git directory ${GITDIR} cannot be removed because it does not exist"
+      logw ".git directory ${DOTGITDIR} cannot be removed because it does not exist"
+    fi
+
+    if [ -d "${GITDIR}" ]; then
+      logrn "Removing local git repo directory: ${GITDIR}"
+      rm -rfI "${GITDIR}"
+      logr "Removed local git repo directory: ${GITDIR}"
+    else
+      logw "Git repo directory ${GITDIR} cannot be removed because it does not exist"
     fi
 
     log "Interactively removed local directories"
