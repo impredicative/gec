@@ -1,7 +1,7 @@
 # gec
 
 **`gec`** is a command-line Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
-It refrains from doing anything clever, making it possible to fallback to the underlying gocryptfs or git commands if a need should arise.
+It refrains from doing anything clever, making it possible to naively fallback to the underlying gocryptfs or git commands if a need should arise.
 
 It transparently uses data encryption, both at rest and on the remotes. It uses version control and leverages redundant remote storage.
 Many of the implemented commands support GitHub and GitLab. Git users will be at home with it.
@@ -36,7 +36,7 @@ If a hard limit is violated during a `commit`, `gec` will attempt to check it an
 | Repo    | 5G       | Soft | GitHub   | Warning         |
 | Repo    | 10G      | Hard | GitLab   | Error           |
 
-Due to the use of the gocryptfs `-sharedstorage` option, no hardlink can be created in a decrypted repo.
+Due to the use of the gocryptfs `-sharedstorage` option, a hardlink cannot be created in a decrypted repo.
 
 ## Requirements
 Linux, along with the tools git, jq, gocryptfs, and git-sizer are required. These tools are covered in the [**Installation**](#installation) section.
@@ -200,17 +200,17 @@ Refer to the [repo-specific commands](#repo-specific) section for details on usi
 To create and provision a new repo:
 * `gec init <repo>`
 * `gec use <repo>`
-* `touch .Trash-${UID}`  # Avoids deleting files to Trash on Ubuntu
+* `touch .Trash-${UID}`  (_Avoids deleting files to Trash on Ubuntu_)
 
 To provision an existing repo:
 * `gec clone <repo>`
 
 To use a provisioned repo:
-* `gec pull [<repo>]`  # If and when changed on remote
-* `gec use [<repo>]`  # Do "exit" the shell after using
+* `gec pull [<repo>]`  (_If and when changed on remote_)
+* `gec use [<repo>]`  (_Remember to `exit` the shell after using_)
 * `gec status [<repo>]`
-* `gec done <repo> "a non-secret commit message"` # If files changed
-* `gec umount <repo>`  # If files not changed
+* `gec done <repo> "a non-secret commit message"` (_If files changed_)
+* `gec umount <repo>` (_If files not changed_)
 
 ## Roadmap
 * Consider rewriting using PowerShell or Nim or Go.
