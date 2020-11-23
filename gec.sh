@@ -254,7 +254,7 @@ case "${CMD}" in
     GITUSER=$(${TOOL} config core.owner)
     mkdir -p "${GITDIR}" && cd "$_"
     logn "Cloning repo from GitHub"
-    git clone -c http.postBuffer=2000000000 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
+    git clone -c http.postBuffer=2147483648 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
     log "Cloned repo from GitHub"
     git remote set-url --add origin git@gitlab.com:${GITUSER}/${REPO}.git
     logn "Added GitLab URL"
