@@ -76,7 +76,7 @@ RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
 ```
-For future updates, running `gec install` will update to the latest release of `gec`.
+For future updates to `gec`, running `gec install` will update to its latest release.
 
 ## Development
 ```shell script
