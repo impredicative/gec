@@ -213,4 +213,6 @@ To use a provisioned repo:
 * `gec umount <repo>` (_If files not changed_)
 
 ## Roadmap
+* Support auto-completion with Bash.
+* Compare datetimes and sizes for tracking which files changed.
 * Consider rewriting using PowerShell or Nim or Go.
