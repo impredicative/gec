@@ -264,17 +264,17 @@ case "${CMD}" in
     COMMIT_MESSAGE="${3:?'Provide a commit message as a positional argument.'}"
     cd "${GITDIR}"
 
+    if mountpoint -q "${DECDIR}"; then
+      ${TOOL} check.dec ${REPO}
+      echo
+    fi
+
     log "Adding changes"
     git add -A -v
     log "Added changes"
 
     if ! git diff-index --quiet @; then
       # Ref: https://stackoverflow.com/a/34093391/
-
-      if mountpoint -q "${DECDIR}"; then
-        echo
-        ${TOOL} check.dec ${REPO}
-      fi
 
       logn "Committing changes"
       pre_commit_repo_size=$(git-sizer -j --json-version 2 --no-progress | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
