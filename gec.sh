@@ -87,8 +87,7 @@ case "${CMD}" in
   ls|list)
     mkdir -p "${_GITDIR}"
     cd "${_GITDIR}"
-    shift
-    PATTERN=${@:-*}
+    PATTERN=${2:-*}
 
     # Print individual state
     ls -1d ${PATTERN} | uniq | xargs -i ${TOOL} state {}

@@ -121,7 +121,7 @@ For each repo, these directories are created and used:
 * **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
 * **`install`**: Update to the latest release of `gec`.
 * **`list`**: Alias of `ls`.
-* **`ls [pattern]...`**: List the output of the `state` command for matching repos in `~/gec/encrypted`. If specifying a pattern, it may need to be quoted.
+* **`ls [pattern]`**: List the output of the `state` command for matching repos in `~/gec/encrypted`. If specifying a pattern, it may need to be quoted.
 * **`lock`**: Unmount all mounted repos.
 
 ### Repo-specific
