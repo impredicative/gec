@@ -1,6 +1,6 @@
 # gec
 
-**`gec`** is a command-line Bash utility with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
+**`gec`** is a command-line utility written in Bash with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
 It refrains from doing anything clever, making it possible to naively fallback to the underlying gocryptfs or git commands if a need should arise.
 
 It transparently uses data encryption, both at rest and on the remotes. It uses version control and leverages redundant remote storage.
@@ -43,6 +43,8 @@ Linux, along with the tools git, jq, gocryptfs, and git-sizer are required. Thes
 
 A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account is required with an identical username on both sites!
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be very useful.
+
+Although gec currently lacks autocompletion, the [fish shell](https://fishshell.com/) offers automatic history-based autocompletion which can further add convenience.
 
 ## Installation
 These steps were tested on Ubuntu. On other distros, ensure that the executables are available in the PATH.
