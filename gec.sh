@@ -586,7 +586,7 @@ case "${CMD}" in
     git status -bs
     mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
     ;;
-  umount|unmount|dismount)  # Remember to exit $DECDIR before using.
+  umount|unmount|dismount)
     if mountpoint -q "${DECDIR}"; then
       log "Unmounting repo"
       fusermount -u "${DECDIR}"
