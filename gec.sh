@@ -620,7 +620,7 @@ case "${CMD}" in
     ${TOOL} shell.dec ${REPO}
     ;;
   *)
-   loge "Unknown command"
+   loge "Invalid command"
    exit 1
    ;;
 esac
