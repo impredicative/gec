@@ -51,8 +51,8 @@ _du_hcd () {  # CD and disk usage for depth of 1
 }
 _shell () {  # Shell into dir
   cd "$1"
-  USER_SHELL=$(getent passwd $USER | cut -d : -f 7)
-  $USER_SHELL
+  local user_shell=$(getent passwd $USER | cut -d : -f 7)
+  $user_shell
 }
 
 # Run repo-agnostic command
