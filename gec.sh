@@ -57,11 +57,11 @@ _shell () {  # Shell into dir
 
 # Run repo-agnostic command
 case "${CMD}" in
-  _list_commands)  # Used by completion.
+  _list_commands)  # Used by completion script.
     echo "$(grep -Eo "^  [a-z\.]+[|)]" "$0" | tr -d ' |)')"
     exit
     ;;
-  _list_repos)  # Used by completion.
+  _list_repos)  # Used by completion script.
     if [ -d "$_GITDIR" ]; then
       ls -1 "$_GITDIR"
     fi
@@ -74,10 +74,19 @@ case "${CMD}" in
     ;;
   install)
     release=$(curl -sS -f -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
-    FILE="$0"
-    wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh -O "${FILE}"
-    chmod +x "${FILE}"
-    log "Installed ${release} to ${FILE}"
+    prog_file="$0"
+    wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh -O "${prog_file}"
+    chmod +x "${prog_file}"
+    log "Installed ${release} to ${prog_file}"
+
+    # Install Bash completion script
+    # Ref: https://serverfault.com/a/1013395/
+    bash_completion_dir="${HOME}/.local/share/bash-completion/completions"
+    mkdir -p "${bash_completion_dir}"
+    bash_completion_file="${bash_completion_dir}/${TOOL}"
+    wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/completion.bash -O "${bash_completion_file}"
+    log "Installed bash completion script for ${release} to ${bash_completion_file}"
+
     exit
     ;;
   lock)

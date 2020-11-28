@@ -12,5 +12,6 @@ complete -F _gec_completion gec
 # References:
 # https://iridakos.com/programming/2018/03/01/bash-programmable-completion-tutorial
 # https://www.gnu.org/software/bash/manual/bash.html#Programmable-Completion
+# https://serverfault.com/questions/506612/
 # https://askubuntu.com/questions/68175/
 # https://stackoverflow.com/questions/39624071/
