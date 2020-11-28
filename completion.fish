@@ -12,7 +12,7 @@ end
 
 complete -f -c gec -n "__gec_needs_commands" -a "(gec _list_commands)"
 complete -f -c gec -n "__gec_needs_repos" -a "(gec _list_repos)"
-complete -c gec -n "__gec_needs_nothing" -x
+complete -f -c gec -n "__gec_needs_nothing"
 
 # References:
 # https://fishshell.com/docs/current/index.html#writing-your-own-completions
