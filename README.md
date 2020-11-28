@@ -91,11 +91,9 @@ For future updates to `gec`, running `gec install` will install its latest relea
 
 ## Development
 ```shell script
-# Clone repo
-git clone git@github.com:impredicative/gec.git
-cd ./gec   
-     
 # Link program
+git clone git@github.com:impredicative/gec.git
+cd ./gec
 ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 
 # Link completion script if using Bash:
