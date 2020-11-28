@@ -87,6 +87,11 @@ For future updates to `gec`, running `gec install` will update to its latest rel
 ```shell script
 git clone git@github.com:impredicative/gec.git
 ln -s "${PWD}/gec.sh" ~/.local/bin/gec
+
+# Link completion script if using Bash:
+mkdir -p ~/.local/share/bash-completion/completions
+ln -s "${PWD}/completion.bash" ~/.local/share/bash-completion/completions/gec
+source ~/.local/share/bash-completion/completions/gec  # for current terminal only
 ```
 
 ## Setup
