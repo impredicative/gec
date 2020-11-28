@@ -79,6 +79,7 @@ chmod +x ~/.local/bin/gec
 # Install completion script if using Bash:
 mkdir -p ~/.local/share/bash-completion/completions
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.bash -O ~/.local/share/bash-completion/completions/gec
+source ~/.local/share/bash-completion/completions/gec  # for current terminal only
 ```
 For future updates to `gec`, running `gec install` will update to its latest release.
 
