@@ -72,6 +72,7 @@ chmod +x ~/.local/bin/git-sizer
 
 Install `gec`:
 ```shell script
+# Install program
 RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
@@ -80,18 +81,32 @@ chmod +x ~/.local/bin/gec
 mkdir -p ~/.local/share/bash-completion/completions
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.bash -O ~/.local/share/bash-completion/completions/gec
 source ~/.local/share/bash-completion/completions/gec  # for current terminal only
+
+# Install completion script if using Fish:
+mkdir -p ~/.config/fish/completions
+wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.fish -O ~/.config/fish/completions/gec.fish
+source ~/.config/fish/completions/gec.fish  # for current terminal only
 ```
-For future updates to `gec`, running `gec install` will update to its latest release.
+For future updates to `gec`, running `gec install` will install its latest release and also its shell completion scripts.
 
 ## Development
 ```shell script
+# Clone repo
 git clone git@github.com:impredicative/gec.git
+cd ./gec   
+     
+# Link program
 ln -s "${PWD}/gec.sh" ~/.local/bin/gec
 
 # Link completion script if using Bash:
 mkdir -p ~/.local/share/bash-completion/completions
 ln -s "${PWD}/completion.bash" ~/.local/share/bash-completion/completions/gec
 source ~/.local/share/bash-completion/completions/gec  # for current terminal only
+
+# Link completion script if using Fish:
+mkdir -p ~/.config/fish/completions
+ln -s "${PWD}/completion.fish" ~/.config/fish/completions/gec.fish
+source ~/.config/fish/completions/gec.fish
 ```
 
 ## Setup

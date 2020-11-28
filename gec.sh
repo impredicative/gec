@@ -87,6 +87,13 @@ case "${CMD}" in
     wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/completion.bash -O "${bash_completion_file}"
     log "Installed bash completion script for ${release} to ${bash_completion_file}"
 
+    # Install Fish completion script
+    fish_completion_dir="${HOME}/.config/fish/completions"
+    mkdir -p "${fish_completion_dir}"
+    fish_completion_file="${fish_completion_dir}/${TOOL}.fish"
+    wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/completion.fish -O "${fish_completion_file}"
+    log "Installed fish completion script for ${release} to ${fish_completion_file}"
+
     exit
     ;;
   lock)
