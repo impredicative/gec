@@ -44,8 +44,6 @@ Linux, along with the tools git, jq, gocryptfs, and git-sizer are required. Thes
 A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account is required with an identical username on both sites!
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be very useful.
 
-Although gec currently lacks autocompletion, the [fish shell](https://fishshell.com/) offers automatic history-based autocompletion which can further add convenience.
-
 ## Installation
 These steps were tested on Ubuntu. On other distros, ensure that the executables are available in the PATH.
 
@@ -77,6 +75,9 @@ Install `gec`:
 RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
 chmod +x ~/.local/bin/gec
+
+# Completion script for Bash:
+sudo wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.bash -O /usr/share/bash-completion/completions/gec
 ```
 For future updates to `gec`, running `gec install` will update to its latest release.
 
@@ -215,6 +216,4 @@ To use a provisioned repo:
 * `gec umount <repo>` (_If files not changed_)
 
 ## Roadmap
-* Support auto-completion with Bash.
-* Compare datetimes and sizes for tracking which files changed.
 * Consider rewriting using PowerShell or Nim or Go.

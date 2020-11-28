@@ -57,6 +57,16 @@ _shell () {  # Shell into dir
 
 # Run repo-agnostic command
 case "${CMD}" in
+  _list_commands)  # Used by completion.
+    echo "$(grep -Eo "^  [a-z\.]+[|)]" "$0" | tr -d ' |)')"
+    exit
+    ;;
+  _list_repos)  # Used by completion.
+    if [ -d "$_GITDIR" ]; then
+      ls -1 "$_GITDIR"
+    fi
+    exit
+    ;;
   config)
     shift
     git config -f "${CONFIGFILE}" "$@"
