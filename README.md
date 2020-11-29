@@ -8,7 +8,7 @@ Many of the implemented commands support GitHub and GitLab. Git users will be at
 
 > **:warning: Before continuing, save the link to the official [Gitee mirror](https://gitee.com/impredicative/gec) of this repo.**
 
->![](sample.png)
+![](sample.png)
 
 ## Contents
 * [Links](#links)
