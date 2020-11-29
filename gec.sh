@@ -40,10 +40,12 @@ _contains () {  # Space-separated list $1 contains line $2
   echo "$1" | tr ' ' '\n' | grep -F -x -q "$2"
 }
 _du_hs () {  # Disk usage for single match
-  du -h -s "$@" | cut -f1
+  # Note: Using -h is avoided because it returns variable length output such as 1002M and 402M.
+  du -B1 -s "$@" | cut -f1 | numfmt --to=si
 }
 _du_hsc () {  # Total disk usage for single or multiple matches
-  du -h -s -c "$@" | tail -1 | cut -f1
+  # Note: Using -h is avoided because it returns variable length output such as 1002M and 402M.
+  du -B1 -s -c "$@" | tail -1 | cut -f1 | numfmt --to=si
 }
 _du_hcd () {  # CD and disk usage for depth of 1
   cd "$1"
