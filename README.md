@@ -236,4 +236,4 @@ To use a provisioned repo:
 * `gec umount <repo>` (_If files not changed_)
 
 ## Roadmap
-* Consider rewriting using PowerShell or Nim or Go.
+* Consider rewriting using a systems language such as Nim or Go.
