@@ -8,6 +8,8 @@ Many of the implemented commands support GitHub and GitLab. Git users will be at
 
 > **:warning: Before continuing, save the link to the official [Gitee mirror](https://gitee.com/impredicative/gec) of this repo.**
 
+>![](sample.png)
+
 ## Contents
 * [Links](#links)
 * [Limitations](#limitations)
@@ -43,8 +45,6 @@ Linux, along with the tools git, jq, gocryptfs, and git-sizer are required. Thes
 
 A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account is required with an identical username on both sites!
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be very useful.
-
-![](images/sample.png)
 
 ## Installation
 These steps were tested on Ubuntu. On other distros, ensure that the executables are available in the PATH.
