@@ -616,7 +616,7 @@ case "${CMD}" in
     ;;
   umount|unmount|dismount)
     if mountpoint -q "${DECDIR}" || [ "${3:-''}" = "-f" ]; then
-      log "Unmounting repo"
+#      log "Unmounting repo"
       fusermount -u "${DECDIR}"
       log "Unmounted repo"
     else
