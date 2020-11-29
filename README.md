@@ -193,7 +193,7 @@ The password and a printed master key must be securely saved.
 * **`mount [<repo>]`**: Mount in read-write mode a repo into its decrypted mountpoint. The repo must be in a dismounted state. Also see the `use` command.
 * **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state. Also see the `use.ro` command.
 * **`mount.rw`**: Alias of `mount`. Also see the `use.rw` command.
-* **`umount [<repo>]`**: Unmount a repo if it is mounted.
+* **`umount [<repo>] [-f]`**: Unmount a repo if it is mounted. To force an unmount, specify `-f`.
 * **`unmount`**: Alias of `umount`.
 
 #### System

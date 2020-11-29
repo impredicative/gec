@@ -613,7 +613,7 @@ case "${CMD}" in
     mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
     ;;
   umount|unmount|dismount)
-    if mountpoint -q "${DECDIR}"; then
+    if mountpoint -q "${DECDIR}" || [ "${3:-''}" = "-f" ]; then
       log "Unmounting repo"
       fusermount -u "${DECDIR}"
       log "Unmounted repo"
