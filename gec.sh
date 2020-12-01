@@ -187,18 +187,25 @@ fi
 # Run repo-specific command
 case "${CMD}" in
   amend)
-    COMMIT_MESSAGE="${3:?'Provide a commit message as a positional argument.'}"
     cd "${GITDIR}"
 
     log "Adding changes"
     git add -A
-    log "Added changes"
 
     if ! git diff-index --quiet @; then
+      log "Added changes"
       # Ref: https://stackoverflow.com/a/34093391/
-      logr "Amending commit: ${COMMIT_MESSAGE}"
-      git commit --amend -m "${COMMIT_MESSAGE}"
-      logr "Amended commit: ${COMMIT_MESSAGE}"
+      if [ "$#" -ge 3 ]; then
+        COMMIT_MESSAGE="${3}"
+        logr "Amending commit: ${COMMIT_MESSAGE}"
+        git commit --amend -m "${COMMIT_MESSAGE}"
+        logr "Amended commit: ${COMMIT_MESSAGE}"
+      else
+        COMMIT_MESSAGE=$(git log -1 --format=%s)
+        logr "Amending commit: ${COMMIT_MESSAGE}"
+        git commit --amend --no-edit
+        logr "Amended commit: ${COMMIT_MESSAGE}"
+      fi
       echo
       git log --color=always --decorate -1 | grep -v '^Author: '
     else

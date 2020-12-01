@@ -178,7 +178,8 @@ The GitHub and GitLab tokens must have access to their `delete_repo` and `api` s
 Also see the `rm` and `destroy` commands.
 
 #### git oriented
-* **`amend <repo> "<commit_msg>"`**: Add and amend all changes to most recent commit. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
+* **`amend [<repo>] ["<commit_msg>"]`**: Add and amend all changes to most recent commit. If `<commit_msg>` is not specified, it is kept unchanged. `<commit_msg>` is not encrypted. 
+To auto-determine `<repo>`, specify a period in its place.
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into its git repo directory, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`gc [<repo>] [options]`**: Run git garbage collection on the repo. Options, if any, are passed to `git gc`. 
