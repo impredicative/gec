@@ -438,14 +438,36 @@ case "${CMD}" in
     git log --color=always --decorate -10 | grep -v '^Author: '
     ;;
   mount|mount.rw)
-    log "Mounting repo read-write"
-    gocryptfs -nofail -sharedstorage -rw "${ENCDIR}" "${DECDIR}"
-    log "Mounted repo read-write"
+    if mountpoint -q "${DECDIR}"; then
+      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
+      if [ "${MOUNT_OPTION}" = "rw" ]; then
+        log "Repo is mounted read-write"
+      else
+        log "Repo is mounted but not read-write"
+        ${TOOL} umount ${REPO}
+        ${TOOL} mount ${REPO}
+      fi
+    else
+      log "Mounting repo read-write"
+      gocryptfs -nofail -sharedstorage -rw "${ENCDIR}" "${DECDIR}"
+      log "Mounted repo read-write"
+    fi
     ;;
   mount.ro)
-    log "Mounting repo read-only"
-    gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
-    log "Mounted repo read-only"
+    if mountpoint -q "${DECDIR}"; then
+      MOUNT_OPTION=$(findmnt -fn -o options "${DECDIR}" | cut -d, -f1)
+      if [ "${MOUNT_OPTION}" = "ro" ]; then
+        log "Repo is mounted read-only"
+      else
+        log "Repo is mounted but not read-only"
+        ${TOOL} umount ${REPO}
+        ${TOOL} mount.ro ${REPO}
+      fi
+    else
+      log "Mounting repo read-only"
+      gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
+      log "Mounted repo read-only"
+    fi
     ;;
   pull)
     if ! mountpoint -q "${DECDIR}"; then

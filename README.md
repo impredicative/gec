@@ -193,8 +193,8 @@ Also see the `done` command.
 * **`dismount`**: Alias of `umount`.
 * **`init.fs [<repo>]`**: Initialize the encrypted filesystem for an empty repo. No commit or push is made. A new password is requested. 
 The password and a printed master key must be securely saved.
-* **`mount [<repo>]`**: Mount in read-write mode a repo into its decrypted mountpoint. The repo must be in a dismounted state. Also see the `use` command.
-* **`mount.ro [<repo>]`**: Mount in read-only mode a repo into its decrypted mountpoint. The repo must be in a dismounted state. Also see the `use.ro` command.
+* **`mount [<repo>]`**: Mount a repo in read-write mode into its decrypted mountpoint if not already mounted as such. Also see the `use` command.
+* **`mount.ro [<repo>]`**: Mount a repo in read-only mode into its decrypted mountpoint if not already mounted as such. Also see the `use.ro` command.
 * **`mount.rw`**: Alias of `mount`. Also see the `use.rw` command.
 * **`umount [<repo>] [-f]`**: Unmount a repo if it is mounted. To force an unmount, specify `-f`.
 * **`unmount`**: Alias of `umount`.
