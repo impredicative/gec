@@ -237,6 +237,3 @@ To use a provisioned repo:
 * `gec status [<repo>]`
 * `gec done <repo> "a non-secret commit message"` (_If files changed_)
 * `gec umount <repo>` (_If files not changed_)
-
-## Roadmap
-* Consider rewriting using a systems language such as Nim or Go.
