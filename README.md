@@ -6,8 +6,6 @@ It refrains from doing anything clever, making it possible to naively fallback t
 It transparently uses data encryption, both at rest and on the remotes. It uses version control and leverages redundant remote storage.
 Many of the implemented commands support GitHub and GitLab. Git users will be at home with it.
 
-Although `gec` is fully functional, an experimental implementation in [Nim](https://nim-lang.org/) is in progress.
-
 > **:warning: Before continuing, save the link to the official [Gitee mirror](https://gitee.com/impredicative/gec) of this repo.**
 
 ## Contents
