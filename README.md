@@ -17,8 +17,8 @@ Many of the implemented commands support GitHub and GitLab. Git users will be at
 * [Development](#development)
 * [Setup](#setup)
 * [Directories](#directories)
-* [Commands](#commands)
 * [Workflow](#workflow)
+* [Commands](#commands)
 * [Roadmap](#roadmap)
 
 ## Screenshot
@@ -141,6 +141,25 @@ For each repo, these directories are created and used:
 | `~/gec/encrypted/<repo>/fs`   | encrypted filesystem contents within git repo |
 | `~/gec/decrypted/<repo>`      | decrypted filesystem mountpoint               |
 
+## Workflow
+
+To create and provision a new repo:
+* `gec init <repo>`
+* `gec use <repo>`
+* `touch .Trash-${UID}`  (_Avoids deleting files to Trash on Ubuntu_)
+
+To provision an existing repo:
+* `gec clone <repo>`
+
+To use a provisioned repo:
+* `gec pull [<repo>]`  (_If and when changed on remote_)
+* `gec use [<repo>]`  (_Remember to `exit` the shell after using_)
+* `gec status [<repo>]`
+* `gec done <repo> "a non-secret commit message"` (_If files changed_)
+* `gec umount <repo>` (_If files not changed_)
+
+Refer to the [repo-specific commands](#repo-specific) section for details on using the commands in the workflows above.
+
 ## Commands
 ### Repo-agnostic
 * **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
@@ -221,21 +240,3 @@ After renaming, remember to store the password for the repo under its new name.
 * **`use [<repo>]`**: (`mount`+`shell.dec`) Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.ro [<repo>]`**: (`mount.ro`+`shell.dec`) Mount read-only if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.rw`**: Alias of `use`.
-
-## Workflow
-Refer to the [repo-specific commands](#repo-specific) section for details on using the commands in the workflows below.
-
-To create and provision a new repo:
-* `gec init <repo>`
-* `gec use <repo>`
-* `touch .Trash-${UID}`  (_Avoids deleting files to Trash on Ubuntu_)
-
-To provision an existing repo:
-* `gec clone <repo>`
-
-To use a provisioned repo:
-* `gec pull [<repo>]`  (_If and when changed on remote_)
-* `gec use [<repo>]`  (_Remember to `exit` the shell after using_)
-* `gec status [<repo>]`
-* `gec done <repo> "a non-secret commit message"` (_If files changed_)
-* `gec umount <repo>` (_If files not changed_)
