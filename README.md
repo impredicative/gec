@@ -64,22 +64,22 @@ sudo apt install jq
 Install [`gocryptfs`](https://github.com/rfjakob/gocryptfs/releases) ≥2.0-beta1:
 ```shell script
 RELEASE=$(curl https://api.github.com/repos/rfjakob/gocryptfs/releases | jq -r .[0].tag_name)
-wget -qO- https://github.com/rfjakob/gocryptfs/releases/download/${RELEASE}/gocryptfs_${RELEASE}_linux-static_amd64.tar.gz | tar -xz -f - -C ~/.local/bin/ gocryptfs
+wget -qO- https://github.com/rfjakob/gocryptfs/releases/download/${RELEASE}/gocryptfs_${RELEASE}_linux-static_amd64.tar.gz | sudo tar -xz -f - -C /usr/local/sbin/ gocryptfs
 ```
 
 Install [`git-sizer`](https://github.com/github/git-sizer/releases) ≥1.3.0:
 ```shell script
 VERSION=$(curl https://api.github.com/repos/github/git-sizer/releases | jq -r .[0].tag_name | tr -d v)
-wget -qO- https://github.com/github/git-sizer/releases/download/v${VERSION}/git-sizer-${VERSION}-linux-amd64.zip | busybox unzip - git-sizer -d ~/.local/bin/
-chmod +x ~/.local/bin/git-sizer
+wget -qO- https://github.com/github/git-sizer/releases/download/v${VERSION}/git-sizer-${VERSION}-linux-amd64.zip | sudo busybox unzip - git-sizer -d /usr/local/sbin/
+sudo chmod +x /usr/local/sbin/git-sizer
 ```
 
 Install `gec`:
 ```shell script
 # Install program
 RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
-wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O ~/.local/bin/gec
-chmod +x ~/.local/bin/gec
+sudo wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O /usr/local/sbin/gec
+sudo chmod +x /usr/local/sbin/gec
 
 # Install completion script if using Bash:
 mkdir -p ~/.local/share/bash-completion/completions

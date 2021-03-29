@@ -77,8 +77,8 @@ case "${CMD}" in
   install)
     release=$(curl -sS -f -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
     prog_file="$0"
-    wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh -O "${prog_file}"
-    chmod +x "${prog_file}"
+    sudo wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh -O "${prog_file}"
+    sudo chmod +x "${prog_file}"
     log "Installed ${release} to ${prog_file}"
 
     # Install Bash completion script
