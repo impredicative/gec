@@ -98,7 +98,7 @@ For future updates to `gec`, running `gec install` will install its latest relea
 # Link program
 git clone git@github.com:impredicative/gec.git
 cd ./gec
-ln -s "${PWD}/gec.sh" ~/.local/bin/gec
+sudo ln -s "${PWD}/gec.sh" /usr/local/sbin/gec
 
 # Link completion script if using Bash:
 mkdir -p ~/.local/share/bash-completion/completions
