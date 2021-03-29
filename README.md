@@ -19,7 +19,6 @@ Many of the implemented commands support GitHub and GitLab. Git users will be at
 * [Directories](#directories)
 * [Workflow](#workflow)
 * [Commands](#commands)
-* [Roadmap](#roadmap)
 
 ## Screenshot
 ![](sample.png)
