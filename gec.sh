@@ -448,6 +448,7 @@ case "${CMD}" in
         ${TOOL} mount ${REPO}
       fi
     else
+      mkdir -p "${DECDIR}"
       log "Mounting repo read-write"
       gocryptfs -nofail -sharedstorage -rw "${ENCDIR}" "${DECDIR}"
       log "Mounted repo read-write"
@@ -464,6 +465,7 @@ case "${CMD}" in
         ${TOOL} mount.ro ${REPO}
       fi
     else
+      mkdir -p "${DECDIR}"
       log "Mounting repo read-only"
       gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
       log "Mounted repo read-only"
