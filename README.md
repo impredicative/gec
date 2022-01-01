@@ -29,7 +29,6 @@ Many of the implemented commands support GitHub and GitLab. Git users will be at
 | Repo      | https://github.com/impredicative/gec          |
 | Changelog | https://github.com/impredicative/gec/releases |
 | Mirror    | https://gitee.com/impredicative/gec           |
-| Donation  | [BTC](https://blockchair.com/bitcoin/address/bc1q05p96m0s9kqe9c67jq87sjsnuv6vmzeuxea872) / [LTC](https://blockchair.com/litecoin/address/ltc1q95jq6j78kvyfrvxalwgt9m9xhj9f4r7jfwrqth) / [ETH](https://blockchair.com/ethereum/address/0x0d2d5c576af8ed9f3833f4a3b1e4de6cac2285f0) / [DOGE](https://blockchair.com/dogecoin/address/D5atn8Q9f5iBXrWByxW3i3483QFNH4RFnP) |
 
 ## Limitations
 The known applicable size [limits](https://stackoverflow.com/a/59479166/) are tabulated below.
