@@ -148,8 +148,8 @@ To provision an existing repo:
 * `gec clone <repo>`
 
 To use a provisioned repo:
-* `gec pull [<repo>]`  (_If and when changed on remote_)
-* `gec use [<repo>]`  (_Remember to `exit` the shell after using_)
+* `gec pull [<repo>]` (_If and when changed on remote_)
+* `gec use [<repo>]` (_Remember to `exit` the shell after using_)
 * `gec status [<repo>]`
 * `gec done <repo> "a non-secret commit message"` (_If files changed_)
 * `gec umount <repo>` (_If files not changed_)
@@ -176,9 +176,9 @@ The minimally relevant repo-specific commands are listed in the [**Workflow**](#
 It is run automatically by `commit` when needed if mounted.
 * **`check.git [<repo>]`**: Check encrypted file sizes, and use `git-sizer` to check the size of the git repo. Error if a size limit is exceeded. 
 It is run automatically by `commit` when needed.
-* **`du [<repo>]`**:  Print the human-friendly disk usage of the git repo directory for a depth of one.
-* **`du.dec [<repo>]`**:  Print the human-friendly disk usage of the decrypted directory for a depth of one. The repo must be in a mounted state.
-* **`du.enc [<repo>]`**:  Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
+* **`du [<repo>]`**: Print the human-friendly disk usage of the git repo directory for a depth of one.
+* **`du.dec [<repo>]`**: Print the human-friendly disk usage of the decrypted directory for a depth of one. The repo must be in a mounted state.
+* **`du.enc [<repo>]`**: Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
 * **`info [<repo>]`**: Alias of `status`.
 * **`log [<repo>]`**: Print the git log for the last ten commits.
 * **`logs [<repo>]`**: Alias of `log`.
