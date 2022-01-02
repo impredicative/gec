@@ -147,7 +147,7 @@ To create and provision a new repo:
 To provision an existing repo:
 * `gec clone <repo>`
 
-To use a provisioned repo:
+To use a provisioned repo, these are some of the many commands:
 * `gec pull [<repo>]` (_If and when changed on remote_)
 * `gec use [<repo>]` (_Remember to `exit` the shell after using_)
 * `gec status [<repo>]`
