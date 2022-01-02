@@ -80,12 +80,12 @@ sudo chmod +x /usr/local/sbin/gec
 # Install completion script if using Bash:
 mkdir -p ~/.local/share/bash-completion/completions
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.bash -O ~/.local/share/bash-completion/completions/gec
-source ~/.local/share/bash-completion/completions/gec  # This is automatic if bash-completion is installed, but can do manually for current terminal only
+source ~/.local/share/bash-completion/completions/gec  # This is automatic if bash-completion is installed, but can do manually for current terminal only.
 
 # Install completion script if using Fish:
 mkdir -p ~/.config/fish/completions
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.fish -O ~/.config/fish/completions/gec.fish
-source ~/.config/fish/completions/gec.fish  # This is automatic, but can do manually for current terminal only
+source ~/.config/fish/completions/gec.fish  # This is automatic, but can do manually for current terminal only.
 ```
 For future updates to `gec`, running `gec install` will install its latest release and also its shell completion scripts.
 
@@ -99,12 +99,12 @@ sudo ln -s "${PWD}/gec.sh" /usr/local/sbin/gec
 # Link completion script if using Bash:
 mkdir -p ~/.local/share/bash-completion/completions
 ln -s "${PWD}/completion.bash" ~/.local/share/bash-completion/completions/gec
-source ~/.local/share/bash-completion/completions/gec  # This is automatic if bash-completion is installed, but can do manually for current terminal only
+source ~/.local/share/bash-completion/completions/gec  # This is automatic if bash-completion is installed, but can do manually for current terminal only.
 
 # Link completion script if using Fish:
 mkdir -p ~/.config/fish/completions
 ln -s "${PWD}/completion.fish" ~/.config/fish/completions/gec.fish
-source ~/.config/fish/completions/gec.fish  # This is automatic, but can do manually for current terminal only
+source ~/.config/fish/completions/gec.fish  # This is automatic, but can do manually for current terminal only.
 ```
 
 ## Setup
