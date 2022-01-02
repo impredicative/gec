@@ -158,7 +158,7 @@ Refer to the [repo-specific commands](#repo-specific) section for details on usi
 
 ## Commands
 ### Repo-agnostic
-* **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`.
+* **`config <key> [<val>]`**: Get or set a value of key from configuration file `~/.gec`. To list all values, specify `-l`.
 * **`install`**: Update to the latest release of `gec`.
 * **`list`**: Alias of `ls`.
 * **`ls [pattern]`**: List the output of the `state` command for matching repos in `~/gec/encrypted`. If specifying a pattern, it may need to be quoted.
