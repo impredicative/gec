@@ -44,7 +44,7 @@ If a hard limit is violated during a `commit`, `gec` will attempt to check it an
 Due to the use of the gocryptfs `-sharedstorage` option, a hardlink cannot be created in a decrypted repo.
 
 ## Requirements
-Linux, along with the tools git, jq, gocryptfs, and git-sizer are required. These tools are covered in the [**Installation**](#installation) section.
+Linux is required along with a few tools which are covered in the [**Installation**](#installation) section.
 
 A dedicated [GitHub](https://github.com/) and [GitLab](https://gitlab.com/) account is required with an identical username on both sites!
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be very useful.
@@ -52,31 +52,26 @@ If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-U
 ## Installation
 These steps were tested on Ubuntu. On other distros, ensure that the executables are available in the PATH.
 
-Ensure `git` ≥2.25.1:
-```
-sudo apt install git
-```
-
-Install [`jq`](https://github.com/stedolan/jq/releases) ≥1.5:
-```shell script
-sudo apt install jq
+Ensure `curl` ≥7.74.0, `git` ≥2.25.1, [`jq`](https://github.com/stedolan/jq/releases) ≥1.5:
+```shell
+sudo apt install curl git jq
 ```
 
 Install [`gocryptfs`](https://github.com/rfjakob/gocryptfs/releases) ≥2.0-beta1:
-```shell script
+```shell
 RELEASE=$(curl https://api.github.com/repos/rfjakob/gocryptfs/releases | jq -r .[0].tag_name)
 wget -qO- https://github.com/rfjakob/gocryptfs/releases/download/${RELEASE}/gocryptfs_${RELEASE}_linux-static_amd64.tar.gz | sudo tar -xz -f - -C /usr/local/sbin/ gocryptfs
 ```
 
 Install [`git-sizer`](https://github.com/github/git-sizer/releases) ≥1.3.0:
-```shell script
+```shell
 VERSION=$(curl https://api.github.com/repos/github/git-sizer/releases | jq -r .[0].tag_name | tr -d v)
 wget -qO- https://github.com/github/git-sizer/releases/download/v${VERSION}/git-sizer-${VERSION}-linux-amd64.zip | sudo busybox unzip - git-sizer -d /usr/local/sbin/
 sudo chmod +x /usr/local/sbin/git-sizer
 ```
 
 Install `gec`:
-```shell script
+```shell
 # Install program
 RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
 sudo wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O /usr/local/sbin/gec
@@ -95,7 +90,7 @@ source ~/.config/fish/completions/gec.fish  # This is automatic, but can do manu
 For future updates to `gec`, running `gec install` will install its latest release and also its shell completion scripts.
 
 ## Development
-```shell script
+```shell
 # Link program
 git clone git@github.com:impredicative/gec.git
 cd ./gec
