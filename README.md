@@ -116,7 +116,7 @@ On each device:
 1. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Use and securely save a passphrase for this key to minimize the risk of any unauthorized push.
 1. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in both GitHub and GitLab.
 1. Create or prepend (not append) to `~/.ssh/config` the specific contents:
-    ```shell script
+    ```shell
     Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
         IdentityFile ~/.ssh/id_gec
     ```
