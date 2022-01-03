@@ -452,6 +452,7 @@ case "${CMD}" in
     else
       mkdir -p "${DECDIR}"
       mkdir -p "${_SOCKDIR}"
+      rm -f "${SOCKFILE}" # Workaround for https://github.com/rfjakob/gocryptfs/issues/634
       log "Mounting repo read-write"
       gocryptfs -nofail -sharedstorage -ctlsock "${SOCKFILE}" -rw "${ENCDIR}" "${DECDIR}"
       log "Mounted repo read-write"
@@ -470,6 +471,7 @@ case "${CMD}" in
     else
       mkdir -p "${DECDIR}"
       mkdir -p "${_SOCKDIR}"
+      rm -f "${SOCKFILE}" # Workaround for https://github.com/rfjakob/gocryptfs/issues/634
       log "Mounting repo read-only"
       gocryptfs -nofail -sharedstorage -ctlsock "${SOCKFILE}" -ro "${ENCDIR}" "${DECDIR}"
       log "Mounted repo read-only"
