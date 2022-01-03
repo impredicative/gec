@@ -655,11 +655,13 @@ case "${CMD}" in
     git status -bs
     mkdir -p "${DECDIR}"
     if mountpoint -q "${DECDIR}"; then
-      echo
       cd "${ENCDIR}"
-      git ls-files -d | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_RED}del${TPUT_RESET}] /"
-      git ls-files -m | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_CYAN}mod${TPUT_RESET}] /"
-      git ls-files -o | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_GREEN}new${TPUT_RESET}] /"
+      if [[ $(git ls-files -dmo) != "" ]]; then
+        echo
+        git ls-files -d | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_RED}del${TPUT_RESET}] /"
+        git ls-files -m | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_CYAN}mod${TPUT_RESET}] /"
+        git ls-files -o | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_GREEN}new${TPUT_RESET}] /"
+      fi
       echo
       findmnt -f "${DECDIR}" || :
     fi
