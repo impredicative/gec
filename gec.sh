@@ -646,10 +646,19 @@ case "${CMD}" in
     ;;
   status|info)
     ${TOOL} state ${REPO}
-    cd "${GITDIR}"
     echo
+    cd "${GITDIR}"
     git status -bs
-    mountpoint -q "${DECDIR}" && echo && findmnt -f "${DECDIR}" || :
+    mkdir -p "${DECDIR}"
+    if mountpoint -q "${DECDIR}"; then
+      echo
+      cd "${ENCDIR}"
+      git ls-files -d | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed 's/^/[del] /'
+      git ls-files -m | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed 's/^/[mod] /'
+      git ls-files -o | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed 's/^/[new] /'
+      echo
+      findmnt -f "${DECDIR}" || :
+    fi
     ;;
   umount|unmount|dismount)
     if mountpoint -q "${DECDIR}" || [ "${3:-''}" = "-f" ]; then
