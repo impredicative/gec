@@ -57,10 +57,10 @@ Ensure `curl` ≥7.74.0, `git` ≥2.25.1, [`jq`](https://github.com/stedolan/jq/
 sudo apt install curl git jq
 ```
 
-Install [`gocryptfs`](https://github.com/rfjakob/gocryptfs/releases) ≥2.0-beta1:
+Install [`gocryptfs`](https://github.com/rfjakob/gocryptfs/releases) ≥2.2.1:
 ```shell
 RELEASE=$(curl https://api.github.com/repos/rfjakob/gocryptfs/releases | jq -r .[0].tag_name)
-wget -qO- https://github.com/rfjakob/gocryptfs/releases/download/${RELEASE}/gocryptfs_${RELEASE}_linux-static_amd64.tar.gz | sudo tar -xz -f - -C /usr/local/sbin/ gocryptfs
+wget -qO- https://github.com/rfjakob/gocryptfs/releases/download/${RELEASE}/gocryptfs_${RELEASE}_linux-static_amd64.tar.gz | sudo tar -xz -f - -C /usr/local/sbin/ gocryptfs gocryptfs-xray
 ```
 
 Install [`git-sizer`](https://github.com/github/git-sizer/releases) ≥1.3.0:
