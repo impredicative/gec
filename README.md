@@ -183,7 +183,7 @@ It is run automatically by `commit` when needed.
 * **`log [<repo>]`**: Print the git log for the last ten commits.
 * **`logs [<repo>]`**: Alias of `log`.
 * **`state [<repo>]`**: Print the repo mount state, .git directory disk usage, encrypted filesystem directory disk usage, total disk usage, and repo name.
-* **`status [<repo>]`**: Print the repo name, mount state, short git status, and mount information if mounted.
+* **`status [<repo>]`**: Print the repo name, mount state, and short git status. If mounted, also print the change status of decrypted paths plus the mount information.
 
 #### Remote oriented
 A [GitHub token](https://github.com/settings/tokens/new) and a [GitLab token](https://gitlab.com/-/profile/personal_access_tokens) are required for these commands.
