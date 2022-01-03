@@ -653,9 +653,9 @@ case "${CMD}" in
     if mountpoint -q "${DECDIR}"; then
       echo
       cd "${ENCDIR}"
-      git ls-files -d | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed 's/^/[del] /'
-      git ls-files -m | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed 's/^/[mod] /'
-      git ls-files -o | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed 's/^/[new] /'
+      git ls-files -d | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_RED}del${TPUT_RESET}] /"
+      git ls-files -m | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_CYAN}mod${TPUT_RESET}] /"
+      git ls-files -o | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_GREEN}new${TPUT_RESET}] /"
       echo
       findmnt -f "${DECDIR}" || :
     fi
