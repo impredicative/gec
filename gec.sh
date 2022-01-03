@@ -76,7 +76,11 @@ case "${CMD}" in
     exit
     ;;
   install)
-    release=$(curl -sS -f -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
+    if [ "$#" -ge 2 ]; then
+      release="$2"
+    else
+      release=$(curl -sS -f -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
+    fi
     prog_file="$0"
     sudo wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh -O "${prog_file}"
     sudo chmod +x "${prog_file}"
