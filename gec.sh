@@ -31,6 +31,7 @@ CONFIGFILE="${HOME}/.gec"
 _APPDIR="${HOME}/gec"
 _GITDIR="${_APPDIR}/encrypted"
 _DECDIR="${_APPDIR}/decrypted"
+_SOCKDIR="/run/user/${UID}/gec"
 LS_FORMAT="all=${TPUT_CYAN}%4s${TPUT_RESET} enc=${TPUT_MAGENTA}${TPUT_BOLD}%4s${TPUT_RESET} .git=${TPUT_CYAN}${TPUT_BOLD}%4s${TPUT_RESET} %s ${TPUT_BLUE}${TPUT_BOLD}%s${TPUT_RESET}\n"
 
 touch -a "${CONFIGFILE}"
@@ -146,6 +147,7 @@ GITDIR="${_GITDIR}/${REPO}"
 DOTGITDIR="${GITDIR}/.git"
 ENCDIR="${GITDIR}/fs"
 DECDIR="${_DECDIR}/${REPO}"
+SOCKFILE="${_SOCKDIR}/${REPO}.socket"
 
 # Define repo-specific logging functions
 logr () { echo "[${TOOL}:${REPO}] ${1}" ; }  # Log raw
@@ -449,8 +451,9 @@ case "${CMD}" in
       fi
     else
       mkdir -p "${DECDIR}"
+      mkdir -p "${_SOCKDIR}"
       log "Mounting repo read-write"
-      gocryptfs -nofail -sharedstorage -rw "${ENCDIR}" "${DECDIR}"
+      gocryptfs -nofail -sharedstorage -ctlsock "${SOCKFILE}" -rw "${ENCDIR}" "${DECDIR}"
       log "Mounted repo read-write"
     fi
     ;;
@@ -466,8 +469,9 @@ case "${CMD}" in
       fi
     else
       mkdir -p "${DECDIR}"
+      mkdir -p "${_SOCKDIR}"
       log "Mounting repo read-only"
-      gocryptfs -nofail -sharedstorage -ro "${ENCDIR}" "${DECDIR}"
+      gocryptfs -nofail -sharedstorage -ctlsock "${SOCKFILE}" -ro "${ENCDIR}" "${DECDIR}"
       log "Mounted repo read-only"
     fi
     ;;
