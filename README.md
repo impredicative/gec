@@ -113,16 +113,15 @@ In the steps below:
 
 On each device:
 1. Run `gec config core.owner <owner>` once for all future repos.
-1. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Use and securely save a passphrase for this key to minimize the risk of any unauthorized push.
-1. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in both GitHub and GitLab.
-1. Create or prepend (not append) to `~/.ssh/config` the specific contents:
+2. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Use and securely save a passphrase for this key to minimize the risk of any unauthorized push.
+3. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in both GitHub and GitLab.
+4. Create or prepend (not append) to `~/.ssh/config` the specific contents:
     ```shell
     Match host github.com,gitlab.com exec "[[ $(git config user.name) = gec ]]"
         IdentityFile ~/.ssh/id_gec
     ```
-1. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as is advised in `man ssh_config`.
-1. Run `ssh -i ~/.ssh/id_gec -T git@github.com` to test GitHub access, ensuring that the `<owner>` name is printed.
-1. Run `ssh -i ~/.ssh/id_gec -T git@gitlab.com` to test GitLab access, ensuring that the `<owner>` name is printed.
+5. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as is advised in `man ssh_config`.
+6. Run `gec test.ssh` to test GitHub and GitLab access via SSH, ensuring that the `<owner>` name is printed for both.
 
 ## Directories
 Storage repos are created in `~/gec/`. This location is created automatically. Both encrypted and decrypted repos and their files are organized in this location.
@@ -163,6 +162,7 @@ Refer to the [repo-specific commands](#repo-specific) section for details on usi
 * **`list`**: Alias of `ls`.
 * **`ls [pattern]`**: List the output of the `state` command for matching repos in `~/gec/encrypted`. If specifying a pattern, it may need to be quoted.
 * **`lock`**: Unmount all mounted repos.
+* **`test.ssh`**: Test access to GitHub and GitLab via SSH.
 
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel-us", in both GitHub and GitLab.

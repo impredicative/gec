@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -euo pipefail  # Note the use of `set` elsewhere in the file.
 
 # Define repo-agnostic vars
 TOOL="$(basename "$0")"
@@ -130,6 +130,33 @@ case "${CMD}" in
     encdirs_size=$(_du_hsc ./${PATTERN}/fs)
     gitdirs_size=$(_du_hsc ./${PATTERN}/.git)
     printf "${LS_FORMAT}" ${alldirs_size} ${encdirs_size} ${gitdirs_size} "          " "(total)"
+    exit
+    ;;
+  test.ssh)
+    # Ref: https://stackoverflow.com/a/70585901/
+    log "Checking SSH access to GitHub"
+    set +e
+    ssh -i ~/.ssh/id_gec -T git@github.com  # Expected exit status is 1.
+    exit_status=$?
+    set -e
+    if [ ${exit_status} -ne 1 ] && [ ${exit_status} -ne 0 ]; then
+      loge "GitHub SSH exit status was ${exit_status} but the expected status was 1 or 0"
+      exit ${exit_status}
+    fi
+    log "GitHub SSH exit status was ${exit_status} as was expected"
+
+    echo
+    log "Checking SSH access to GitLab"
+    set +e
+    ssh -i ~/.ssh/id_gec -T git@gitlab.com
+    exit_status=$?
+    set -e
+    if [ ${exit_status} -ne 0 ]; then
+      loge "GitLab SSH exit status was ${exit_status} but the expected status was 0"
+      exit ${exit_status}
+    fi
+    log "GitLab SSH exit status was ${exit_status} as was expected"
+
     exit
     ;;
 esac
