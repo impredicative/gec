@@ -37,7 +37,7 @@ LS_FORMAT="all=${TPUT_CYAN}%4s${TPUT_RESET} enc=${TPUT_MAGENTA}${TPUT_BOLD}%4s${
 touch -a "${CONFIGFILE}"
 
 # Define utility functions
-_contains () {  # Space-separated list $1 contains line $2
+_contains () {  # Space-separated list $1 contains line $2. `grep -x` enforces an exact match.
   echo "$1" | tr ' ' '\n' | grep -F -x -q "$2"
 }
 _du_hs () {  # Disk usage for single match
@@ -81,10 +81,11 @@ case "${CMD}" in
     else
       release=$(curl -sS -f -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/impredicative/gec/releases | jq -r .[0].tag_name)
     fi
-    prog_file="$0"
-    sudo wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh -O "${prog_file}"
-    sudo chmod +x "${prog_file}"
-    log "Installed ${release} to ${prog_file}"
+    source_file="https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh"
+    dest_file="$0"
+    sudo wget -q "${source_file}" -O "${dest_file}"
+    sudo chmod +x "${dest_file}"
+    log "Installed ${release} from ${source_file} to ${dest_file}"
 
     # Install Bash completion script
     # Ref: https://serverfault.com/a/1013395/
@@ -134,7 +135,7 @@ case "${CMD}" in
     ;;
   test.ssh)
     # Ref: https://stackoverflow.com/a/70585901/
-    log "Checking SSH access to GitHub"
+    log "Testing SSH access to GitHub"
     set +e
     ssh -i ~/.ssh/id_gec -T git@github.com  # Expected exit status is 1.
     exit_status=$?
@@ -146,7 +147,7 @@ case "${CMD}" in
     log "GitHub SSH exit status was ${exit_status} as was expected"
 
     echo
-    log "Checking SSH access to GitLab"
+    log "Testing SSH access to GitLab"
     set +e
     ssh -i ~/.ssh/id_gec -T git@gitlab.com
     exit_status=$?
@@ -156,6 +157,37 @@ case "${CMD}" in
       exit ${exit_status}
     fi
     log "GitLab SSH exit status was ${exit_status} as was expected"
+
+    exit
+    ;;
+  test.token)
+    read -s -p "GitHub token with access to 'repo' and 'delete_repo' scopes: " GITHUB_TOKEN
+    logn "Testing token access to GitHub"
+    # Ref: https://stackoverflow.com/a/70588035/
+    authorized_scopes=$(curl -sS -f -I -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com | grep ^x-oauth-scopes: | cut -d' ' -f2- | tr -d "[:space:]" | sed 's/,/ /g')
+    logr "GitHub token has access to the scopes: ${authorized_scopes}"
+    for required_scope in repo delete_repo; do
+      if _contains "${authorized_scopes}" "${required_scope}"; then
+        log "GitHub token has access to the required '${required_scope}' scope"
+      else
+        loge "GitHub token does not have access to the required '${required_scope}' scope"
+        exit 11
+      fi
+    done
+
+    echo
+    read -s -p "GitLab personal access token with name '${TOOL}' and access to 'api' scope: " GITLAB_TOKEN
+    logn "Testing token access to GitLab"
+    # Ref: https://stackoverflow.com/a/70602701/
+    authorized_scopes=$(curl -sS -f -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" https://gitlab.com/api/v4/personal_access_tokens | jq -j "map(select((.revoked == false) and (.name == \"${TOOL}\"))) | .[0].scopes | join(\" \")")
+    token_description="First non-revoked GitLab token having name '${TOOL}'"
+    logr "${token_description} has access to the scopes: ${authorized_scopes}"
+    if _contains "${authorized_scopes}" "api"; then
+      log "${token_description} has access to the required 'api' scope"
+    else
+      loge "${token_description} does not have access to the required 'api' scope"
+      exit 11
+    fi
 
     exit
     ;;
@@ -370,6 +402,7 @@ case "${CMD}" in
     logn "Creating repo in GitHub"
     read -s -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
     echo
+    curl -H "Authorization: token ${GITHUB_TOKEN}"  -H "Accept: application/vnd.github.v3+json" https://api.github.com/user/authorizations
     curl -sS -f -X POST -o /dev/null \
       -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
       https://api.github.com/user/repos -d "{\"name\": \"${REPO}\", \"private\": true}"

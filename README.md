@@ -122,6 +122,9 @@ On each device:
     ```
 5. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as is advised in `man ssh_config`.
 6. Run `gec test.ssh` to test GitHub and GitLab access via SSH, ensuring that the `<owner>` name is printed for both.
+7. Run `gec test.token` to tset GitHub and GitLab access via a personal access token for each. 
+The GitHub token must have access to the `repo` and `delete_repo` scopes.
+The GitLab token must necessarily be named `gec` and have access to the `api` scope.
 
 ## Directories
 Storage repos are created in `~/gec/`. This location is created automatically. Both encrypted and decrypted repos and their files are organized in this location.
@@ -163,6 +166,7 @@ Refer to the [repo-specific commands](#repo-specific) section for details on usi
 * **`ls [pattern]`**: List the output of the `state` command for matching repos in `~/gec/encrypted`. If specifying a pattern, it may need to be quoted.
 * **`lock`**: Unmount all mounted repos.
 * **`test.ssh`**: Test access to GitHub and GitLab via SSH.
+* **`test.token`**: Test access to GitHub and GitLab via a personal access token for each.
 
 ### Repo-specific
 In the commands below, `<repo>` refers to an identical repository name, e.g. "travel-us", in both GitHub and GitLab.
