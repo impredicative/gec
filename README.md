@@ -122,7 +122,7 @@ On each device:
     ```
 5. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as is advised in `man ssh_config`.
 6. Run `gec test.ssh` to test GitHub and GitLab access via SSH, ensuring that the `<owner>` name is printed for both.
-7. Run `gec test.token` to tset GitHub and GitLab access via a personal access token for each. 
+7. Run `gec test.token` to test GitHub and GitLab access via a personal access token for each. 
 The GitHub token must have access to the `repo` and `delete_repo` scopes.
 The GitLab token must necessarily be named `gec` and have access to the `api` scope.
 
