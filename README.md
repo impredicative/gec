@@ -184,7 +184,8 @@ It is run automatically by `commit` when needed.
 * **`du.dec [<repo>]`**: Print the human-friendly disk usage of the decrypted directory for a depth of one. The repo must be in a mounted state.
 * **`du.enc [<repo>]`**: Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
 * **`info [<repo>]`**: Alias of `status`.
-* **`log [<repo>]`**: Print the git log for the last ten commits.
+* **`log [<repo>]`**: Print the git log for the last ten commits. Options, if any, are forwarded to `git log`. 
+If specifying any options, to auto-determine `<repo>`, specify a period in its place.
 * **`logs [<repo>]`**: Alias of `log`.
 * **`state [<repo>]`**: Print the repo mount state, .git directory disk usage, encrypted filesystem directory disk usage, total disk usage, and repo name.
 * **`status [<repo>]`**: Print the repo name, mount state, and short git status. If mounted, also print the change status of decrypted paths plus the mount information.
@@ -203,7 +204,7 @@ Also see the `rm` and `destroy` commands.
 To auto-determine `<repo>`, specify a period in its place.
 * **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into its git repo directory, and add its GitLab URL.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
-* **`gc [<repo>] [options]`**: Run git garbage collection on the repo. Options, if any, are passed to `git gc`. 
+* **`gc [<repo>] [options]`**: Run git garbage collection on the repo. Options, if any, are forwarded to `git gc`. 
 If specifying any options, to auto-determine `<repo>`, specify a period in its place.
 * **`pull [<repo>]`**: Pull commits from remote. For safety, only a fast-forward pull is made, and a prerequisite is that the repo must be in a dismounted state.
 * **`push [<repo>]`**: Push commits to remote.

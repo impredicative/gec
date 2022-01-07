@@ -505,7 +505,8 @@ case "${CMD}" in
     ;;
   log|logs)
     cd "${GITDIR}"
-    git log --color=always --decorate -10 | grep -v '^Author: '
+    shift $(min_num 2 $#)
+    git log --color=always --decorate -10 "$@" | grep -v '^Author: '
     ;;
   mount|mount.rw)
     if mountpoint -q "${DECDIR}"; then
