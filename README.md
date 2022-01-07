@@ -184,7 +184,7 @@ It is run automatically by `commit` when needed.
 * **`du.dec [<repo>]`**: Print the human-friendly disk usage of the decrypted directory for a depth of one. The repo must be in a mounted state.
 * **`du.enc [<repo>]`**: Print the human-friendly disk usage of the encrypted filesystem directory for a depth of one.
 * **`info [<repo>]`**: Alias of `status`.
-* **`log [<repo>]`**: Print the git log for the last ten commits. Options, if any, are forwarded to `git log`. 
+* **`log [<repo>] [options]`**: Print the git log for the last ten commits. Options, if any, are forwarded to `git log`. 
 If specifying any options, to auto-determine `<repo>`, specify a period in its place.
 * **`logs [<repo>]`**: Alias of `log`.
 * **`state [<repo>]`**: Print the repo mount state, .git directory disk usage, encrypted filesystem directory disk usage, total disk usage, and repo name.
