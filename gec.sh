@@ -57,6 +57,10 @@ _shell () {  # Shell into dir
   local user_shell=$(getent passwd $USER | cut -d : -f 7)
   $user_shell
 }
+min_num () {  # Min of numbers
+  # Ref: https://stackoverflow.com/a/25268449/
+  printf "%s\n" "$@" | sort -g | head -n1
+}
 
 # Run repo-agnostic command
 case "${CMD}" in
@@ -477,7 +481,7 @@ case "${CMD}" in
     ;;
   gc)
     cd ${GITDIR}
-    shift 2
+    shift $(min_num 2 $#)
     repo_size=$(_du_hs "${DOTGITDIR}")
     pack_size=$(_du_hs "${DOTGITDIR}/objects/pack")
     logr "Running git garbage collection having pre-gc sizes: .git=${repo_size} pack=${pack_size}"
