@@ -506,7 +506,7 @@ case "${CMD}" in
   log|logs)
     cd "${GITDIR}"
     shift $(min_num 2 $#)
-    git log --color=always --decorate -10 "$@" | grep -v '^Author: '
+    git log --color=always --decorate -10 "$@" | grep -v '^Author: gec <gec@users.noreply.git.com>$'
     ;;
   mount|mount.rw)
     if mountpoint -q "${DECDIR}"; then
