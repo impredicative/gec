@@ -36,7 +36,7 @@ LS_FORMAT="all=${TPUT_CYAN}%4s${TPUT_RESET} enc=${TPUT_MAGENTA}${TPUT_BOLD}%4s${
 
 touch -a "${CONFIGFILE}"
 
-# Define utility functions
+# Define repo-agnostic utility functions
 _contains () {  # Space-separated list $1 contains line $2. `grep -x` enforces an exact match.
   echo "$1" | tr ' ' '\n' | grep -F -x -q "$2"
 }
@@ -223,6 +223,13 @@ log () { logr "${1}." ; }  # Log
 logn () { echo; log "$1" ; }  # Log after newline
 loge () { log "Failed ${CMD}. $1" >&2 ; }  # Log error
 logw () { log "warning: $1" >&2 ; }  # Log warning
+
+# Define repo-specific utility functions
+_decrypt_paths () {  # Decrypted gocryptfs paths
+  # Note: The input paths are over stdin, and must be relative to ENCDIR.
+  cat - | grep -v '/gocryptfs.diriv$' | gocryptfs-xray -decrypt-paths "${SOCKFILE}" 2>&- || :
+  # Note: "|| :" is used because gocryptfs-xray sometimes outputs: "errno 2: no such file or directory"
+}
 
 # Validate repo name
 # Ref: https://stackoverflow.com/a/59082561/ https://gitlab.com/gitlab-org/gitlab/-/issues/21661
@@ -723,9 +730,9 @@ case "${CMD}" in
       cd "${ENCDIR}"
       if [[ $(git ls-files -dmo) != "" ]]; then
         echo
-        git ls-files -d | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_RED}del${TPUT_RESET}] /"
-        git ls-files -m | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_CYAN}mod${TPUT_RESET}] /"
-        git ls-files -o | gocryptfs-xray -decrypt-paths "${SOCKFILE}" | sed "s/^/[${TPUT_GREEN}new${TPUT_RESET}] /"
+        git ls-files -d | _decrypt_paths | sed "s/^/[${TPUT_RED}del${TPUT_RESET}] /"
+        git ls-files -m | _decrypt_paths | sed "s/^/[${TPUT_CYAN}mod${TPUT_RESET}] /"
+        git ls-files -o | _decrypt_paths | sed "s/^/[${TPUT_GREEN}new${TPUT_RESET}] /"
       fi
       echo
       findmnt -f "${DECDIR}" || :
