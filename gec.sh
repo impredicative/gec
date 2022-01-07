@@ -506,7 +506,19 @@ case "${CMD}" in
   log|logs)
     cd "${GITDIR}"
     shift $(min_num 2 $#)
-    git log --color=always --decorate -10 "$@" | grep -v '^Author: gec <gec@users.noreply.git.com>$'
+    author_line='^Author: gec <gec@users.noreply.git.com>$'
+    if ! mountpoint -q "${DECDIR}"; then
+      git log --color=always --decorate -10 "$@" | grep -v "${author_line}"
+    else
+      python_code=$(cat <<'END'
+import sys
+for line in sys.stdin:
+    line = 'PY: ' + line
+    sys.stdout.write(line)
+END
+      )
+      git log --color=always --decorate -10 --name-status "$@" | grep -v "${author_line}" | python3 -c "${python_code}"
+    fi
     ;;
   mount|mount.rw)
     if mountpoint -q "${DECDIR}"; then
