@@ -1,5 +1,8 @@
 # gec
 
+> **:warning: In Oct 2022, [GitLab will be dramatically lowering its free storage quota](https://docs.gitlab.com/ee/user/usage_quotas.html) down to just 5 GB for all repositories combined! As such, the use of this project is discouraged until it replaces GitLab with another host.**
+
+
 **`gec`** is a command-line utility written in Bash with convenience commands for using [gocryptfs](https://github.com/rfjakob/gocryptfs) with git.
 It refrains from doing anything clever, making it possible to naively fallback to the underlying gocryptfs or git commands if a need should arise.
 
