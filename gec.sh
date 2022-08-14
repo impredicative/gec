@@ -145,27 +145,27 @@ case "${CMD}" in
     exit_status=$?
     set -e
     if [ ${exit_status} -ne 1 ] && [ ${exit_status} -ne 0 ]; then
-      loge "GitHub SSH exit status was ${exit_status} but the expected status was 1 or 0"
+      loge "GitHub SSH exit status was ${exit_status} but the expected status was 0 or 1"
       exit ${exit_status}
     fi
     log "GitHub SSH exit status was ${exit_status} as was expected"
 
     echo
-    log "Testing SSH access to GitLab"
+    log "Testing SSH access to Bitbucket"
     set +e
-    ssh -i ~/.ssh/id_gec -T git@gitlab.com
+    ssh -i ~/.ssh/id_gec -T git@bitbucket.org
     exit_status=$?
     set -e
     if [ ${exit_status} -ne 0 ]; then
-      loge "GitLab SSH exit status was ${exit_status} but the expected status was 0"
+      loge "Bitbucket SSH exit status was ${exit_status} but the expected status was 0"
       exit ${exit_status}
     fi
-    log "GitLab SSH exit status was ${exit_status} as was expected"
+    log "Bitbucket SSH exit status was ${exit_status} as was expected"
 
     exit
     ;;
   test.token)
-    read -s -p "GitHub token with access to 'repo' and 'delete_repo' scopes: " GITHUB_TOKEN
+    read -p "GitHub token with access to 'repo' and 'delete_repo' scopes: " GITHUB_TOKEN
     logn "Testing token access to GitHub"
     # Ref: https://stackoverflow.com/a/70588035/
     authorized_scopes=$(curl -sS -f -I -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com | grep ^x-oauth-scopes: | cut -d' ' -f2- | tr -d "[:space:]" | sed 's/,/ /g')
@@ -180,18 +180,20 @@ case "${CMD}" in
     done
 
     echo
-    read -s -p "GitLab personal access token with name '${TOOL}' and access to 'api' scope: " GITLAB_TOKEN
-    logn "Testing token access to GitLab"
-    # Ref: https://stackoverflow.com/a/70602701/
-    authorized_scopes=$(curl -sS -f -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" https://gitlab.com/api/v4/personal_access_tokens | jq -j "map(select((.revoked == false) and (.name == \"${TOOL}\"))) | .[0].scopes | join(\" \")")
-    token_description="First non-revoked GitLab token having name '${TOOL}'"
-    logr "${token_description} has access to the scopes: ${authorized_scopes}"
-    if _contains "${authorized_scopes}" "api"; then
-      log "${token_description} has access to the required 'api' scope"
-    else
-      loge "${token_description} does not have access to the required 'api' scope"
-      exit 11
-    fi
+    GITUSER=$(${TOOL} config core.owner)
+    read -p "Bitbucket personal access token with access to 'repository:read', 'repository:admin' and 'repository:delete' scopes: " BITBUCKET_TOKEN
+    logn "Testing token access to Bitbucket"
+    # Ref: https://stackoverflow.com/a/73263692/
+    authorized_scopes=$(curl -sS -f -I -u "${GITUSER}:${BITBUCKET_TOKEN}" https://api.bitbucket.org/ | grep ^x-oauth-scopes: | cut -d' ' -f2- | tr -d "[:space:]" | sed 's/,/ /g')
+    logr "Bitbucket token has access to the scopes: ${authorized_scopes}"
+    for required_scope in repository repository:admin repository:delete; do  # Note: 'repository:read' is returned by server as just 'repository'.
+      if _contains "${authorized_scopes}" "${required_scope}"; then
+        log "Bitbucket token has access to the required '${required_scope}' scope"
+      else
+        loge "Bitbucket token does not have access to the required '${required_scope}' scope"
+        exit 11
+      fi
+    done
 
     exit
     ;;
@@ -232,7 +234,7 @@ _decrypt_paths () {  # Decrypted gocryptfs paths
 }
 
 # Validate repo name
-# Ref: https://stackoverflow.com/a/59082561/ https://gitlab.com/gitlab-org/gitlab/-/issues/21661
+# Ref: https://stackoverflow.com/a/59082561/
 repo_valid_pattern="^[a-zA-Z0-9_][a-zA-Z0-9_-]{0,99}$"
 if [[ ! "$REPO" =~ $repo_valid_pattern ]]; then
     loge "Repo name must match pattern ${repo_valid_pattern} so as to ensure broad compatibility"
@@ -334,13 +336,11 @@ case "${CMD}" in
     # Check approximation of total repo size using git-sizer
     repo_size=$(echo "${git_sizer_json}" | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
     repo_size_fmt=$(numfmt --to=si $repo_size)
-    if (( $repo_size > 10000000000 )); then
-      loge "Repo size of ${repo_size_fmt} is over GitLab's hard limit of 10G"
+    if (( $repo_size > 4000000000 )); then
+      loge "Repo size of ${repo_size_fmt} is over Bitbucket's hard limit of 4G"
       exit 4
-    elif (( $repo_size > 5000000000 )); then
-      logw "Repo size of ${repo_size_fmt} is over GitHub's soft limit of 5G, but not over GitLab's hard limit of 10G"
     else
-      log "Repo size of ${repo_size_fmt} is not over GitHub's soft limit of 5G"
+      log "Repo size of ${repo_size_fmt} is not over Bitbucket's hard limit of 4G"
     fi
 
     # Check commit size using git-sizer if pre-commit repo size was given
@@ -366,8 +366,8 @@ case "${CMD}" in
     logn "Cloning repo from GitHub"
     git clone -c http.postBuffer=2147483648 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
     log "Cloned repo from GitHub"
-    git remote set-url --add origin git@gitlab.com:${GITUSER}/${REPO}.git
-    logn "Added GitLab URL"
+    git remote set-url --add origin git@bitbucket.org:${GITUSER}/${REPO}.git
+    logn "Added Bitbucket URL"
 
     logn "Cloned and configured repo"
     ;;
@@ -406,57 +406,65 @@ case "${CMD}" in
     ;;
   create)
     GITUSER=$(${TOOL} config core.owner)
-    log "Creating repo in GitHub and GitLab"
+    log "Idempotently creating repo in GitHub and Bitbucket"
 
-    # Create GitHub repo
-    # Ref: https://stackoverflow.com/a/64636218/
-    logn "Creating repo in GitHub"
-    read -s -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
-    echo
-    curl -H "Authorization: token ${GITHUB_TOKEN}"  -H "Accept: application/vnd.github.v3+json" https://api.github.com/user/authorizations
-    curl -sS -f -X POST -o /dev/null \
-      -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
-      https://api.github.com/user/repos -d "{\"name\": \"${REPO}\", \"private\": true}"
-    log "Created repo in GitHub"
+    # Idempotently create GitHub repo
+    read -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
+    # Ref: https://docs.github.com/en/rest/repos/repos#get-a-repository
+    if curl -s -f -o /dev/null -H "Accept: application/vnd.github+json" -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITUSER}/${REPO}"; then
+      log "Repo already exists in GitHub"
+    else
+      # Create GitHub repo
+      # Ref: https://stackoverflow.com/a/64636218/
+      log "Creating repo in GitHub"
+      curl -sS -f -X POST -o /dev/null \
+        -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/user/repos -d "{\"name\": \"${REPO}\", \"private\": true}"
+      log "Created repo in GitHub"
+    fi
 
-    # Create GitLab repo
-    # Ref: https://stackoverflow.com/a/64656788/
-    # This is optional as the repo is automatically created upon first push.
-    logn "Creating repo in GitLab"
-    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
-    echo
-    curl -sS -f -X POST -o /dev/null \
-      -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
-      "https://gitlab.com/api/v4/projects" -d "{\"path\": \"${REPO}\", \"visibility\": \"private\"}"
-    log "Created repo in GitLab"
+    # Idempotently create Bitbucket repo
+    read -p "Bitbucket token with access to 'repository:read' and 'repository:admin' scopes: " BITBUCKET_TOKEN
+    # Ref: https://stackoverflow.com/a/73346422/
+    if curl -s -f -o /dev/null -u "${GITUSER}:${BITBUCKET_TOKEN}" "https://api.bitbucket.org/2.0/repositories/${GITUSER}/${REPO}"; then
+      log "Repo already exists in Bitbucket"
+    else
+      # Create Bitbucket repo
+      # Ref: https://stackoverflow.com/a/38272918/
+      log "Creating repo in Bitbucket"
+      curl -sS -f -X POST -o /dev/null \
+        -u "${GITUSER}:${BITBUCKET_TOKEN}" \
+        -H "Content-Type: application/json" \
+        "https://api.bitbucket.org/2.0/repositories/${GITUSER}/${REPO}" \
+        -d '{"scm": "git", "is_private": "true", "fork_policy": "no_forks"}'
+      log "Created repo in Bitbucket"
+    fi
 
-    logn "Created repo in GitHub and GitLab"
+    logn "Idempotently created repo in GitHub and Bitbucket"
     ;;
   del)
     GITUSER=$(${TOOL} config core.owner)
-    log "Deleting repo in GitHub and GitLab"
+    log "Deleting repo from GitHub and Bitbucket"
 
     # Delete GitHub repo
     # Ref: https://stackoverflow.com/a/30644156/
     logn "Deleting repo in GitHub"
-    read -s -p "GitHub token with access to 'delete_repo' scope: " GITHUB_TOKEN
-    echo
+    read -p "GitHub token with access to 'delete_repo' scope: " GITHUB_TOKEN
     curl -sS -f -X DELETE -o /dev/null \
       -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
       https://api.github.com/repos/${GITUSER}/${REPO}
     log "Deleted repo in GitHub"
 
-    # Delete GitLab repo
-    # Ref: https://stackoverflow.com/a/52132529/
-    logn "Deleting repo in GitLab"
-    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
-    echo
+    # Delete Bitbucket repo
+    # Ref: https://stackoverflow.com/a/22391849/
+    logn "Deleting repo from Bitbucket"
+    read -p "Bitbucket token with access to 'repository:delete' scope: " BITBUCKET_TOKEN
     curl -sS -f -X DELETE -o /dev/null \
-      -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
-      "https://gitlab.com/api/v4/projects/${GITUSER}%2F${REPO}"
-    log "Deleted repo in GitLab"
+      -u "${GITUSER}:${BITBUCKET_TOKEN}" \
+      "https://api.bitbucket.org/2.0/repositories/${GITUSER}/${REPO}"
+    log "Deleted repo from Bitbucket"
 
-    logn "Deleted repo in GitHub and GitLab"
+    logn "Deleted repo from GitHub and Bitbucket"
     ;;
   destroy)
     ${TOOL} rm ${REPO}
@@ -585,22 +593,21 @@ case "${CMD}" in
     # Rename GitHub repo
     # Ref: https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#update-a-repository
     logn "Renaming repo in GitHub"
-    read -s -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
-    echo
+    read -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
     curl -sS -f -X PATCH -o /dev/null \
       -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" \
       https://api.github.com/repos/${GITUSER}/${REPO} -d "{\"name\": \"${new_name}\"}"
     log "Renamed repo in GitHub"
 
-    # Rename GitLab repo
-    # Ref: https://docs.gitlab.com/ee/api/projects.html#edit-project
-    logn "Renaming repo in GitLab"
-    read -s -p "GitLab token with access to 'api' scope: " GITLAB_TOKEN
-    echo
+    # Rename Bitbucket repo
+    # Ref: https://stackoverflow.com/a/14976945/
+    logn "Renaming repo in Bitbucket"
+    read -p "Bitbucket token with access to 'repository:admin' scope: " BITBUCKET_TOKEN
     curl -sS -f -X PUT -o /dev/null \
-      -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type:application/json" \
-      "https://gitlab.com/api/v4/projects/${GITUSER}%2F${REPO}" -d "{\"name\": \"${new_name}\", \"path\": \"${new_name}\"}"
-    log "Renamed repo in GitLab"
+      -u "${GITUSER}:${BITBUCKET_TOKEN}" \
+      -H "Content-Type:application/json" \
+      "https://api.bitbucket.org/2.0/repositories/${GITUSER}/${REPO}" -d "{\"name\": \"${new_name}\"}"
+    log "Renamed repo in Bitbucket"
 
     # Move decryption directory
     if [ -d "${DECDIR}" ]; then
@@ -633,21 +640,63 @@ case "${CMD}" in
     fi
 
     # Update origin URLs
-    if [ -d "${new_gitdir}/.git" ]; then
+    new_dotgitdir="${new_gitdir}/.git"
+    if [ -d "${new_dotgitdir}" ]; then
       cd "${new_gitdir}"
       logrn "Updating origin URLs from:"
       git remote get-url --all origin | sed 's/^/  /'
       git remote set-url --delete origin git@github.com:${GITUSER}/${old_name}.git
       git remote set-url --add origin git@github.com:${GITUSER}/${new_name}.git
-      git remote set-url --delete origin git@gitlab.com:${GITUSER}/${old_name}.git
-      git remote set-url --add origin git@gitlab.com:${GITUSER}/${new_name}.git
+      git remote set-url --delete origin git@bitbucket.org:${GITUSER}/${old_name}.git
+      git remote set-url --add origin git@bitbucket.org:${GITUSER}/${new_name}.git
       logr "Updated origin URLs to:"
       git remote get-url --all origin | sed 's/^/  /'
     else
-      logw "Origin URLs cannot be updated because .git directory ${GITDIR} does not exist"
+      logw "Origin URLs cannot be updated because the .git directory ${new_dotgitdir} does not exist"
     fi
 
     logn "Renamed remotely and locally to ${new_name}"
+    ;;
+  reset.url)
+    GITUSER=$(${TOOL} config core.owner)
+
+    if [ -d "${DOTGITDIR}" ]; then
+      cd "${GITDIR}"
+
+      # Log old URLs
+      logr "Resetting origin URLs from:"
+      git remote get-url --all origin | sed 's/^/  /'
+      old_urls=$(git remote get-url --all origin | tr '\n' ' ')
+      expected_urls="git@github.com:${GITUSER}/${REPO}.git git@bitbucket.org:${GITUSER}/${REPO}.git"
+
+      # Add missing URLs
+      for expected_url in $expected_urls; do
+        if ! _contains "${old_urls}" "${expected_url}"; then
+          git remote set-url --add origin "${expected_url}"
+          logr "Added origin URL: ${expected_url}"
+        fi
+      done
+      
+      # Remove extra URLs
+      for old_url in $old_urls; do
+        if ! _contains "${expected_urls}" ${old_url}; then
+          git remote set-url --delete origin "${old_url}"
+          logr "Removed origin URL: ${old_url}"
+        fi
+      done
+
+      # Log new URLs
+      new_urls=$(git remote get-url --all origin | tr '\n' ' ')
+      if [ "${old_urls}" = "${new_urls}" ]; then
+        log "Origin URLs remain unchanged"
+      else
+        logr "Reset origin URLs to:"
+        git remote get-url --all origin | sed 's/^/  /'
+      fi
+      
+    else
+      logw "Origin URLs cannot be reset because the .git directory ${DOTGITDIR} does not exist"
+    fi
     ;;
   rm)
     if mountpoint -q "${DECDIR}"; then
