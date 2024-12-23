@@ -82,17 +82,17 @@ RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r .
 sudo wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh -O /usr/local/sbin/gec
 sudo chmod +x /usr/local/sbin/gec
 
-# Install completion script if using Bash:
+# Install completion script if using Bash on Linux:
 mkdir -p ~/.local/share/bash-completion/completions
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.bash -O ~/.local/share/bash-completion/completions/gec
 source ~/.local/share/bash-completion/completions/gec  # This is automatic if bash-completion is installed, but can do manually for current terminal only.
 
-# Install completion script if using Fish:
+# Install completion script if using Fish on Linux:
 mkdir -p ~/.config/fish/completions
 wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.fish -O ~/.config/fish/completions/gec.fish
 source ~/.config/fish/completions/gec.fish  # This is automatic, but can do manually for current terminal only.
 ```
-For future updates to `gec`, running `gec install` will install its latest release and also its shell completion scripts.
+For future updates to `gec`, running `gec install` will install its latest release.
 
 ### Mac
 These steps were tested on MacOS 15.2 for Apple Silicon. Ensure the required tools are installed and accessible.
@@ -108,7 +108,7 @@ Note that the `brew` version of `gocryptfs` is for Linux only.
 Install [`git-sizer`](https://github.com/github/git-sizer/releases) ≥1.5.0:
 ```shell
 VERSION=$(curl https://api.github.com/repos/github/git-sizer/releases | jq -r '.[0].tag_name'  | tr -d v)
-curl -L https://github.com/github/git-sizer/releases/download/v${VERSION}/git-sizer-${VERSION}-darwin-arm64.zip -o git-sizer.zip
+curl -L -o git-sizer.zip https://github.com/github/git-sizer/releases/download/v${VERSION}/git-sizer-${VERSION}-darwin-arm64.zip
 sudo unzip -o git-sizer.zip git-sizer -d /usr/local/bin/
 rm git-sizer.zip
 ```
@@ -119,24 +119,43 @@ Install `gec`:
 RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r '.[0].tag_name')
 sudo curl -o /usr/local/bin/gec https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh
 sudo chmod +x /usr/local/bin/gec
+
+# Install completion script if using Zsh on Mac:
+mkdir -p ~/.zsh/completions
+curl -L https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.zsh -o ~/.zsh/completions/_gec
+grep -q "fpath+=(~/.zsh/completions)" ~/.zshrc || echo "fpath+=(~/.zsh/completions)" >> ~/.zshrc
+grep -q "autoload -Uz compinit" ~/.zshrc || echo "autoload -Uz compinit && compinit" >> ~/.zshrc
+source ~/.zshrc
+
+# Install completion script if using Bash on Mac (untested):
+mkdir -p ~/.local/share/bash-completion/completions
+curl -L https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.bash -o ~/.local/share/bash-completion/completions/gec
+source ~/.local/share/bash-completion/completions/gec  # This is automatic if bash-completion is installed, but can be done manually for the current terminal.
+
+# Install completion script if using brew-installed Bash on Mac (untested):
+brew install bash-completion
+curl -L https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.bash -o "$(brew --prefix)/etc/bash_completion.d/gec"
+source "$(brew --prefix)/etc/bash_completion.d/gec"
+# If needed, ensure that `.bash_profile` or `.bashrc` have the equivalent of:
+[ -f "$(brew --prefix)/etc/bash_completion" ] && source "$(brew --prefix)/etc/bash_completion"
+
+# Install completion script if using Fish on Mac (untested):
+mkdir -p ~/.config/fish/completions
+curl -L https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.fish -o ~/.config/fish/completions/gec.fish
+source ~/.config/fish/completions/gec.fish  # This is automatic, but can be done manually for the current terminal.
 ```
 
 ## Development
 ```shell
-# Link program
+# Clone repo
 git clone git@github.com:impredicative/gec.git
 cd ./gec
+
+# Link program if on Linux
 sudo ln -s "${PWD}/gec.sh" /usr/local/sbin/gec
 
-# Link completion script if using Bash:
-mkdir -p ~/.local/share/bash-completion/completions
-ln -s "${PWD}/completion.bash" ~/.local/share/bash-completion/completions/gec
-source ~/.local/share/bash-completion/completions/gec  # This is automatic if bash-completion is installed, but can do manually for current terminal only.
-
-# Link completion script if using Fish:
-mkdir -p ~/.config/fish/completions
-ln -s "${PWD}/completion.fish" ~/.config/fish/completions/gec.fish
-source ~/.config/fish/completions/gec.fish  # This is automatic, but can do manually for current terminal only.
+# Link program if on Mac
+sudo ln -s "${PWD}/gec.sh" /usr/local/bin/gec
 ```
 
 ## Setup
