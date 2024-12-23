@@ -64,15 +64,23 @@ sudo apt install curl git jq
 
 Install [`gocryptfs`](https://github.com/rfjakob/gocryptfs/releases) ≥2.2.1:
 ```shell
+# Install on amd64:
 RELEASE=$(curl https://api.github.com/repos/rfjakob/gocryptfs/releases | jq -r .[0].tag_name)
 wget -qO- https://github.com/rfjakob/gocryptfs/releases/download/${RELEASE}/gocryptfs_${RELEASE}_linux-static_amd64.tar.gz | sudo tar -xz -f - -C /usr/local/sbin/ gocryptfs gocryptfs-xray
+
+# Install on arm64 on Ubuntu:
+sudo apt install gocryptfs
 ```
 
 Install [`git-sizer`](https://github.com/github/git-sizer/releases) ≥1.3.0:
 ```shell
+# Install on amd64:
 VERSION=$(curl https://api.github.com/repos/github/git-sizer/releases | jq -r .[0].tag_name | tr -d v)
 wget -qO- https://github.com/github/git-sizer/releases/download/v${VERSION}/git-sizer-${VERSION}-linux-amd64.zip | sudo busybox unzip - git-sizer -d /usr/local/sbin/
 sudo chmod +x /usr/local/sbin/git-sizer
+
+# Install on arm64 on Ubuntu:
+sudo apt install git-sizer
 ```
 
 Install `gec`:
@@ -95,6 +103,8 @@ source ~/.config/fish/completions/gec.fish  # This is automatic, but can do manu
 For future updates to `gec`, running `gec install` will install its latest release.
 
 ## Development
+This section is for `gec` development only; it is not applicable for routine use.
+
 ```shell
 # Clone repo
 git clone git@github.com:impredicative/gec.git
