@@ -87,7 +87,8 @@ case "${CMD}" in
     fi
     source_file="https://raw.githubusercontent.com/impredicative/gec/${release}/gec.sh"
     dest_file="$0"
-    sudo wget -q "${source_file}" -O "${dest_file}"
+    # sudo wget -q "${source_file}" -O "${dest_file}"
+    sudo curl -s -o "${dest_file}" "${source_file}"
     sudo chmod +x "${dest_file}"
     log "Installed ${release} from ${source_file} to ${dest_file}"
     exit
