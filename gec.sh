@@ -96,7 +96,7 @@ case "${CMD}" in
   lock)
     mkdir -p "${_DECDIR}"
     log "Unmounting all mounted repos"
-    if findmnt -t fuse.gocryptfs -n -o target | grep "^${_DECDIR}/" | xargs -i basename "{}" | xargs -i ${TOOL} umount {}; then
+    if findmnt -t fuse.gocryptfs -n -o target | grep "^${_DECDIR}/" | xargs -I {} basename "{}" | xargs -I {} ${TOOL} umount {}; then
       # Note: grep returns nonzero exitcode if there are no matching lines. To force 0 exitcode, use { grep "^${_DECDIR}/" || :; }
       log "Unmounted all mounted repos"
     else
@@ -104,7 +104,7 @@ case "${CMD}" in
     fi
 #    mkdir -p "${_GITDIR}"
 #    cd "${_GITDIR}"
-#    ls -1 | xargs -i ${TOOL} umount {}
+#    ls -1 | xargs -I {} ${TOOL} umount {}
     exit
     ;;
   ls|list)
@@ -113,7 +113,7 @@ case "${CMD}" in
     PATTERN=${2:-*}
 
     # Print individual state
-    ls -1d ${PATTERN} | uniq | xargs -i ${TOOL} state {}
+    ls -1d ${PATTERN} | uniq | xargs -I {} ${TOOL} state {}
 
     # Print cumulative disk usage
     alldirs_size=$(_du_hsc ./${PATTERN})
