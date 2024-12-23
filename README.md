@@ -163,7 +163,7 @@ In the steps below, `<owner>` refers to an identical username in both GitHub and
 
 On each device:
 1. Run `gec config core.owner <owner>` once for all future repos.
-2. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Use and securely save a passphrase for this key to minimize the risk of any unauthorized push.
+2. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Optionally use and securely save a passphrase for this key to minimize the risk of any unauthorized push.
 3. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in both GitHub and Bitbucket.
 4. Create or prepend (not append) to `~/.ssh/config` the specific contents:
     ```shell
