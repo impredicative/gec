@@ -90,22 +90,6 @@ case "${CMD}" in
     sudo wget -q "${source_file}" -O "${dest_file}"
     sudo chmod +x "${dest_file}"
     log "Installed ${release} from ${source_file} to ${dest_file}"
-
-    # Install Bash completion script
-    # Ref: https://serverfault.com/a/1013395/
-    bash_completion_dir="${HOME}/.local/share/bash-completion/completions"
-    mkdir -p "${bash_completion_dir}"
-    bash_completion_file="${bash_completion_dir}/${TOOL}"
-    wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/completion.bash -O "${bash_completion_file}"
-    log "Installed bash completion script for ${release} to ${bash_completion_file}"
-
-    # Install Fish completion script
-    fish_completion_dir="${HOME}/.config/fish/completions"
-    mkdir -p "${fish_completion_dir}"
-    fish_completion_file="${fish_completion_dir}/${TOOL}.fish"
-    wget -q https://raw.githubusercontent.com/impredicative/gec/${release}/completion.fish -O "${fish_completion_file}"
-    log "Installed fish completion script for ${release} to ${fish_completion_file}"
-
     exit
     ;;
   lock)
