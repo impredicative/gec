@@ -47,12 +47,14 @@ If a hard limit is violated during a `commit`, `gec` will attempt to check it an
 Due to the use of the gocryptfs `-sharedstorage` option, a hardlink cannot be created in a decrypted repo.
 
 ## Requirements
-Linux is required along with a few tools which are covered in the [**Installation**](#installation) section.
+Linux or Mac is required, along with a few tools which are covered in the [**Installation**](#installation) section.
 
 A dedicated [GitHub](https://github.com/) account and [Bitbucket](https://bitbucket.org/) account is required with an identical username on both sites!
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be very useful to separate them from your primary accounts on these sites.
 
 ## Installation
+
+### Linux
 These steps were tested on Ubuntu. On other distros, ensure that the executables are available in the PATH.
 
 Ensure `curl` ≥7.74.0, `git` ≥2.25.1, [`jq`](https://github.com/stedolan/jq/releases) ≥1.5:
@@ -91,6 +93,33 @@ wget https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/completion.f
 source ~/.config/fish/completions/gec.fish  # This is automatic, but can do manually for current terminal only.
 ```
 For future updates to `gec`, running `gec install` will install its latest release and also its shell completion scripts.
+
+### Mac
+These steps were tested on MacOS 15.2 for Apple Silicon. Ensure the required tools are installed and accessible.
+
+`curl`, `git`, and `jq` were found to be available.
+
+Install [`gocryptfs`](https://ports.macports.org/port/gocryptfs/) ≥2.3.1 using [port](https://www.macports.org/install.php):
+```shell
+sudo port install gocryptfs
+```
+Note that the `brew` version of `gocryptfs` is for Linux only.
+
+Install [`git-sizer`](https://github.com/github/git-sizer/releases) ≥1.5.0:
+```shell
+VERSION=$(curl https://api.github.com/repos/github/git-sizer/releases | jq -r '.[0].tag_name'  | tr -d v)
+curl -L https://github.com/github/git-sizer/releases/download/v${VERSION}/git-sizer-${VERSION}-darwin-arm64.zip -o git-sizer.zip
+sudo unzip -o git-sizer.zip git-sizer -d /usr/local/bin/
+rm git-sizer.zip
+```
+
+Install `gec`:
+```shell
+# Install program
+RELEASE=$(curl https://api.github.com/repos/impredicative/gec/releases | jq -r '.[0].tag_name')
+sudo curl -o /usr/local/bin/gec https://raw.githubusercontent.com/impredicative/gec/${RELEASE}/gec.sh
+sudo chmod +x /usr/local/bin/gec
+```
 
 ## Development
 ```shell
