@@ -2,6 +2,7 @@
 set -euo pipefail  # Note the use of `set` elsewhere in the file.
 
 # Define repo-agnostic vars
+PLATFORM="$(uname -s)"
 TOOL="$(basename "$0")"
 TPUT_BOLD=$(tput bold)
 TPUT_RED=$(tput setaf 1)
@@ -42,11 +43,11 @@ _contains () {  # Space-separated list $1 contains line $2. `grep -x` enforces a
 }
 _du_hs () {  # Disk usage for single match
   # Note: Using -h is avoided because it returns variable length output such as 1002M and 402M.
-  du -B1 -s "$@" | cut -f1 | numfmt --to=si
+  du -B1 -s "$@" | cut -f1 | numfmt_si
 }
 _du_hsc () {  # Total disk usage for single or multiple matches
   # Note: Using -h is avoided because it returns variable length output such as 1002M and 402M.
-  du -B1 -s -c "$@" | tail -1 | cut -f1 | numfmt --to=si
+  du -B1 -s -c "$@" | tail -1 | cut -f1 | numfmt_si
 }
 _du_hcd () {  # CD and disk usage for depth of 1
   cd "$1"
@@ -54,12 +55,27 @@ _du_hcd () {  # CD and disk usage for depth of 1
 }
 _shell () {  # Shell into dir
   cd "$1"
-  local user_shell=$(getent passwd $USER | cut -d : -f 7)
+  if [[ "$PLATFORM" == "Darwin" ]]; then
+    local user_shell=$(dscl . -read /Users/"$USER" UserShell | awk '{print $2}')
+  else
+    local user_shell=$(getent passwd "$USER" | cut -d : -f 7)
+  fi
   $user_shell
 }
 min_num () {  # Min of numbers
   # Ref: https://stackoverflow.com/a/25268449/
   printf "%s\n" "$@" | sort -g | head -n1
+}
+numfmt_si() {
+  if [[ "$PLATFORM" == "Darwin" ]]; then
+    awk 'function human(x) {
+      s=" KMGTPE";
+      while (x >= 1024 && length(s) > 1) {x/=1024; s=substr(s,2);}
+      return int(x+0.5) substr(s,1,1)
+    } {print human($0)}' <<< "$1"
+  else
+    numfmt --to=si "$@"
+  fi
 }
 
 # Run repo-agnostic command
@@ -309,7 +325,7 @@ case "${CMD}" in
 
 #    # Check approximation of largest file size using git-sizer
 #    max_blob_size=$(echo "${git_sizer_json}" | jq '.maxBlobSize.value')
-#    max_blob_size_fmt=$(numfmt --to=si $max_blob_size)
+#    max_blob_size_fmt=$(numfmt_si $max_blob_size)
 #    if (( $max_blob_size > 100000000 )); then
 #      loge "Largest blob size of ${max_blob_size_fmt} is over GitHub's file size hard limit of 100M"
 #      exit 4
@@ -320,7 +336,7 @@ case "${CMD}" in
 
     # Check approximation of total repo size using git-sizer
     repo_size=$(echo "${git_sizer_json}" | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
-    repo_size_fmt=$(numfmt --to=si $repo_size)
+    repo_size_fmt=$(numfmt_si $repo_size)
     if (( $repo_size > 4000000000 )); then
       loge "Repo size of ${repo_size_fmt} is over Bitbucket's hard limit of 4G"
       exit 4
@@ -332,7 +348,7 @@ case "${CMD}" in
     if (( $# >= 3 )); then
       pre_commit_repo_size="${3}"
       commit_size=$((repo_size-pre_commit_repo_size))
-      commit_size_fmt=$(numfmt --to=si $commit_size)
+      commit_size_fmt=$(numfmt_si $commit_size)
       if (( $commit_size > 2000000000 )); then
         loge "Commit size of ${commit_size_fmt} is over GitHub's push size hard limit of 2G"
         exit 4
