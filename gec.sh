@@ -134,19 +134,6 @@ case "${CMD}" in
       exit ${exit_status}
     fi
     log "GitHub SSH exit status was ${exit_status} as was expected"
-
-    echo
-    log "Testing SSH access to Bitbucket"
-    set +e
-    ssh -i ~/.ssh/id_gec -T git@bitbucket.org
-    exit_status=$?
-    set -e
-    if [ ${exit_status} -ne 0 ]; then
-      loge "Bitbucket SSH exit status was ${exit_status} but the expected status was 0"
-      exit ${exit_status}
-    fi
-    log "Bitbucket SSH exit status was ${exit_status} as was expected"
-
     exit
     ;;
   test.token)
@@ -163,23 +150,6 @@ case "${CMD}" in
         exit 11
       fi
     done
-
-    echo
-    GITUSER=$(${TOOL} config core.owner)
-    read -p "Bitbucket personal access token with access to 'repository:read', 'repository:admin' and 'repository:delete' scopes: " BITBUCKET_TOKEN
-    logn "Testing token access to Bitbucket"
-    # Ref: https://stackoverflow.com/a/73263692/
-    authorized_scopes=$(curl -sS -f -I -u "${GITUSER}:${BITBUCKET_TOKEN}" https://api.bitbucket.org/ | grep ^x-oauth-scopes: | cut -d' ' -f2- | tr -d "[:space:]" | sed 's/,/ /g')
-    logr "Bitbucket token has access to the scopes: ${authorized_scopes}"
-    for required_scope in repository repository:admin repository:delete; do  # Note: 'repository:read' is returned by server as just 'repository'.
-      if _contains "${authorized_scopes}" "${required_scope}"; then
-        log "Bitbucket token has access to the required '${required_scope}' scope"
-      else
-        loge "Bitbucket token does not have access to the required '${required_scope}' scope"
-        exit 11
-      fi
-    done
-
     exit
     ;;
 esac
@@ -321,11 +291,16 @@ case "${CMD}" in
     # Check approximation of total repo size using git-sizer
     repo_size=$(echo "${git_sizer_json}" | jq '.uniqueBlobSize.value+.uniqueTreeSize.value+.uniqueCommitSize.value')
     repo_size_fmt=$(numfmt --to=si $repo_size)
-    if (( $repo_size > 4000000000 )); then
-      loge "Repo size of ${repo_size_fmt} is over Bitbucket's hard limit of 4G"
+    if (( $repo_size > 100000000000 )); then
+      loge "Repo size of ${repo_size_fmt} is over GitHub's presumed hard limit of 100G"
       exit 4
     else
-      log "Repo size of ${repo_size_fmt} is not over Bitbucket's hard limit of 4G"
+      log "Repo size of ${repo_size_fmt} is not over GitHub's presumed hard limit of 100G"
+    fi
+    if (( $repo_size > 5000000000 )); then
+      logw "Repo size of ${repo_size_fmt} is over GitHub's soft limit of 5G"
+    else
+      log "Repo size of ${repo_size_fmt} is not over GitHub's soft limit of 5G"
     fi
 
     # Check commit size using git-sizer if pre-commit repo size was given
@@ -351,8 +326,6 @@ case "${CMD}" in
     logn "Cloning repo from GitHub"
     git clone -c http.postBuffer=2147483648 -c user.name=gec -c user.email=gec@users.noreply.git.com git@github.com:${GITUSER}/${REPO}.git .
     log "Cloned repo from GitHub"
-    git remote set-url --add origin git@bitbucket.org:${GITUSER}/${REPO}.git
-    logn "Added Bitbucket URL"
 
     logn "Cloned and configured repo"
     ;;
@@ -391,7 +364,7 @@ case "${CMD}" in
     ;;
   create)
     GITUSER=$(${TOOL} config core.owner)
-    log "Idempotently creating repo in GitHub and Bitbucket"
+    log "Idempotently creating repo in GitHub"
 
     # Idempotently create GitHub repo
     read -p "GitHub token with access to 'repo' scope: " GITHUB_TOKEN
@@ -408,28 +381,11 @@ case "${CMD}" in
       log "Created repo in GitHub"
     fi
 
-    # Idempotently create Bitbucket repo
-    read -p "Bitbucket token with access to 'repository:read' and 'repository:admin' scopes: " BITBUCKET_TOKEN
-    # Ref: https://stackoverflow.com/a/73346422/
-    if curl -s -f -o /dev/null -u "${GITUSER}:${BITBUCKET_TOKEN}" "https://api.bitbucket.org/2.0/repositories/${GITUSER}/${REPO}"; then
-      log "Repo already exists in Bitbucket"
-    else
-      # Create Bitbucket repo
-      # Ref: https://stackoverflow.com/a/38272918/
-      log "Creating repo in Bitbucket"
-      curl -sS -f -X POST -o /dev/null \
-        -u "${GITUSER}:${BITBUCKET_TOKEN}" \
-        -H "Content-Type: application/json" \
-        "https://api.bitbucket.org/2.0/repositories/${GITUSER}/${REPO}" \
-        -d '{"scm": "git", "is_private": "true", "fork_policy": "no_forks"}'
-      log "Created repo in Bitbucket"
-    fi
-
-    logn "Idempotently created repo in GitHub and Bitbucket"
+    logn "Idempotently created repo in GitHub"
     ;;
   del)
     GITUSER=$(${TOOL} config core.owner)
-    log "Deleting repo from GitHub and Bitbucket"
+    log "Deleting repo from GitHub"
 
     # Delete GitHub repo
     # Ref: https://stackoverflow.com/a/30644156/
@@ -440,16 +396,7 @@ case "${CMD}" in
       https://api.github.com/repos/${GITUSER}/${REPO}
     log "Deleted repo in GitHub"
 
-    # Delete Bitbucket repo
-    # Ref: https://stackoverflow.com/a/22391849/
-    logn "Deleting repo from Bitbucket"
-    read -p "Bitbucket token with access to 'repository:delete' scope: " BITBUCKET_TOKEN
-    curl -sS -f -X DELETE -o /dev/null \
-      -u "${GITUSER}:${BITBUCKET_TOKEN}" \
-      "https://api.bitbucket.org/2.0/repositories/${GITUSER}/${REPO}"
-    log "Deleted repo from Bitbucket"
-
-    logn "Deleted repo from GitHub and Bitbucket"
+    logn "Deleted repo from GitHub"
     ;;
   destroy)
     ${TOOL} rm ${REPO}
@@ -584,16 +531,6 @@ case "${CMD}" in
       https://api.github.com/repos/${GITUSER}/${REPO} -d "{\"name\": \"${new_name}\"}"
     log "Renamed repo in GitHub"
 
-    # Rename Bitbucket repo
-    # Ref: https://stackoverflow.com/a/14976945/
-    logn "Renaming repo in Bitbucket"
-    read -p "Bitbucket token with access to 'repository:admin' scope: " BITBUCKET_TOKEN
-    curl -sS -f -X PUT -o /dev/null \
-      -u "${GITUSER}:${BITBUCKET_TOKEN}" \
-      -H "Content-Type:application/json" \
-      "https://api.bitbucket.org/2.0/repositories/${GITUSER}/${REPO}" -d "{\"name\": \"${new_name}\"}"
-    log "Renamed repo in Bitbucket"
-
     # Move decryption directory
     if [ -d "${DECDIR}" ]; then
       new_decdir=$(realpath -ms "${DECDIR}/../${new_name}")
@@ -632,8 +569,6 @@ case "${CMD}" in
       git remote get-url --all origin | sed 's/^/  /'
       git remote set-url --delete origin git@github.com:${GITUSER}/${old_name}.git
       git remote set-url --add origin git@github.com:${GITUSER}/${new_name}.git
-      git remote set-url --delete origin git@bitbucket.org:${GITUSER}/${old_name}.git
-      git remote set-url --add origin git@bitbucket.org:${GITUSER}/${new_name}.git
       logr "Updated origin URLs to:"
       git remote get-url --all origin | sed 's/^/  /'
     else
@@ -652,7 +587,7 @@ case "${CMD}" in
       logr "Resetting origin URLs from:"
       git remote get-url --all origin | sed 's/^/  /'
       old_urls=$(git remote get-url --all origin | tr '\n' ' ')
-      expected_urls="git@github.com:${GITUSER}/${REPO}.git git@bitbucket.org:${GITUSER}/${REPO}.git"
+      expected_urls="git@github.com:${GITUSER}/${REPO}.git"
 
       # Add missing URLs
       for expected_url in $expected_urls; do

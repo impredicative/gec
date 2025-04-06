@@ -4,7 +4,7 @@
 It refrains from doing anything clever, making it possible to naively fallback to the underlying gocryptfs or git commands if a need should arise.
 
 It transparently uses data encryption, both at rest and on the remotes. It uses version control and leverages redundant remote storage.
-The implemented remote commands require GitHub and Bitbucket. Git users will be at home with it.
+The implemented remote commands require GitHub. Git users will be at home with it.
 
 > **:warning: Before continuing, save the link to the official [Gitee mirror](https://gitee.com/impredicative/gec) of this repo.**
 
@@ -32,24 +32,22 @@ The implemented remote commands require GitHub and Bitbucket. Git users will be 
 | Mirror    | https://gitee.com/impredicative/gec           |
 
 ## Limitations
-The known applicable size limits for [GitHub](https://stackoverflow.com/a/59479166/) and [Bitbucket](https://stackoverflow.com/a/73244577/) are tabulated below.
+The known applicable size limits for [GitHub](https://stackoverflow.com/a/59479166/) is tabulated below.
 If a hard limit is violated during a `commit`, `gec` will attempt to check it and error early, otherwise a `push` will fail.
 
-| Size of | SI Value | Type | Enforcer  | Action by `gec` |
-|---------|----------|------|-----------|-----------------|
-| File    | 100M     | Hard | GitHub    | Error           |
-| Push    | 2G       | Hard | GitHub    | Error           |
-| Repo    | 5G       | Soft | GitHub    | (none)          |
-| File    | 1G       | Hard | Bitbucket | (none)          |
-| Push    | 3.5G     | Hard | Bitbucket | (none)          |
-| Repo    | 4G       | Hard | Bitbucket | Error           |
+| Size of | SI Value              | Type | Enforcer | Action by `gec` |
+|---------|-----------------------|------|----------|-----------------|
+| File    | 100M                  | Hard | GitHub   | Error           |
+| Push    | 2G                    | Hard | GitHub   | Error           |
+| Repo    | 5G                    | Soft | GitHub   | Warning         |
+| Repo    | 100G (*presumed*)     | Hard | GitHub   | Error           |
 
 Due to the use of the gocryptfs `-sharedstorage` option, a hardlink cannot be created in a decrypted repo.
 
 ## Requirements
 Linux is required, along with a few tools which are covered in the [**Installation**](#installation) section.
 
-A dedicated [GitHub](https://github.com/) account and [Bitbucket](https://bitbucket.org/) account is required with an identical username on both sites!
+A dedicated [GitHub](https://github.com/) account is required.
 If using Firefox, the [Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) add-on can be very useful to separate them from your primary accounts on these sites.
 
 ## Installation
@@ -115,22 +113,21 @@ sudo ln -s "${PWD}/gec.sh" /usr/local/sbin/gec
 ```
 
 ## Setup
-In the steps below, `<owner>` refers to an identical username in both GitHub and Bitbucket.
+In the steps below, `<owner>` refers to a username in GitHub.
 
 On each device:
 1. Run `gec config core.owner <owner>` once for all future repos.
 2. Run `ssh-keygen -f ~/.ssh/id_gec` once to create a new SSH key. Optionally use and securely save a passphrase for this key to minimize the risk of any unauthorized push.
-3. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in both GitHub and Bitbucket.
+3. Add the `~/.ssh/id_gec.pub` file for the key created above into the `<owner>` account in GitHub.
 4. Create or prepend (not append) to `~/.ssh/config` the specific contents:
     ```shell
-    Match host github.com,bitbucket.org exec "[[ $(git config user.name) = gec ]]"
+    Match host github.com exec "[[ $(git config user.name) = gec ]]"
         IdentityFile ~/.ssh/id_gec
     ```
 5. Run `chmod go-rw ~/.ssh/config` to tighten permissions of the file as is advised in `man ssh_config`.
-6. Run `gec test.ssh` to test GitHub and Bitbucket access via SSH, ensuring that the `<owner>` name is printed for both.
-7. Run `gec test.token` to test GitHub and Bitbucket access via a personal access token for each. 
+6. Run `gec test.ssh` to test GitHub access via SSH, ensuring that the `<owner>` name is printed for both.
+7. Run `gec test.token` to test GitHub access via a personal access token for each. 
 The GitHub token must have access to the `repo` and `delete_repo` scopes.
-The Bitbucket token must have access to the `repository:read`, `repository:admin` and `repository:delete` scopes.
 
 ## Directories
 Storage repos are created in `~/gec/`. This location is created automatically. Both encrypted and decrypted repos and their files are organized in this location.
@@ -171,11 +168,11 @@ Refer to the [repo-specific commands](#repo-specific) section for details on usi
 * **`list`**: Alias of `ls`.
 * **`ls [pattern]`**: List the output of the `state` command for matching repos in `~/gec/encrypted`. If specifying a pattern, it may need to be quoted.
 * **`lock`**: Unmount all mounted repos.
-* **`test.ssh`**: Test access to GitHub and Bitbucket via SSH.
-* **`test.token`**: Test access to GitHub and Bitbucket via a personal access token for each.
+* **`test.ssh`**: Test access to GitHub via SSH.
+* **`test.token`**: Test access to GitHub via a personal access token for each.
 
 ### Repo-specific
-In the commands below, `<repo>` refers to an identical repository name, e.g. "travel-ak", in both GitHub and Bitbucket.
+In the commands below, `<repo>` refers to an identical repository name, e.g. "travel-ak", in GitHub.
 It can be auto-determined if a command is run from its encrypted or decrypted directory.
 When it can be auto-determined, to disambiguate a command's arguments that follow, it can alternatively be specified as a period.
 
@@ -197,25 +194,24 @@ If specifying any options, to auto-determine `<repo>`, specify a period in its p
 * **`status [<repo>]`**: Print the repo name, mount state, and short git status. If mounted, also print the change status of decrypted paths plus the mount information.
 
 #### Remote oriented
-A [GitHub token](https://github.com/settings/tokens/new) and a [Bitbucket token](https://bitbucket.org/-/profile/personal_access_tokens) are required for these commands.
+A [GitHub token](https://github.com/settings/tokens/new) is required for these commands.
 For your security, the tokens are not saved by `gec`.
-* **`create <repo>`**: Idempotently create the repo in GitHub and Bitbucket.
+* **`create <repo>`**: Idempotently create the repo in GitHub.
 The required GitHub token must have access to the `repo` scope.
-The required Bitbucket token must have access to the `repository:read` and `repository:admin` scopes.
-* **`del [<repo>]`**: Delete an existing repo in GitHub and Bitbucket.
-The required GitHub and Bitbucket tokens must have access to their `delete_repo` and `repository:delete` scopes respectively.
+* **`del [<repo>]`**: Delete an existing repo in GitHub.
+The required GitHub token must have access to their `delete_repo` and `repository:delete` scopes respectively.
 Also see the `rm` and `destroy` commands.
 
 #### git oriented
 * **`amend [<repo>] ["<commit_msg>"]`**: Add and amend all changes to most recent commit. If `<commit_msg>` is not specified, it is kept unchanged. `<commit_msg>` is not encrypted. 
 To auto-determine `<repo>`, specify a period in its place.
-* **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into its git repo directory, and add its Bitbucket URL.
+* **`clone <repo>`**: Clone and configure a preexisting repo from GitHub into its git repo directory.
 * **`commit <repo> "<commit_msg>"`**: Add and commit all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 * **`gc [<repo>] [options]`**: Run git garbage collection on the repo. Options, if any, are forwarded to `git gc`. 
 If specifying any options, to auto-determine `<repo>`, specify a period in its place.
 * **`pull [<repo>]`**: Pull commits from remote. For safety, only a fast-forward pull is made, and a prerequisite is that the repo must be in a dismounted state.
 * **`push [<repo>]`**: Push commits to remote.
-* **`reset.url [<repo>]`**: Update the locally configured remote URLs for the repo to the expected ones for GitHub and Bitbucket, removing all other URLs.
+* **`reset.url [<repo>]`**: Update the locally configured remote URLs for the repo to the expected one for GitHub, removing all other URLs.
 * **`send <repo> "<commit_msg>"`**: (`commit`+`push`) Add, commit, and push all changes. `<commit_msg>` is not encrypted. To auto-determine `<repo>`, specify a period in its place.
 Also see the `done` command.
 
@@ -239,13 +235,12 @@ The password and a printed master key must be securely saved.
 * **`init <repo>`**: (`create`+`clone`+`init.fs`+`send`) Create new repo remotely, clone it locally, initialize encrypted filesystem, commit, and push.
 A new password is requested. The password and a printed master key must be securely saved.
 The required GitHub token must have access to the `repo` scope.
-The required Bitbucket token must have access to the `repository:read` and `repository:admin` scopes.
-* **`destroy <repo>`**: (`rm`+`del`) Interactively remove all local repo directories, and delete repo from GitHub and Bitbucket.
+* **`destroy <repo>`**: (`rm`+`del`) Interactively remove all local repo directories, and delete repo from GitHub.
 * **`done <repo> "<commit_msg>"`**: (`check.dec`+`umount`+`send`) Add, commit, and push all changes. Unmount repo if mounted. `<commit_msg>` is not encrypted. 
 To auto-determine `<repo>`, specify a period in its place.
 * **`rename <repo> <new_name>`**: Rename repo remotely and locally, and update its locally configured remotes. The repo must be in a dismounted state. 
 The new name must not already be in use.
-The required GitHub and Bitbucket tokens must have access to their `repo` and `repository:admin` scopes respectively.
+The required GitHub token must have access to their `repo` and `repository:admin` scopes respectively.
 After renaming, remember to store the password for the repo under its new name.
 * **`use [<repo>]`**: (`mount`+`shell.dec`) Mount read-write if not already mounted as such, and provide a shell into the decrypted mountpoint.
 * **`use.ro [<repo>]`**: (`mount.ro`+`shell.dec`) Mount read-only if not already mounted as such, and provide a shell into the decrypted mountpoint.
@@ -256,13 +251,11 @@ If updating from v0.4, first verify the [Setup](#setup) steps.
 
 Next, for each repo:
 1. If it exists remotely but not locally, obtain it using `gec clone <repo>`.
-2. Check its repo size as printed by `gec check.git <repo>`.
-3. If the repo size is ≤4.0G, run this sequence once:
+2. Run this sequence once:
     ```shell
     gec shell <repo>  # Enters repo shell
-    gec create  # Creates repo in Bitbucket.
-    gec reset.url  # Adds Bitbucket remote and removes obsolete remote.
-    gec push  # Pushes to Bitbucket.
+    gec reset.url  # Ensures GitHub remote and removes obsolete remotes.
+    gec push  # Pushes to GitHub.
     exit  # Exits repo shell.
     ```
 4. If `gec push` fails with the push size exceeding 2G, run an alternative command instead such as the one below to push commits individually. At this time, ignore errors about failing to push commits to GitHub.
