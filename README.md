@@ -247,19 +247,11 @@ After renaming, remember to store the password for the repo under its new name.
 * **`use.rw`**: Alias of `use`.
 
 ## Migration
-If updating from v0.4, first verify the [Setup](#setup) steps.
+To migrate from v0.5, for each local repo, run this sequence once:
 
-Next, for each repo:
-1. If it exists remotely but not locally, obtain it using `gec clone <repo>`.
-2. Run this sequence once:
-    ```shell
-    gec shell <repo>  # Enters repo shell
-    gec reset.url  # Ensures GitHub remote and removes obsolete remotes.
-    gec push  # Pushes to GitHub.
-    exit  # Exits repo shell.
-    ```
-4. If `gec push` fails with the push size exceeding 2G, run an alternative command instead such as the one below to push commits individually. At this time, ignore errors about failing to push commits to GitHub.
-    ```shell
-    git log --format=%H --reverse | xargs -i git push origin {}:refs/heads/$(git branch --show-current)
-    ```
-5. If the repo size is >4.0G, it cannot be migrated. One or more new repos can however be created to replace it. In each new repo, limit each push to a max of 2G.
+```shell
+gec shell <repo>  # Enters repo shell
+gec reset.url  # Ensures GitHub remote and removes obsolete remotes.
+gec push  # Pushes to GitHub.
+exit  # Exits repo shell.
+```
