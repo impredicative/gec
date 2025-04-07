@@ -252,6 +252,5 @@ To migrate from v0.5, for each local repo, run this sequence once:
 ```shell
 gec shell <repo>  # Enters repo shell
 gec reset.url  # Ensures GitHub remote and removes obsolete remotes.
-gec push  # Pushes to GitHub.
 exit  # Exits repo shell.
 ```
